@@ -1,0 +1,33 @@
+@use '../base/vars';
+
+.navbar {
+    padding: 20px;
+    background: vars.$white;
+    box-shadow: vars.$shadow;
+    border-bottom: 1px solid vars.$black;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+
+    &__content {
+        display: flex;
+        justify-content: space-between;
+        max-width: 810px;
+        margin: 0 auto;
+    }
+
+    &__items {
+        display: flex;
+        column-gap: 20px;
+    }
+
+    &__item {
+        white-space: nowrap;
+        user-select: none;
+        cursor: pointer;
+
+        & .active {
+            font-weight: bold;
+        }
+    }
+}

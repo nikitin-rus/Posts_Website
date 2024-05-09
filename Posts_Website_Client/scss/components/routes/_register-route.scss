@@ -1,0 +1,15 @@
+@use './../../base/vars';
+
+.register-route {
+    &__heading {
+        margin-bottom: 24px;
+    }
+
+    &__form {
+        margin-bottom: 40px;
+    }
+
+    &__error {
+        color: vars.$red;
+    }
+}

@@ -1,0 +1,15 @@
+@use './../../base/vars';
+
+.login-route {
+    &__heading {
+        margin-bottom: 24px;
+    }
+
+    &__form {
+        margin-bottom: 24px;
+    }
+
+    &__error {
+        color: vars.$red;
+    }
+}

@@ -1,0 +1,9 @@
+.post-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+
+    &__btn {
+        align-self: flex-start;
+    }
+}

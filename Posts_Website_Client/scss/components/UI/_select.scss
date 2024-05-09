@@ -1,0 +1,83 @@
+@use '../../base/vars';
+
+.select {
+    position: relative;
+    
+    svg {
+        pointer-events: none;
+        transition: transform 0.1s;
+    }
+
+    &_opened svg {
+        transform: rotate(-180deg);
+    }
+
+    &__bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 200px;
+        min-height: 40px;
+        max-height: 40px;
+        padding: 0 12px;
+
+        background: vars.$white;
+        box-shadow: vars.$shadow;
+        border: 1px solid vars.$black;
+        border-radius: 5px;
+
+        white-space: nowrap;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    &__options {
+        width: 100%;
+
+        position: absolute;
+        top: 48px;
+        z-index: 999;
+
+        box-shadow: vars.$shadow;
+        border: 1px solid vars.$black;
+        border-radius: 5px;
+        overflow: hidden;
+
+        &-enter {
+            opacity: 0;
+        }
+
+        &-enter-active {
+            opacity: 1;
+            transition: opacity 200ms;
+        }
+
+        &-exit {
+            opacity: 1;
+        }
+
+        &-exit-active {
+            opacity: 0;
+            transition: opacity 200ms;
+        }
+    }
+
+    &__option {
+        display: flex;
+        align-items: center;
+
+        min-height: 40px;
+        max-height: 40px;
+        padding: 0 12px;
+        
+        background-color: vars.$white;
+
+        white-space: nowrap;
+        user-select: none;
+        cursor: pointer;
+
+        &:hover {
+            background-color: vars.$white-hover;
+        }
+    }
+}

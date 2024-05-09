@@ -1,0 +1,14 @@
+@use '../../base/vars';
+
+.text-area {
+    display: flex;
+    min-height: 120px;
+    padding: 12px;
+
+    background-color: vars.$white;
+    border: 1px solid vars.$black;
+    box-shadow: vars.$shadow;
+    border-radius: 5px;
+
+    resize: none;
+}

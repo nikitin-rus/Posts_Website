@@ -1,0 +1,44 @@
+@use '../../base/vars';
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    max-height: 40px;
+    padding: 0 12px;
+
+    background-color: vars.$white;
+    border: 1px solid vars.$black;
+    box-shadow: vars.$shadow;
+    border-radius: 5px;
+
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: vars.$white-hover;
+    }
+
+    &_blue {
+        background-color: vars.$blue;
+        color: vars.$white;
+        border: none;
+
+        &:hover {
+            background-color: vars.$blue-hover;
+        }
+    }
+
+    &_gray {
+        background-color: vars.$gray;
+        border-radius: 10px;
+        box-shadow: none;
+        border: none;
+
+        &:hover {
+            background-color: vars.$gray-hover;
+        }
+    }
+}

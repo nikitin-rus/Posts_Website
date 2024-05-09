@@ -1,0 +1,87 @@
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans ExtraBold"),
+        local("Open Sans-ExtraBold"),
+        url("/fonts/OpenSans-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans Bold"),
+        local("Open Sans-Bold"),
+        url("/fonts/OpenSans-Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans SemiBold"),
+        local("Open Sans-SemiBold"),
+        url("/fonts/OpenSans-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans Semibold"),
+        local("Open Sans-Semibold"),
+        url("/fonts/OpenSans-Semibold.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans Regular"),
+        local("Open Sans-Regular"),
+        url("/fonts/OpenSans-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    font-style: normal;
+    src:
+        local("Open Sans Light"),
+        local("Open Sans-Light"),
+        url("/fonts/OpenSans-Light.ttf") format("truetype");
+    font-weight: 300;
+}
+
+*,
+*::after,
+*::before {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}

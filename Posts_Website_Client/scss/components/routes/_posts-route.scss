@@ -1,0 +1,29 @@
+.posts-route {
+    &__controls {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    &__message {
+        &-enter {
+            opacity: 0;
+        }
+
+        &-enter-active {
+            opacity: 1;
+            transition: opacity 300ms linear;
+        }
+
+        &-exit {
+            opacity: 1;
+        }
+
+        &-exit-active {
+            opacity: 0;
+            transition: opacity 300ms linear;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+@use '../../base/vars';
+
+.comment-route {
+    &__heading {
+        margin-bottom: 24px;
+    }
+
+    &__link {
+        color: vars.$blue;
+        text-decoration: underline;
+    }
+
+    &__controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    &__btn-text {
+        margin-right: 6px;
+    }
+}

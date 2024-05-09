@@ -1,0 +1,21 @@
+.register-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+
+    &__input-forms {
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    &__input-form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 8px;
+    }
+
+    &__btn {
+        align-self: flex-start;
+    }
+}
