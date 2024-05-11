@@ -5,16 +5,14 @@ import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
 import { PostDetailsDto } from "../../typescript/dtos/PostDto";
 import { Button } from "../UI/Button";
 import { Page } from "../Page";
-import { ContentCard } from "../ContentCard";
-import { postDtoToPost } from "../../helpers/mappers/postDtoToContent";
-import { commentDtoToComment } from "../../helpers/mappers/commentDtoToContent";
 import { CommentForm } from "../forms/CommentForm";
-import { ContentCardList } from "../ContentCardList";
 import EditIcon from "../../assets/edit_24dp.svg?react";
 import DeleteIcon from "../../assets/delete_24dp.svg?react";
 import { deletePost } from "../../fetchers/deletePost";
 import { store } from "../../redux/store";
 import { updatePost } from "../../fetchers/updatePost";
+import { PostCard } from "../cards/PostCard";
+import { CommentCardList } from "../lists/CommentCardList";
 
 export async function loader({ params }: { params: Params }) {
     return getPost(params.id!);
@@ -79,8 +77,8 @@ export function PostRoute() {
                     </div>
                 )}
 
-                <ContentCard className="post-route__card"
-                    content={postDtoToPost(post)}
+                <PostCard className="post-route__card"
+                    post={post}
                 />
 
                 <h1 className="post-route__heading">
@@ -97,7 +95,9 @@ export function PostRoute() {
                     />
                 )}
 
-                <ContentCardList content={post.comments.map(commentDtoToComment)} />
+                <CommentCardList className="post-route__list"
+                    comments={post.comments}
+                />
 
                 {post.comments.length === 0 && (
                     <p className="post-route__message">

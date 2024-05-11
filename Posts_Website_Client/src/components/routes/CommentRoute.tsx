@@ -1,6 +1,5 @@
 import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
 import { getComment } from "../../fetchers/getComment";
-import { ContentCard } from "../ContentCard";
 import { authSelector } from "../../redux/slices/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import { CommentDetailsDto } from "../../typescript/dtos/CommentDto";
@@ -8,10 +7,10 @@ import { Page } from "../Page";
 import { Button } from "../UI/Button";
 import EditIcon from "../../assets/edit_24dp.svg?react";
 import DeleteIcon from "../../assets/delete_24dp.svg?react";
-import { commentDtoToComment } from "../../helpers/mappers/commentDtoToContent";
 import { store } from "../../redux/store";
 import { updateComment } from "../../fetchers/updateComment";
 import { deleteComment } from "../../fetchers/deleteComment";
+import { CommentCard } from "../cards/CommentCard";
 
 export async function loader({ params }: { params: Params }) {
     return await getComment(params.postId!, params.commentId!);
@@ -88,7 +87,9 @@ export function CommentRoute() {
                     </div>
                 )}
 
-                <ContentCard content={commentDtoToComment(comment)} />
+                <CommentCard className="comment-route__card"
+                    comment={comment}
+                />
             </Page>
         </div>
     );

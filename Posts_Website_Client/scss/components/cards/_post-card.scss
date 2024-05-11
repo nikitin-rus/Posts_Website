@@ -1,0 +1,29 @@
+@use '../../base/vars';
+@use '../../base/mixins';
+
+.post-card {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 24px;
+
+    background: vars.$white;
+    box-shadow: vars.$shadow;
+    border: 1px solid vars.$black;
+    border-radius: 5px;
+
+    &__body {
+        white-space: pre-wrap;
+        line-height: 150%;
+    }
+
+    $selector: &;
+
+    &_preview {
+        max-height: 220px;
+
+        #{$selector}__body {
+            @include mixins.line-clamp;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+@use '../../base/vars';
+
+.comment-card-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+
+    &__link {
+        &-enter {
+            opacity: 0;
+        }
+
+        &-enter-active {
+            opacity: 1;
+            transition: opacity 300ms linear;
+        }
+
+        &-exit {
+            opacity: 1;
+        }
+
+        &-exit-active {
+            opacity: 0;
+            transition: opacity 300ms linear;
+        }
+
+        &:hover {
+            background-color: vars.$white-hover;
+            opacity: 0.6;
+        }
+    }
+}

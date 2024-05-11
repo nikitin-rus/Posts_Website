@@ -1,6 +1,7 @@
-@use '../base/vars';
+@use '../../base/vars';
+@use '../../base/mixins';
 
-.content-card {
+.comment-card {
     display: flex;
     flex-direction: column;
     row-gap: 20px;
@@ -10,17 +11,6 @@
     box-shadow: vars.$shadow;
     border: 1px solid vars.$black;
     border-radius: 5px;
-
-    &__head {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__link {
-        &:hover {
-            text-decoration: underline;
-        }
-    }
 
     &__body {
         white-space: pre-wrap;
@@ -33,10 +23,7 @@
         max-height: 220px;
 
         #{$selector}__body {
-            display: -webkit-box;
-            -webkit-line-clamp: 5;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            @include mixins.line-clamp;
         }
     }
 }
