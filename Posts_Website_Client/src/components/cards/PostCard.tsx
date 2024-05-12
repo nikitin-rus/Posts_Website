@@ -30,6 +30,10 @@ const PostCard = forwardRef<HTMLDivElement, Props>(({
                 isUserLinked={!isPreview}
             />
 
+            <h3 className="post-card__title">
+                {post.title}
+            </h3>
+
             <div className="post-card__body">
                 {post.content}
             </div>

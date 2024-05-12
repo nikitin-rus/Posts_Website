@@ -25,10 +25,11 @@ export async function action({ params, request }: { params: Params, request: Req
     switch (request.method) {
         case "PUT": {
             const formData = await request.formData();
+            const title = formData.get("title")?.toString();
             const content = formData.get("content")?.toString();
 
-            if (!content) {
-                throw new Response(`Форма не содержит поля с именем content`, {
+            if (!content || !title) {
+                throw new Response(`Форма не содержит всех необходимых полей`, {
                     statusText: "Bad Request",
                     status: 400,
                 });
@@ -36,7 +37,7 @@ export async function action({ params, request }: { params: Params, request: Req
 
             return await updatePost(
                 id,
-                { content: content },
+                { title: title, content: content },
                 token!
             );
         }

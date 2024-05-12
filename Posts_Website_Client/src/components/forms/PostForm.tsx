@@ -4,6 +4,7 @@ import { Button } from "../UI/Button";
 import { PostFormDto } from "../../typescript/dtos/PostDto";
 import { getClassName } from "../../helpers/getClassName";
 import { useSubmit } from "react-router-dom";
+import { Input } from "../UI/Input";
 
 interface Props extends FormikFormProps {
     initialData?: PostFormDto,
@@ -21,6 +22,7 @@ export function PostForm({
     return (
         <Formik
             initialValues={initialData ?? {
+                "title": "",
                 "content": ""
             }}
             onSubmit={async (values) => {
@@ -28,8 +30,12 @@ export function PostForm({
                     rest.method === "POST"
                     || rest.method === "PUT"
                 ) {
+                    ;
                     submit(
-                        { content: values.content },
+                        {
+                            title: values.title,
+                            content: values.content   
+                        },
                         {
                             method: rest.method,
                             action: rest.action,
@@ -42,9 +48,16 @@ export function PostForm({
                 {...rest}
             >
                 <Field className="post-form__input"
+                    name="title"
+                    as={Input}
+                    placeholder="Заголовок поста"
+                    required
+                />
+
+                <Field className="post-form__input"
                     name="content"
                     as={TextArea}
-                    placeholder="Расскажите, что у Вас нового"
+                    placeholder="Расскажите о чем-нибудь..."
                     required
                 />
 
