@@ -1,0 +1,18 @@
+services:
+  posts_website_api:
+    container_name: posts_website_api
+    ports:
+      - 8080:8080
+    build: 
+      context: .
+      target: final
+    depends_on: 
+      - posts_website_db
+  posts_website_db:
+    container_name: posts_website_db
+    image: "postgres:alpine3.19"
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
