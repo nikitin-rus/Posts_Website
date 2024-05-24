@@ -1,0 +1,10 @@
+.card-head {
+    display: flex;
+    justify-content: space-between;
+
+    &__link {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

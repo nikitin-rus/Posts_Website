@@ -3,6 +3,7 @@ namespace Posts_Website.Dtos
     public record class PostDto
     (
         Guid Id,
+        string Title,
         string Content,
         string PublishedAt,
         UserDto User
@@ -11,6 +12,7 @@ namespace Posts_Website.Dtos
     public record class PostDetailsDto
     (
         Guid Id,
+        string Title,
         string Content,
         string PublishedAt,
         UserDto User,
@@ -19,6 +21,7 @@ namespace Posts_Website.Dtos
 
     public record class PostFormDto 
     (
+        string Title,
         string Content
     );
 }

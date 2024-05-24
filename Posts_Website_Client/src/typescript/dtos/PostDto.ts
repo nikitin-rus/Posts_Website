@@ -3,6 +3,7 @@ import { UserDto } from "./UserDto"
 
 export interface PostDto {
     id: string
+    title: string
     content: string,
     publishedAt: string,
     user: UserDto
@@ -13,5 +14,6 @@ export interface PostDetailsDto extends PostDto {
 }
 
 export interface PostFormDto {
+    title: string
     content: string
 }

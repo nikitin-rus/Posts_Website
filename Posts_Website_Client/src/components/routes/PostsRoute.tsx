@@ -5,8 +5,7 @@ import { PostDto } from "../../typescript/dtos/PostDto";
 import { Select, SelectOption } from "../UI/Select";
 import { Page } from "../Page";
 import { Search } from "../UI/Search";
-import { ContentCardList } from "../ContentCardList";
-import { postDtoToPost } from "../../helpers/mappers/postDtoToContent";
+import { PostCardList } from "../lists/PostCardList";
 
 export async function loader() {
     return await getPosts();
@@ -72,8 +71,8 @@ export function PostsRoute() {
                     />
                 </div>
                 
-                <ContentCardList className="posts-route__list"
-                    content={sortedPosts.map(postDtoToPost)}
+                <PostCardList className="posts-route__list"
+                    posts={sortedPosts}
                 />
                 
                 {sortedPosts.length === 0 && 

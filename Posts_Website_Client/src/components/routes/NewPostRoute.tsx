@@ -16,17 +16,18 @@ export async function action({ request }: { request: Request }) {
 
     const formData = await request.formData();
 
+    const title = formData.get("title")?.toString();
     const content = formData.get("content")?.toString();
 
-    if (!content) {
-        throw new Response(`Форма не содержит поля с именем content`, {
+    if (!content || !title) {
+        throw new Response(`Форма не содержит всех необходимых полей!`, {
             statusText: "Bad Request",
             status: 400,
         });
     }
 
     const post = await createPost(
-        { content: content },
+        { content: content, title: title },
         store.getState().jwtToken!
     );
 

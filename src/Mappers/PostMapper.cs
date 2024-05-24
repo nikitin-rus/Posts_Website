@@ -8,11 +8,12 @@ namespace Posts_Website.Mappers
     {
         public static PostDto ToPostDto(this Post post)
         {
-			if (post.User == null)
-				throw new NullNavigationPropertyException();
+            if (post.User == null)
+                throw new NullNavigationPropertyException();
 
-			return new PostDto(
+            return new PostDto(
                 Id: post.Id,
+                Title: post.Title,
                 Content: post.Content,
                 PublishedAt: post.PublishedAt,
                 User: post.User.ToUserDto()
@@ -21,11 +22,12 @@ namespace Posts_Website.Mappers
 
         public static PostDetailsDto ToPostDetailsDto(this Post post)
         {
-			if (post.User == null)
-				throw new NullNavigationPropertyException();
+            if (post.User == null)
+                throw new NullNavigationPropertyException();
 
-			return new PostDetailsDto(
+            return new PostDetailsDto(
                 Id: post.Id,
+                Title: post.Title,
                 Content: post.Content,
                 PublishedAt: post.PublishedAt,
                 User: post.User.ToUserDto(),

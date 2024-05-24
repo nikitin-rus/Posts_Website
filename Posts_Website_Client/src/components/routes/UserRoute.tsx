@@ -4,9 +4,8 @@ import { UserDetailsDto } from "../../typescript/dtos/UserDto";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Page } from "../Page";
-import { postDtoToPost } from "../../helpers/mappers/postDtoToContent";
-import { ContentCardList } from "../ContentCardList";
-import { commentDtoToComment } from "../../helpers/mappers/commentDtoToContent";
+import { CommentCardList } from "../lists/CommentCardList";
+import { PostCardList } from "../lists/PostCardList";
 
 export async function loader({ params }: { params: Params }) {
     return await getUser(params.id!);
@@ -28,8 +27,8 @@ export function UserRoute() {
                         }
                     </h1>
 
-                    <ContentCardList className="user-route__list"
-                        content={user.posts.map(postDtoToPost)}
+                    <PostCardList className="user-route__list"
+                        posts={user.posts}
                     />
 
                     {user.posts.length === 0 && (
@@ -50,8 +49,8 @@ export function UserRoute() {
                         }
                     </h1>
 
-                    <ContentCardList className="user-route__list"
-                        content={user.comments.map(commentDtoToComment)}
+                    <CommentCardList className="user-route__list"
+                        comments={user.comments}
                     />
 
                     {user.comments.length === 0 && (

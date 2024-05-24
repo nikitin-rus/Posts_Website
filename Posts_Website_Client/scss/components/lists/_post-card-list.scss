@@ -1,11 +1,11 @@
-@use '../base/vars';
+@use '../../base/vars';
 
-.content-card-list {
+.post-card-list {
     display: flex;
     flex-direction: column;
     row-gap: 24px;
 
-    &__list-item {
+    &__link {
         &-enter {
             opacity: 0;
         }

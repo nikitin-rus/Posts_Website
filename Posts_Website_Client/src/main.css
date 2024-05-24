@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -763,6 +764,110 @@ h3 {
   margin-bottom: 40px;
 }
 
+.comment-card {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  padding: 24px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid #282828;
+  border-radius: 5px;
+}
+.comment-card__body {
+  white-space: pre-wrap;
+  line-height: 150%;
+}
+.comment-card_preview .comment-card__body {
+  /* 
+      Макс. высота нужна, 
+      чтобы избежать багов с версткой, 
+      если вдруг line-clamp не работает
+  */
+  max-height: 140px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  padding: 24px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid #282828;
+  border-radius: 5px;
+}
+.post-card__body {
+  white-space: pre-wrap;
+  line-height: 150%;
+}
+.post-card_preview .post-card__body {
+  /* 
+      Макс. высота нужна, 
+      чтобы избежать багов с версткой, 
+      если вдруг line-clamp не работает
+  */
+  max-height: 140px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comment-card-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+.comment-card-list__link-enter {
+  opacity: 0;
+}
+.comment-card-list__link-enter-active {
+  opacity: 1;
+  transition: opacity 300ms linear;
+}
+.comment-card-list__link-exit {
+  opacity: 1;
+}
+.comment-card-list__link-exit-active {
+  opacity: 0;
+  transition: opacity 300ms linear;
+}
+.comment-card-list__link:hover {
+  background-color: #F6F6F6;
+  opacity: 0.6;
+}
+
+.post-card-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+.post-card-list__link-enter {
+  opacity: 0;
+}
+.post-card-list__link-enter-active {
+  opacity: 1;
+  transition: opacity 300ms linear;
+}
+.post-card-list__link-exit {
+  opacity: 1;
+}
+.post-card-list__link-exit-active {
+  opacity: 0;
+  transition: opacity 300ms linear;
+}
+.post-card-list__link:hover {
+  background-color: #F6F6F6;
+  opacity: 0.6;
+}
+
 .navbar {
   padding: 20px;
   background: #FFFFFF;
@@ -799,59 +904,12 @@ h3 {
   margin: 0 auto;
 }
 
-.content-card {
-  display: flex;
-  flex-direction: column;
-  row-gap: 20px;
-  padding: 24px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.1);
-  border: 1px solid #282828;
-  border-radius: 5px;
-}
-.content-card__head {
+.card-head {
   display: flex;
   justify-content: space-between;
 }
-.content-card__link:hover {
+.card-head__link:hover {
   text-decoration: underline;
-}
-.content-card__body {
-  white-space: pre-wrap;
-  line-height: 150%;
-}
-.content-card_preview {
-  max-height: 220px;
-}
-.content-card_preview .content-card__body {
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.content-card-list {
-  display: flex;
-  flex-direction: column;
-  row-gap: 24px;
-}
-.content-card-list__list-item-enter {
-  opacity: 0;
-}
-.content-card-list__list-item-enter-active {
-  opacity: 1;
-  transition: opacity 300ms linear;
-}
-.content-card-list__list-item-exit {
-  opacity: 1;
-}
-.content-card-list__list-item-exit-active {
-  opacity: 0;
-  transition: opacity 300ms linear;
-}
-.content-card-list__list-item:hover {
-  background-color: #F6F6F6;
-  opacity: 0.6;
 }
 
 /*# sourceMappingURL=main.css.map */
