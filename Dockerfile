@@ -2,10 +2,9 @@ FROM node:lts-alpine3.19 AS assets_builder
 
 WORKDIR /app
 
-COPY ./Client/package.json ./Client/package-lock.json ./
-RUN npm install
-
 COPY ./Client/ ./
+RUN npm install
+RUN npx sass ./scss/main.scss ./src/main.css
 RUN npm run build
 
 # syntax=docker/dockerfile:1
