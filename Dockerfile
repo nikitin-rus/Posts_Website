@@ -1,3 +1,13 @@
+FROM node:lts-alpine3.19 AS assets_builder
+
+WORKDIR /app
+
+COPY ./Client/package.json ./Client/package-lock.json ./
+RUN npm install
+
+COPY ./Client/ ./
+RUN npm run build
+
 # syntax=docker/dockerfile:1
 
 # Comments are provided throughout this file to help you get started.
@@ -13,7 +23,8 @@
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 ARG TARGETARCH
 
-COPY . /source
+COPY --from=assets_builder /app/dist /source/wwwroot
+COPY ./Server /source
 
 WORKDIR /source
 

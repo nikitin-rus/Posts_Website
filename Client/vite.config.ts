@@ -7,9 +7,5 @@ export default defineConfig({
     plugins: [
         react(), 
         svgr()
-    ],
-    build: {
-        outDir: "./../wwwroot",
-        emptyOutDir: true,
-    }
+    ]
 });
