@@ -1,0 +1,21 @@
+services:
+  posts_website_frontend: 
+    container_name: posts_website_frontend
+    ports:
+      - 5173:5173
+    build:
+      context: /Client
+    volumes:
+      - type: bind
+        source: ./Client
+        target: /app
+  posts_website_api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    extends:
+      file: compose.yaml
+      service: posts_website_api
+  posts_website_db:
+    extends:
+      file: compose.yaml
+      service: posts_website_db

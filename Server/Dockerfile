@@ -1,11 +1,10 @@
-FROM node:lts-alpine3.19 AS assets_builder
+FROM node:18-alpine AS assets_builder
 
 WORKDIR /app
 
-COPY ./Client/ ./
-RUN npm install
-RUN npx sass ./scss/main.scss ./src/main.css
-RUN npm run build
+COPY /Client .
+RUN npm install && \
+    npm run build
 
 # syntax=docker/dockerfile:1
 
@@ -22,10 +21,9 @@ RUN npm run build
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 ARG TARGETARCH
 
-COPY --from=assets_builder /app/dist /source/wwwroot
-COPY ./Server /source
-
 WORKDIR /source
+
+COPY ./Server .
 
 # Build the application.
 # Leverage a cache mount to /root/.nuget/packages so that subsequent builds don't have to re-download packages.
@@ -48,10 +46,12 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 # version (e.g., aspnet:7.0.10-alpine-3.18),
 # or SHA (e.g., mcr.microsoft.com/dotnet/aspnet@sha256:f3d99f54d504a21d38e4cc2f13ff47d67235efeeb85c109d3d1ff1808b38d034).
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
-WORKDIR /app
+
+WORKDIR /app 
 
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /app .
+COPY --from=assets_builder /app/dist ./wwwroot
 
 # Switch to a non-privileged user (defined in the base image) that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/

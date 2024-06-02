@@ -51,12 +51,14 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 if (builder.Environment.IsDevelopment())
 {
     app.UseCors();
+}
+else
+{
+    app.UseDefaultFiles();
+    app.UseStaticFiles();
 }
 
 app.MapControllers();

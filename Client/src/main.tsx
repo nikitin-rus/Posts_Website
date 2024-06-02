@@ -18,7 +18,7 @@ import { action as postCommentsAction } from './components/routes/PostCommentsRo
 import { EditCommentRoute, loader as editCommentLoader } from './components/routes/EditCommentRoute';
 
 if (import.meta.env.DEV) {
-    axios.defaults.baseURL = "http://localhost:5212";
+    axios.defaults.baseURL = "http://localhost:8080";
 }
 
 const router = createBrowserRouter([{
