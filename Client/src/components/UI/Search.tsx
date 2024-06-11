@@ -1,5 +1,5 @@
 import { ChangeEvent, PointerEvent } from "react";
-import CloseIcon from "../../assets/close_24dp.svg?react";
+import CloseIcon from "../../assets/icons/close_24dp.svg";
 import { Input } from "./Input";
 
 interface Props {

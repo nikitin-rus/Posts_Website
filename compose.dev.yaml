@@ -12,6 +12,8 @@ services:
   posts_website_api:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+    build:
+      target: development
     extends:
       file: compose.yaml
       service: posts_website_api

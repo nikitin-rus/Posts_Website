@@ -6,7 +6,7 @@ services:
     build: 
       context: .
       dockerfile: /Server/Dockerfile
-      target: final
+      target: production
     depends_on: 
       - posts_website_db
   posts_website_db:

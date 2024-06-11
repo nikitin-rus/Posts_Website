@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import axios from 'axios';
+
+import "./scss/main.scss";
+
 import { Provider } from 'react-redux';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { store } from './redux/store';
@@ -17,9 +19,8 @@ import { EditPostRoute, loader as editPostLoader } from './components/routes/Edi
 import { action as postCommentsAction } from './components/routes/PostCommentsRoute';
 import { EditCommentRoute, loader as editCommentLoader } from './components/routes/EditCommentRoute';
 
-if (import.meta.env.DEV) {
-    axios.defaults.baseURL = "http://localhost:8080";
-}
+import axios from 'axios';
+axios.defaults.baseURL = "http://localhost:8080";
 
 const router = createBrowserRouter([{
     path: "/",

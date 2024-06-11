@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
-import ExpandMoreIcon from "../../assets/expand_more_24dp.svg?react";
-import { isNode } from "../../typescript/validators/isNode.ts";
+import ExpandMoreIcon from "../../assets/icons/expand_more_24dp.svg";
+import { isNode } from "../../typescript/validators/isNode";
 
 export type SelectOption = {
     name: string,
