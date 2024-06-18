@@ -1,12 +1,14 @@
 {
     "scripts": {
         "dev": "webpack serve",
-        "build": "webpack --env production"
+        "build": "webpack --env production",
+        "test": "jest"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.2.3",
         "axios": "^1.6.8",
         "formik": "^2.4.6",
+        "markdown-to-jsx": "^7.4.7",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-redux": "^9.1.2",
@@ -22,6 +24,7 @@
         "@types/webpack": "^5.28.5",
         "css-loader": "^7.1.2",
         "html-webpack-plugin": "^5.6.0",
+        "jest": "^29.7.0",
         "mini-css-extract-plugin": "^2.9.0",
         "sass": "^1.77.4",
         "sass-loader": "^14.2.1",

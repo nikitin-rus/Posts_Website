@@ -7,8 +7,14 @@ services:
       context: /Client
     volumes:
       - type: bind
-        source: ./Client
-        target: /app
+        source: ./Client/src
+        target: /app/src
+      - type: bind
+        source: ./Client/package.json
+        target: /app/package.json
+      - type: bind
+        source: ./Client/package-lock.json
+        target: /app/package-lock.json
   posts_website_api:
     environment:
       ASPNETCORE_ENVIRONMENT: Development

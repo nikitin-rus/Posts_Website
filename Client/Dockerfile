@@ -1,5 +1,6 @@
-FROM node:alpine3.19
+FROM node:18-alpine
 WORKDIR /app
+EXPOSE 5173
 COPY . .
-CMD npm install && \
+CMD npm i && \
     npm run dev

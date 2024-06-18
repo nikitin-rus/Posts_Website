@@ -1,0 +1,43 @@
+@use '../../base/vars';
+
+.rich-text-area {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    padding: 16px;
+    background: vars.$white;
+    border: 1px solid vars.$black;
+    border-radius: 5px;
+    box-shadow: vars.$shadow;
+
+    &__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid vars.$black;
+    }
+
+    &__preview {
+        display: flex;
+        flex-direction: column;
+        min-height: 120px;
+
+        background-color: vars.$white;
+
+        & * {
+            all: revert;
+            overflow-wrap: anywhere;
+            margin-top: 0;
+        }
+    }
+
+    & * {
+        box-shadow: none;
+    }
+
+    &__buttons {
+        display: flex;
+        column-gap: 16px;
+    }
+}

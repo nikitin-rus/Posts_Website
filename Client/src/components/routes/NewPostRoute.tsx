@@ -45,7 +45,7 @@ export function NewPostRoute() {
         <div className="new-post-route">
             <Page>
                 <h1 className="new-post-route__heading">Создание нового поста</h1>
-                <PostForm method="POST" />
+                <PostForm method="POST" action="/posts/new" />
             </Page>
         </div>
     );

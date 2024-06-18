@@ -2,23 +2,29 @@ import { ButtonHTMLAttributes, forwardRef } from "react";
 import { getClassName } from "../../helpers/getClassName";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-    theme?: "default" | "blue"
+    theme?: "default" | "blue",
+    isSquare?: boolean
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
     function ({
-        theme,
         className,
         children,
+        theme = "default",
+        isSquare = false,
         ...rest
     }, ref) {
-        const finalClassName = getClassName("button", className, {
-            "button_blue": theme === "blue"
+        const componentClassName = "button";
+
+        const finalClassName = getClassName(componentClassName, className, {
+            [componentClassName + "_blue"]: theme === "blue",
+            [componentClassName + "_square"]: isSquare
         });
 
         return (
             <button className={finalClassName}
                 ref={ref}
+                type={"button"}
                 {...rest}
             >
                 {children}

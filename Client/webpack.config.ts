@@ -4,7 +4,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import "webpack-dev-server";
 
-export default function (env): Configuration {
+export default function (env: any): Configuration {
     const devMode = !env.production;
 
     return {

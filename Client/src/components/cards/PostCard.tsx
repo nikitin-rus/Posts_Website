@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
 import { PostDto } from "../../typescript/dtos/PostDto";
+import Markdown from "markdown-to-jsx";
 
 interface Props {
     className?: string,
@@ -35,7 +36,11 @@ const PostCard = forwardRef<HTMLDivElement, Props>(({
             </h3>
 
             <div className="post-card__body">
-                {post.content}
+                <Markdown options={{
+                    forceBlock: true
+                }}>
+                    {post.content}
+                </Markdown>
             </div>
         </div>
     );

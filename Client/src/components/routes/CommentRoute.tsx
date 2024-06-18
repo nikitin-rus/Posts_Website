@@ -79,7 +79,7 @@ export function CommentRoute() {
                         </Link>
 
                         <Form method="DELETE">
-                            <Button>
+                            <Button type="submit">
                                 <p className="comment-route__btn-text">Удалить</p>
                                 <DeleteIcon />
                             </Button>

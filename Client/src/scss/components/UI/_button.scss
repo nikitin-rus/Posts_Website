@@ -17,8 +17,13 @@
     user-select: none;
     cursor: pointer;
 
-    &:hover {
+    &:not([disabled]):hover {
         background-color: vars.$white-hover;
+    }
+
+    &:disabled {
+        opacity: 0.75;
+        cursor: default;
     }
 
     &_blue {
@@ -26,7 +31,7 @@
         color: vars.$white;
         border: none;
 
-        &:hover {
+        &:not([disabled]):hover {
             background-color: vars.$blue-hover;
         }
     }
@@ -40,5 +45,11 @@
         &:hover {
             background-color: vars.$gray-hover;
         }
+    }
+
+    &_square {
+        padding: 0;
+        min-width: 40px;
+        max-width: 40px;
     }
 }

@@ -4,7 +4,7 @@ interface ClassNames {
 
 export function getClassName(
     innerClassName: string,
-    outerClassName: string | undefined,
+    outerClassName?: string,
     extraClassNames: ClassNames = {}
 ) {
     const classNames = [innerClassName];

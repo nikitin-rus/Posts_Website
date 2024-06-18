@@ -70,7 +70,7 @@ export function PostRoute() {
                         </Link>
 
                         <Form method="DELETE">
-                            <Button>
+                            <Button type="submit">
                                 <p className="post-route__btn-text">Удалить</p>
                                 <DeleteIcon />
                             </Button>
