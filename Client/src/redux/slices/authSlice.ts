@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserDto } from "../../typescript/dtos/UserDto";
+import { getUserFromLocalStorage } from "../../helpers/getUserFromLocalStorage";
 
 interface AuthState {
     jwtToken: string | null
@@ -7,8 +8,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    jwtToken: null,
-    user: null
+    jwtToken: localStorage.getItem('jwt'),
+    user: getUserFromLocalStorage(),
 }
 
 const authSlice = createSlice({
