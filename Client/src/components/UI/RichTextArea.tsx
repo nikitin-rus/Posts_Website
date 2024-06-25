@@ -4,55 +4,14 @@ import { Button } from "./Button";
 import { TextArea } from "./TextArea";
 import Markdown from "markdown-to-jsx";
 import TitleIcon from "../../assets/icons/title_24dp.svg";
-import { findWordAroundCaret } from "../../helpers/findWordAroundCaret";
+import FormatBoldIcon from "../../assets/icons/format_bold_24dp.svg";
+import { FormatType, TextFormatter } from "../../helpers/TextFormatter";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     value: string,
     onFormat: (value: string) => void,
 }
 
-function formatTitle(value: string, selectionStart: number, selectionEnd: number) {
-    let result = value;
-
-    const formatSymbols = "###";
-    const left = value.slice(0, selectionStart);
-    const selected = value.slice(selectionStart, selectionEnd);
-    const right = value.slice(selectionEnd);
-
-    /**
-     * Если что-то выделено, то перед выделением ставим ###
-     * 
-     * Если ничего не выделено, но каретка стоит перед буквой в слове, то
-     * ставим ### перед этим словом
-     * 
-     * Иначе просто добавляем ### в конец
-    */
-    if (selected) {
-        result = left + formatSymbols + " " + selected + right;
-    } else if (
-        value[selectionStart] !== " "
-        && value[selectionStart] !== undefined
-    ) {
-        const pos = findWordAroundCaret(value, selectionStart);
-
-        if (pos) {
-            const [i, j] = pos;
-            result = (
-                value.slice(0, i)
-                + formatSymbols
-                + " "
-                + value.slice(i, j + 1)
-                + value.slice(j + 1)
-            );
-        }
-    } else {
-        result = left + right + formatSymbols + " ";
-    }
-
-    return result;
-}
-
-type FormatType = "title";
 type ToolInfo = {
     format: FormatType,
     icon: React.ReactElement;
@@ -75,6 +34,10 @@ export function RichTextArea({
         {
             format: "title",
             icon: <TitleIcon />
+        },
+        {
+            format: "bold",
+            icon: <FormatBoldIcon />
         }
     ];
 
@@ -85,13 +48,12 @@ export function RichTextArea({
 
         const el = textAreaRef.current;
         if (el) {
-            switch (type) {
-                case "title":
-                    res = formatTitle(value, el.selectionStart, el.selectionEnd);
-                    break;
-                default:
-                    throw new Error(`Нет способа форматирования типа ${type}`);
-            }
+            const textFormatter = new TextFormatter({
+                text: el.value,
+                selectionStart: el.selectionStart,
+                selectionEnd: el.selectionEnd
+            }, type);
+            res = textFormatter.format();
         }
 
         onFormat(res);
