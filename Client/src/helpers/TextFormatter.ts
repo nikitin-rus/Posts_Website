@@ -2,12 +2,14 @@ import { findWordAroundCaret } from "./findWordAroundCaret";
 
 export type FormatType = "title" | "bold";
 
-type TypesToMethods = {
-    [type in FormatType]: () => string;
+// TODO: Валидация входных значений
+// Пример: text[selectionStart] !== undefined
+
+type TypesToFormatters = {
+    [type in FormatType]: (parts: PartsOfText) => string;
 }
 
 interface SelectionInfo {
-    text: string,
     selectionStart: number,
     selectionEnd: number
 }
@@ -19,79 +21,82 @@ interface PartsOfText {
 }
 
 export class TextFormatter {
+    text: string;
     selectionInfo: SelectionInfo;
-    formatType: FormatType
+    formatType: FormatType;
 
-    public get partsOfText(): PartsOfText {
-        const text = this.selectionInfo.text;
-        const selStart = this.selectionInfo.selectionStart;
-        const selEnd = this.selectionInfo.selectionEnd;
-
-        return {
-            left: text.slice(0, selStart),
-            selected: text.slice(selStart, selEnd),
-            right: text.slice(selEnd),
-        };
-    }
-
-    private typesToMethods: TypesToMethods = {
+    private typesToFormatters: TypesToFormatters = {
         "title": this.formatTitle,
-        "bold": this.formatBold
+        "bold": this.formatBold,
     }
 
-    constructor(info: SelectionInfo, formatType: FormatType) {
-        this.selectionInfo = info;
+    constructor(text: string, formatType: FormatType, selectionInfo: SelectionInfo) {
+        this.text = text;
+        this.selectionInfo = selectionInfo;
         this.formatType = formatType;
     }
 
-    format = () => this.typesToMethods[this.formatType].call(this);
-
-    private formatTitle(): string {
-        const formatSymbols = "###";
-
-        const { text, selectionStart } = this.selectionInfo;
-        const { left, selected, right } = this.partsOfText;
-
-        let result = this.selectionInfo.text;
+    format(): string {
+        const text = this.text;
+        const { selectionStart, selectionEnd } = this.selectionInfo;
+        let parts = {
+            left: text.slice(0, selectionStart),
+            selected: text.slice(selectionStart, selectionEnd),
+            right: text.slice(selectionEnd),
+        };
+        const { left, selected, right } = parts;
 
         /**
-         * Если что-то выделено, то перед выделением ставим ###
-         * 
-         * Если ничего не выделено, но каретка стоит перед буквой в слове, то
-         * ставим ### перед этим словом
-         * 
-         * Иначе просто добавляем ### в конец
+         * Разбиваем текст на три части:
+         * 1. Если что-то выделено, то текст делится на три части выделенной подстрокой
+         * 2. Если ничего не выделено, но каретка стоит перед буквой в слове, то 
+         * ищем границы этого слова и воспринимаем его как выделенный
+         * 3. Иначе считаем, что ничего не выделено и помещаем весь текст в левую часть
         */
         if (selected) {
-            result = left + formatSymbols + " " + selected + right;
-        } else if (
-            text[selectionStart] !== " "
-            && text[selectionStart] !== undefined
-        ) {
-            const pos = findWordAroundCaret(text, selectionStart);
+            parts = {
+                left: left,
+                selected: selected,
+                right: right,
+            };
+        } else if (text[selectionStart] !== " ") {
+            try {
+                const positions = findWordAroundCaret(text, selectionStart);
 
-            if (pos) {
-                const [i, j] = pos;
-                result = (
-                    text.slice(0, i)
-                    + formatSymbols
-                    + " "
-                    + text.slice(i, j + 1)
-                    + text.slice(j + 1)
-                );
+                if (positions) {
+                    const [posLeft, posRight] = positions;
+                    parts = {
+                        left: text.slice(0, posLeft),
+                        selected: text.slice(posLeft, posRight + 1),
+                        right: text.slice(posRight + 1),
+                    };
+                } else {
+                    parts = {
+                        left: left + selected + right,
+                        selected: "",
+                        right: "",
+                    };
+                }
+            } catch (e) {
+                // TODO: Обработка исключений из findWordAroundCaret
+                throw e;
             }
         } else {
-            result = left + right + formatSymbols + " ";
+            parts = {
+                left: left + selected + right,
+                selected: "",
+                right: "",
+            };
         }
 
-        return result;
+        return this.typesToFormatters[this.formatType](parts);
+    };
+
+    private formatTitle(parts: PartsOfText): string {
+        return `${parts.left}### ${parts.selected}${parts.right}`;
     }
 
-    private formatBold(): string {
-        const formatSymbols = "**";
-
-        console.log(formatSymbols);
-
-        return "";
+    private formatBold(parts: PartsOfText): string {
+        return `${parts.left}**${parts.selected}**${parts.right}`;
     }
 }

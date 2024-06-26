@@ -48,11 +48,10 @@ export function RichTextArea({
 
         const el = textAreaRef.current;
         if (el) {
-            const textFormatter = new TextFormatter({
-                text: el.value,
+            const textFormatter = new TextFormatter(el.value, type, {
                 selectionStart: el.selectionStart,
                 selectionEnd: el.selectionEnd
-            }, type);
+            });
             res = textFormatter.format();
         }
 
