@@ -10,14 +10,6 @@
     border-radius: 5px;
     box-shadow: vars.$shadow;
 
-    &__toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid vars.$black;
-    }
-
     &__preview {
         display: flex;
         flex-direction: column;
@@ -46,10 +38,5 @@
 
     & * {
         box-shadow: none;
-    }
-
-    &__buttons {
-        display: flex;
-        column-gap: 16px;
     }
 }
