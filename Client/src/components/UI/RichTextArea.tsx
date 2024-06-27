@@ -4,7 +4,12 @@ import { Button } from "./Button";
 import { TextArea } from "./TextArea";
 import Markdown from "markdown-to-jsx";
 import TitleIcon from "../../assets/icons/title_24dp.svg";
-import FormatBoldIcon from "../../assets/icons/format_bold_24dp.svg";
+import BoldIcon from "../../assets/icons/bold_24dp.svg";
+import ItalicIcon from "../../assets/icons/italic_24dp.svg";
+import QuoteIcon from "../../assets/icons/quote_24dp.svg";
+import StrikethroughIcon from "../../assets/icons/strikethrough_24dp.svg";
+import LinkIcon from "../../assets/icons/link_24dp.svg";
+import CodeIcon from "../../assets/icons/code_24dp.svg";
 import { FormatType, TextFormatter } from "../../helpers/TextFormatter";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -37,7 +42,27 @@ export function RichTextArea({
         },
         {
             format: "bold",
-            icon: <FormatBoldIcon />
+            icon: <BoldIcon />
+        },
+        {
+            format: "italic",
+            icon: <ItalicIcon />
+        },
+        {
+            format: "strikethrough",
+            icon: <StrikethroughIcon />
+        },
+        {
+            format: "link",
+            icon: <LinkIcon />
+        },
+        {
+            format: "code",
+            icon: <CodeIcon />
+        },
+        {
+            format: "quote",
+            icon: <QuoteIcon />
         }
     ];
 

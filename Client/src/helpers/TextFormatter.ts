@@ -1,12 +1,24 @@
 import { findWordAroundCaret } from "./findWordAroundCaret";
 
-export type FormatType = "title" | "bold";
+export type FormatType =
+    "title"
+    | "bold"
+    | "italic"
+    | "strikethrough"
+    | "link"
+    | "code"
+    | "quote";
 
 // TODO: Валидация входных значений
 // Пример: text[selectionStart] !== undefined
 
-type TypesToFormatters = {
-    [type in FormatType]: (parts: PartsOfText) => string;
+interface FormatSymbols {
+    leftSymbols: string,
+    rightSymbols: string
+}
+
+type TypesToFormatSymbols = {
+    [type in FormatType]: FormatSymbols
 }
 
 interface SelectionInfo {
@@ -25,10 +37,36 @@ export class TextFormatter {
     selectionInfo: SelectionInfo;
     formatType: FormatType;
 
-    private typesToFormatters: TypesToFormatters = {
-        "title": this.formatTitle,
-        "bold": this.formatBold,
-    }
+    private typesToFormatSymbols: TypesToFormatSymbols = {
+        "title": {
+            leftSymbols: "### ",
+            rightSymbols: "",
+        },
+        "bold": {
+            leftSymbols: "**",
+            rightSymbols: "**",
+        },
+        "italic": {
+            leftSymbols: "_",
+            rightSymbols: "_",
+        },
+        "strikethrough": {
+            leftSymbols: "~~",
+            rightSymbols: "~~",
+        },
+        "link": {
+            leftSymbols: "[",
+            rightSymbols: "](url)",
+        },
+        "code": {
+            leftSymbols: "`",
+            rightSymbols: "`"
+        },
+        "quote": {
+            leftSymbols: "> ",
+            rightSymbols: ""
+        }
+    };
 
     constructor(text: string, formatType: FormatType, selectionInfo: SelectionInfo) {
         this.text = text;
@@ -50,7 +88,7 @@ export class TextFormatter {
          * Разбиваем текст на три части:
          * 1. Если что-то выделено, то текст делится на три части выделенной подстрокой
          * 2. Если ничего не выделено, но каретка стоит перед буквой в слове, то 
-         * ищем границы этого слова и воспринимаем его как выделенный
+         * ищем границы этого слова и воспринимаем его как выделенный текст
          * 3. Иначе считаем, что ничего не выделено и помещаем весь текст в левую часть
         */
         if (selected) {
@@ -89,14 +127,17 @@ export class TextFormatter {
             };
         }
 
-        return this.typesToFormatters[this.formatType](parts);
+        return this.createString(parts);
     };
 
-    private formatTitle(parts: PartsOfText): string {
-        return `${parts.left}### ${parts.selected}${parts.right}`;
-    }
-
-    private formatBold(parts: PartsOfText): string {
-        return `${parts.left}**${parts.selected}**${parts.right}`;
+    private createString(parts: PartsOfText): string {
+        const formatSymbols = this.typesToFormatSymbols[this.formatType];
+        return (
+            parts.left
+            + formatSymbols.leftSymbols
+            + parts.selected
+            + formatSymbols.rightSymbols
+            + parts.right
+        );
     }
 }

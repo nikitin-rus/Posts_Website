@@ -30,6 +30,16 @@
             overflow-wrap: anywhere;
             margin-top: 0;
         }
+
+        & blockquote {
+            padding: 16px;
+            background: vars.$gray;
+            border-radius: 5px;
+
+            p {
+                margin-bottom: 0;
+            }
+        }
     }
 
     & * {
