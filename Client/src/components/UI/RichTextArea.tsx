@@ -85,7 +85,6 @@ export function RichTextArea({
 
     return (
         <div className={finalClassName}>
-            {!isPreviewShown && (
                 <div className={componentClassName + "__toolbar"}>
                     {tools.map((t, index) => {
                         return (
@@ -93,13 +92,13 @@ export function RichTextArea({
                                 key={index}
                                 isSquare={true}
                                 onClick={() => handleFormat(t.format)}
+                                disabled={isPreviewShown}
                             >
                                 {t.icon}
                             </Button>
                         );
                     })}
                 </div>
-            )}
 
             {isPreviewShown ? (
                 <div className={componentClassName + "__preview"}>
