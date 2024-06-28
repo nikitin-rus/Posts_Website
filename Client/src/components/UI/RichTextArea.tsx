@@ -29,7 +29,8 @@ export function RichTextArea({
 
         const el = textAreaRef.current;
         if (el) {
-            const textFormatter = new TextFormatter(el.value, type, {
+            const textFormatter = new TextFormatter(type, {
+                text: el.value,
                 selectionStart: el.selectionStart,
                 selectionEnd: el.selectionEnd
             });

@@ -1,4 +1,4 @@
-import { findWordAroundCaret } from "./findWordAroundCaret";
+import { SelectionInfoError } from "../errors/SelectionInfoError";
 
 export type FormatType =
     "title"
@@ -8,9 +8,6 @@ export type FormatType =
     | "link"
     | "code"
     | "quote";
-
-// TODO: Валидация входных значений
-// Пример: text[selectionStart] !== undefined
 
 interface FormatSymbols {
     leftSymbols: string,
@@ -22,6 +19,7 @@ type TypesToFormatSymbols = {
 }
 
 interface SelectionInfo {
+    text: string
     selectionStart: number,
     selectionEnd: number
 }
@@ -33,8 +31,12 @@ interface PartsOfText {
 }
 
 export class TextFormatter {
-    text: string;
-    selectionInfo: SelectionInfo;
+    private _selectionInfo: SelectionInfo = {
+        text: "",
+        selectionStart: 0,
+        selectionEnd: 0,
+    };
+
     formatType: FormatType;
 
     private typesToFormatSymbols: TypesToFormatSymbols = {
@@ -68,67 +70,67 @@ export class TextFormatter {
         }
     };
 
-    constructor(text: string, formatType: FormatType, selectionInfo: SelectionInfo) {
-        this.text = text;
+    constructor(formatType: FormatType, selectionInfo: SelectionInfo) {
         this.selectionInfo = selectionInfo;
         this.formatType = formatType;
     }
 
+    public get selectionInfo(): SelectionInfo {
+        return this._selectionInfo;
+    }
+
+    public set selectionInfo(selectionInfo: SelectionInfo) {
+        const { text, selectionStart, selectionEnd } = selectionInfo;
+
+        if (
+            selectionStart < 0
+            || selectionEnd < 0
+        ) {
+            throw new SelectionInfoError(
+                "Начальный или конечный индекс выделения не может быть меньше нуля."
+            );
+        }
+
+        if (
+            selectionStart > text.length
+            || selectionEnd > text.length
+        ) {
+            throw new SelectionInfoError(
+                "Начальный или конечный индекс выделения не может быть больше длины строки."
+            );
+        }
+
+        if (selectionStart > selectionEnd) {
+            throw new SelectionInfoError(
+                "Начальный индекс выделения не может быть больше конечного."
+            );
+        }
+
+        this._selectionInfo = selectionInfo;
+    }
+
     format(): string {
-        const text = this.text;
-        const { selectionStart, selectionEnd } = this.selectionInfo;
-        let parts = {
+        const parts = this.chopString();
+        return this.createString(parts);
+    }
+
+    private chopString(): PartsOfText {
+        const { text, selectionStart, selectionEnd } = this.selectionInfo;
+        const parts = {
             left: text.slice(0, selectionStart),
             selected: text.slice(selectionStart, selectionEnd),
             right: text.slice(selectionEnd),
         };
-        const { left, selected, right } = parts;
 
-        /**
-         * Разбиваем текст на три части:
-         * 1. Если что-то выделено, то текст делится на три части выделенной подстрокой
-         * 2. Если ничего не выделено, но каретка стоит перед буквой в слове, то 
-         * ищем границы этого слова и воспринимаем его как выделенный текст
-         * 3. Иначе считаем, что ничего не выделено и помещаем весь текст в левую часть
-        */
-        if (selected) {
-            parts = {
-                left: left,
-                selected: selected,
-                right: right,
-            };
-        } else if (text[selectionStart] !== " ") {
-            try {
-                const positions = findWordAroundCaret(text, selectionStart);
-
-                if (positions) {
-                    const [posLeft, posRight] = positions;
-                    parts = {
-                        left: text.slice(0, posLeft),
-                        selected: text.slice(posLeft, posRight + 1),
-                        right: text.slice(posRight + 1),
-                    };
-                } else {
-                    parts = {
-                        left: left + selected + right,
-                        selected: "",
-                        right: "",
-                    };
-                }
-            } catch (e) {
-                // TODO: Обработка исключений из findWordAroundCaret
-                throw e;
-            }
-        } else {
-            parts = {
-                left: left + selected + right,
-                selected: "",
-                right: "",
-            };
+        // Если ничего не выделено, но каретка стоит перед буквой в слове, то 
+        // ищем границы этого слова и воспринимаем его как выделенный текст
+        if (!parts.selected) {
+            const result = this.findSelectedText();
+            if (result) return result;
         }
 
-        return this.createString(parts);
-    };
+        return parts;
+    }
 
     private createString(parts: PartsOfText): string {
         const formatSymbols = this.typesToFormatSymbols[this.formatType];
@@ -139,5 +141,42 @@ export class TextFormatter {
             + formatSymbols.rightSymbols
             + parts.right
         );
+    }
+
+    public findSelectedText(): PartsOfText | null {
+        const { text, selectionStart } = this.selectionInfo;
+        const regExp = /\s/;
+
+        if (
+            !text.length
+            || selectionStart === text.length
+            || regExp.test(text[selectionStart])
+        ) {
+            return null
+        }
+
+        let i = selectionStart;
+        while (i > 0) {
+            if (regExp.test(text[i])) {
+                i++;
+                break;
+            }
+            i--;
+        }
+
+        let j = selectionStart;
+        while (j < text.length - 1) {
+            if (regExp.test(text[j])) {
+                j--;
+                break;
+            }
+            j++;
+        }
+
+        return {
+            left: text.slice(0, i),
+            selected: text.slice(i, j + 1),
+            right: text.slice(j + 1),
+        };
     }
 }
