@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useCallback, useRef, useState } from "react";
+import { TextareaHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { Button } from "./Button";
 import { TextArea } from "./TextArea";
@@ -8,7 +8,7 @@ import { Toolbar } from "../Toolbar";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     value: string,
-    onFormat: (value: string) => void,
+    onFormat: (value: string) => void;
 }
 
 export function RichTextArea({
@@ -35,9 +35,12 @@ export function RichTextArea({
                 selectionEnd: el.selectionEnd
             });
             res = textFormatter.format();
-        }
 
-        onFormat(res);
+            // Повторная фокусировка после нажатия на кнопку в тулбаре
+            el.focus();
+
+            onFormat(res);
+        }
     }, []);
 
     const handleModeChange = () => setIsPreviewShown(!isPreviewShown);

@@ -152,7 +152,7 @@ export class TextFormatter {
             || selectionStart === text.length
             || regExp.test(text[selectionStart])
         ) {
-            return null
+            return null;
         }
 
         let i = selectionStart;
