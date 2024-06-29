@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import { ButtonHTMLAttributes, forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -6,7 +6,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     isSquare?: boolean
 }
 
-const Button = forwardRef<HTMLButtonElement, Props>(
+const Button = memo(forwardRef<HTMLButtonElement, Props>(
     function ({
         className,
         children,
@@ -31,6 +31,6 @@ const Button = forwardRef<HTMLButtonElement, Props>(
             </button>
         );
     }
-);
+));
 
 export { Button };

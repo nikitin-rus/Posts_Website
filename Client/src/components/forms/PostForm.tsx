@@ -43,7 +43,7 @@ export function PostForm({
                 }
             }}
         >
-            {({ setFieldValue, values, handleChange, isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
                 <Form className={finalClassName}
                     {...rest}
                 >
@@ -54,12 +54,11 @@ export function PostForm({
                         required
                     />
 
-                    <RichTextArea className="post-form__input"
+                    <Field className="post-form__input"
                         name="content"
-                        value={values.content}
-                        onChange={handleChange}
+                        as={RichTextArea}
+                        onFormat={(value: string) => setFieldValue("content", value)}
                         placeholder="Расскажите о чем-нибудь..."
-                        onFormat={(value) => setFieldValue("content", value)}
                         required
                     />
 

@@ -1,0 +1,9 @@
+@use '../base/vars';
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid vars.$black;   
+}
