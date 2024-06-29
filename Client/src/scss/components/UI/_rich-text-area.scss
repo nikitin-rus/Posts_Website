@@ -10,34 +10,37 @@
     border-radius: 5px;
     box-shadow: vars.$shadow;
 
-    &__toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid vars.$black;
-    }
-
     &__preview {
         display: flex;
         flex-direction: column;
         min-height: 120px;
+        padding: 12px;
 
-        background-color: vars.$white;
+        border-radius: 5px;
+        background-color: vars.$gray;
 
         & * {
             all: revert;
             overflow-wrap: anywhere;
             margin-top: 0;
         }
+
+        & blockquote {
+            padding: 16px;
+            background: vars.$gray;
+            border-radius: 5px;
+
+            p {
+                margin-bottom: 0;
+            }
+        }
+
+        & *:last-child {
+            margin-bottom: 0;
+        }
     }
 
     & * {
         box-shadow: none;
-    }
-
-    &__buttons {
-        display: flex;
-        column-gap: 16px;
     }
 }

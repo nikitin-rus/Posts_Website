@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
 }
 
-export function Input({
+const Input = memo(function Input({
     className,
     label,
     ...rest
@@ -22,4 +23,6 @@ export function Input({
             />
         </div>
     );
-}
+});
+
+export { Input };
