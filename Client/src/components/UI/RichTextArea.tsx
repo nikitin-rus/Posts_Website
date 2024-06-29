@@ -29,11 +29,10 @@ export function RichTextArea({
 
         const el = textAreaRef.current;
         if (el) {
-            const textFormatter = new TextFormatter(type, {
-                text: el.value,
+            const textFormatter = new TextFormatter(el.value, {
                 selectionStart: el.selectionStart,
                 selectionEnd: el.selectionEnd
-            });
+            }, type);
             res = textFormatter.format();
 
             // Повторная фокусировка после нажатия на кнопку в тулбаре

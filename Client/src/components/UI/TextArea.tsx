@@ -25,7 +25,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
         useEffect(() => {
             const resizeHandler = () => {
                 if (textAreaRef.current) {
-                    setHeight(textAreaRef.current, 120);
+                    setHeight(textAreaRef.current, 300);
                 }
             };
 
@@ -36,7 +36,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, Props>(
 
         useEffect(() => {
             if (textAreaRef.current) {
-                setHeight(textAreaRef.current, 120);
+                setHeight(textAreaRef.current, 300);
             }
         }, [value]);
 

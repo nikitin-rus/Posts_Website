@@ -1,45 +1,36 @@
+import { EnvironmentPlugin } from "webpack";
 import { SelectionInfoError } from "../errors/SelectionInfoError";
 
-export type FormatType =
-    "title"
-    | "bold"
-    | "italic"
-    | "strikethrough"
-    | "link"
-    | "code"
-    | "quote";
+export type InlineFormatType = "title" | "bold" | "italic" | "strikethrough" | "link" | "code" | "quote";
+export type ListFormatType = "unordered-list" | "numbered-list";
 
-interface FormatSymbols {
+export type FormatType = InlineFormatType | ListFormatType;
+
+interface InlineFormatSymbols {
     leftSymbols: string,
     rightSymbols: string
 }
 
-type TypesToFormatSymbols = {
-    [type in FormatType]: FormatSymbols
+type TypesToInlineFormatSymbols = {
+    [type in InlineFormatType]: InlineFormatSymbols
 }
 
 interface SelectionInfo {
-    text: string
     selectionStart: number,
     selectionEnd: number
 }
 
-interface PartsOfText {
-    left: string,
-    selected: string,
-    right: string
-}
-
 export class TextFormatter {
-    private _selectionInfo: SelectionInfo = {
-        text: "",
+    readonly text: string;
+
+    readonly selectionInfo: SelectionInfo = {
         selectionStart: 0,
         selectionEnd: 0,
     };
 
-    formatType: FormatType;
+    readonly formatType: FormatType;
 
-    private typesToFormatSymbols: TypesToFormatSymbols = {
+    private typesToInlineFormatSymbols: TypesToInlineFormatSymbols = {
         "title": {
             leftSymbols: "### ",
             rightSymbols: "",
@@ -70,17 +61,124 @@ export class TextFormatter {
         }
     };
 
-    constructor(formatType: FormatType, selectionInfo: SelectionInfo) {
+    constructor(text: string, selectionInfo: SelectionInfo, formatType: FormatType) {
+        TextFormatter.validateSelectionInfo(text, selectionInfo);
+
+        this.text = text;
         this.selectionInfo = selectionInfo;
         this.formatType = formatType;
     }
 
-    public get selectionInfo(): SelectionInfo {
-        return this._selectionInfo;
+    format(): string {
+        const text = this.text;
+        const { selectionStart, selectionEnd } = this.selectionInfo;
+
+        if (
+            this.formatType === "numbered-list"
+            || this.formatType === "unordered-list"
+        ) {
+            const {
+                selectionStart: expandedSelectionStart,
+                selectionEnd: expandedSelectionEnd
+            } = TextFormatter.expandSelection(this.text, this.selectionInfo);
+
+            const parts = {
+                left: text.slice(0, expandedSelectionStart),
+                selected: text.slice(expandedSelectionStart, expandedSelectionEnd),
+                right: text.slice(expandedSelectionEnd),
+            };
+
+            const lines = parts.selected.split("\n");
+
+            let result = lines[0];
+
+            if (this.formatType === "numbered-list") {
+                result = `1. ${result}`;
+
+                for (let i = 1; i < lines.length; i++) {
+                    result += `\n${i + 1}. ${lines[i]}`;
+                }
+            } else if (this.formatType === "unordered-list") {
+                result = `- ${result}`;
+
+                for (let i = 1; i < lines.length; i++) {
+                    result += `\n- ${lines[i]}`;
+                }
+            }
+
+            return (
+                parts.left
+                + result
+                + parts.right
+            );
+        } else {
+            const parts = {
+                left: text.slice(0, selectionStart),
+                selected: text.slice(selectionStart, selectionEnd),
+                right: text.slice(selectionEnd),
+            };
+
+            // Если ничего не выделено, но каретка стоит перед буквой в слове, то 
+            // ищем границы этого слова и воспринимаем его как выделенный текст
+            if (!parts.selected) {
+                const {
+                    selectionStart: expandedSelectionStart,
+                    selectionEnd: expandedSelectionEnd
+                } = TextFormatter.expandSelection(this.text, this.selectionInfo);
+
+                parts.left = text.slice(0, expandedSelectionStart);
+                parts.selected = text.slice(expandedSelectionStart, expandedSelectionEnd);
+                parts.right = text.slice(expandedSelectionEnd);
+            }
+
+            const formatSymbols = this.typesToInlineFormatSymbols[this.formatType];
+
+            return (
+                parts.left
+                + formatSymbols.leftSymbols
+                + parts.selected
+                + formatSymbols.rightSymbols
+                + parts.right
+            );
+        }
     }
 
-    public set selectionInfo(selectionInfo: SelectionInfo) {
-        const { text, selectionStart, selectionEnd } = selectionInfo;
+    static expandSelection(text: string, selectionInfo: SelectionInfo): SelectionInfo {
+        const { selectionStart, selectionEnd } = selectionInfo;
+
+        TextFormatter.validateSelectionInfo(text, selectionInfo);
+
+        const regExp = /\s/;
+
+        let i = selectionStart;
+        while (i > 0) {
+            if (i === selectionStart) {
+                i--;
+                continue;
+            };
+            if (regExp.test(text[i])) {
+                i++;
+                break;
+            }
+            i--;
+        }
+
+        let j = selectionEnd;
+        while (j < text.length) {
+            if (regExp.test(text[j])) {
+                break;
+            }
+            j++;
+        }
+
+        return {
+            selectionStart: i,
+            selectionEnd: j,
+        };
+    }
+
+    static validateSelectionInfo(text: string, selectionInfo: SelectionInfo): void {
+        const { selectionStart, selectionEnd } = selectionInfo;
 
         if (
             selectionStart < 0
@@ -105,78 +203,5 @@ export class TextFormatter {
                 "Начальный индекс выделения не может быть больше конечного."
             );
         }
-
-        this._selectionInfo = selectionInfo;
-    }
-
-    format(): string {
-        const parts = this.chopString();
-        return this.createString(parts);
-    }
-
-    private chopString(): PartsOfText {
-        const { text, selectionStart, selectionEnd } = this.selectionInfo;
-        const parts = {
-            left: text.slice(0, selectionStart),
-            selected: text.slice(selectionStart, selectionEnd),
-            right: text.slice(selectionEnd),
-        };
-
-        // Если ничего не выделено, но каретка стоит перед буквой в слове, то 
-        // ищем границы этого слова и воспринимаем его как выделенный текст
-        if (!parts.selected) {
-            const result = this.findSelectedText();
-            if (result) return result;
-        }
-
-        return parts;
-    }
-
-    private createString(parts: PartsOfText): string {
-        const formatSymbols = this.typesToFormatSymbols[this.formatType];
-        return (
-            parts.left
-            + formatSymbols.leftSymbols
-            + parts.selected
-            + formatSymbols.rightSymbols
-            + parts.right
-        );
-    }
-
-    public findSelectedText(): PartsOfText | null {
-        const { text, selectionStart } = this.selectionInfo;
-        const regExp = /\s/;
-
-        if (
-            !text.length
-            || selectionStart === text.length
-            || regExp.test(text[selectionStart])
-        ) {
-            return null;
-        }
-
-        let i = selectionStart;
-        while (i > 0) {
-            if (regExp.test(text[i])) {
-                i++;
-                break;
-            }
-            i--;
-        }
-
-        let j = selectionStart;
-        while (j < text.length - 1) {
-            if (regExp.test(text[j])) {
-                j--;
-                break;
-            }
-            j++;
-        }
-
-        return {
-            left: text.slice(0, i),
-            selected: text.slice(i, j + 1),
-            right: text.slice(j + 1),
-        };
     }
 }

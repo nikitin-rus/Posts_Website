@@ -5,153 +5,133 @@ import { SelectionInfoError } from '../errors/SelectionInfoError';
 describe(`Класс ${TextFormatter.name}`, () => {
     test(`Выбрасывает ${SelectionInfoError.name}, если переданы неверные данные о выделении текста`, () => {
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: -1,
                     selectionEnd: 0
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: 0,
                     selectionEnd: -1
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: -1,
                     selectionEnd: -1
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: 4,
                     selectionEnd: 0
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: 0,
                     selectionEnd: 4
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: 4,
                     selectionEnd: 4
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
 
         expect(() => {
-            new TextFormatter("bold",
+            new TextFormatter("abc",
                 {
-                    text: "abc",
                     selectionStart: 3,
                     selectionEnd: 0
-                }
+                },
+                "bold"
             )
         }).toThrowError(SelectionInfoError);
     });
 
-    describe(`Метод ${TextFormatter.prototype.findSelectedText.name}`, () => {
-        test(`Возвращает null, если строка пустая`, () => {
+    describe(`Метод ${TextFormatter.expandSelection.name}`, () => {
+        test(`Возвращает корректный результат`, () => {
             expect(
-                new TextFormatter("bold",
-                    {
-                        text: "",
-                        selectionStart: 0,
-                        selectionEnd: 0
-                    }
-                ).findSelectedText()
-            ).toBe(null);
-        });
-
-        test(`Возвращает null, если начальная позиция выделения равна длине строки`, () => {
-            expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc",
-                        selectionStart: 3,
-                        selectionEnd: 3
-                    }
-                ).findSelectedText()
-            ).toBe(null);
-        });
-
-        test(`Возвращает null, если начальная позиция выделения указывает на пробельный символ`, () => {
-            expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc abc",
-                        selectionStart: 3,
-                        selectionEnd: 3
-                    }
-                ).findSelectedText()
-            ).toBe(null);
+                TextFormatter.expandSelection("", {
+                    selectionStart: 0,
+                    selectionEnd: 0
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 0 });
 
             expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc\nabc",
-                        selectionStart: 3,
-                        selectionEnd: 3
-                    }
-                ).findSelectedText()
-            ).toBe(null);
+                TextFormatter.expandSelection("abc", {
+                    selectionStart: 3,
+                    selectionEnd: 3
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 3 });
 
             expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc\tabc",
-                        selectionStart: 3,
-                        selectionEnd: 3
-                    }
-                ).findSelectedText()
-            ).toBe(null);
-        });
-
-        test(`Возвращает null, если начальная позиция выделения указывает на пробельный символ`, () => {
-            expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc abc abc",
-                        selectionStart: 0,
-                        selectionEnd: 0
-                    }
-                ).findSelectedText()
-            ).toEqual({ left: "", selected: "abc", right: " abc abc" });
+                TextFormatter.expandSelection("abc abc", {
+                    selectionStart: 3,
+                    selectionEnd: 3
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 3 });
 
             expect(
-                new TextFormatter("bold",
-                    {
-                        text: "abc\nabc\nabc",
-                        selectionStart: 4,
-                        selectionEnd: 6
-                    }
-                ).findSelectedText()
-            ).toEqual({ left: "abc\n", selected: "abc", right: "\nabc" });
+                TextFormatter.expandSelection("abc abc", {
+                    selectionStart: 3,
+                    selectionEnd: 3
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 3 });
+
+            expect(
+                TextFormatter.expandSelection("abc\nabc", {
+                    selectionStart: 3,
+                    selectionEnd: 3
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 3 });
+
+            expect(
+                TextFormatter.expandSelection("abc\nabc", {
+                    selectionStart: 3,
+                    selectionEnd: 3
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 3 });
+
+            expect(
+                TextFormatter.expandSelection("abc\nabc\nabc", {
+                    selectionStart: 4,
+                    selectionEnd: 7
+                })
+            ).toEqual({ selectionStart: 4, selectionEnd: 7 });
+
+            expect(
+                TextFormatter.expandSelection("abc\nabc\nabc", {
+                    selectionStart: 2,
+                    selectionEnd: 8
+                })
+            ).toEqual({ selectionStart: 0, selectionEnd: 11 });
         });
     });
 });

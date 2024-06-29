@@ -5,13 +5,15 @@ import QuoteIcon from "../assets/icons/quote_24dp.svg";
 import StrikethroughIcon from "../assets/icons/strikethrough_24dp.svg";
 import LinkIcon from "../assets/icons/link_24dp.svg";
 import CodeIcon from "../assets/icons/code_24dp.svg";
+import UnorderedListIcon from "../assets/icons/unordered_list_24dp.svg";
+import NumberedListIcon from "../assets/icons/numbered_list_24dp.svg";
 import { getClassName } from "../helpers/getClassName";
-import { FormatType } from "../helpers/TextFormatter";
+import { FormatType, InlineFormatType, ListFormatType } from "../helpers/TextFormatter";
 import { Button } from "./UI/Button";
 import { memo } from "react";
 
-type ToolInfo = {
-    format: FormatType,
+type FormatToolInfo = {
+    formatType: FormatType,
     icon: React.ReactElement;
 };
 
@@ -25,52 +27,60 @@ const Toolbar = memo(function Toolbar({ className, onFormat, isDisabled }: Props
     const componentClassName = "toolbar";
     const finalClassName = getClassName(componentClassName, className);
 
-    const tools: ToolInfo[] = [
+    const formatTools: FormatToolInfo[] = [
         {
-            format: "title",
+            formatType: "title",
             icon: <TitleIcon />
         },
         {
-            format: "bold",
+            formatType: "bold",
             icon: <BoldIcon />
         },
         {
-            format: "italic",
-            icon: <ItalicIcon />
-        },
-        {
-            format: "strikethrough",
-            icon: <StrikethroughIcon />
-        },
-        {
-            format: "link",
-            icon: <LinkIcon />
-        },
-        {
-            format: "code",
+            formatType: "code",
             icon: <CodeIcon />
         },
         {
-            format: "quote",
+            formatType: "italic",
+            icon: <ItalicIcon />
+        },
+        {
+            formatType: "link",
+            icon: <LinkIcon />
+        },
+        {
+            formatType: "quote",
             icon: <QuoteIcon />
+        },
+        {
+            formatType: "strikethrough",
+            icon: <StrikethroughIcon />
+        },
+        {
+            formatType: "numbered-list",
+            icon: <NumberedListIcon />
+        },
+        {
+            formatType: "unordered-list",
+            icon: <UnorderedListIcon />
         },
     ];
 
     return (
         <div className={finalClassName}>
-            {tools.map((t, index) => {
+            {formatTools.map((formatTool, index) => {
                 return (
                     <Button className={componentClassName + "__tool"}
-                        key={index}
-                        isSquare={true}
-                        disabled={isDisabled}
-                        onClick={() => onFormat(t.format)}
-                    >
-                        {t.icon}
-                    </Button>
+                    key={index}
+                    isSquare={true}
+                    disabled={isDisabled}
+                    onClick={() => onFormat(formatTool.formatType)}
+                >
+                    {formatTool.icon}
+                </Button>
                 );
             })}
-        </div>
+        </div >
     );
 });
 
