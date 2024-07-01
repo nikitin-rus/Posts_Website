@@ -9,18 +9,15 @@ using Posts_Website.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment())
+builder.Services.AddCors(opts =>
 {
-    builder.Services.AddCors(opts =>
+    opts.AddDefaultPolicy(policy =>
     {
-        opts.AddDefaultPolicy(policy =>
-        {
-            policy.WithMethods(["GET", "POST", "PUT", "DELETE"])
-                .AllowAnyOrigin()
-                .AllowAnyHeader();
-        });
+        policy.WithMethods(["GET", "POST", "PUT", "DELETE"])
+            .AllowAnyOrigin()
+            .AllowAnyHeader();
     });
-}
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opts =>
@@ -51,18 +48,8 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-if (builder.Environment.IsDevelopment())
-{
-    app.UseCors();
-}
-else
-{
-    app.UseDefaultFiles();
-    app.UseStaticFiles();
-}
+app.UseCors();
 
 app.MapControllers();
-
-app.MapFallbackToFile("/index.html");
 
 app.Run();

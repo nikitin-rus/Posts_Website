@@ -1,16 +1,21 @@
+name: "posts-website"
+
 services:
-  posts_website_api:
-    container_name: posts_website_api
+  frontend:
+    container_name: posts-website-frontend
+    build:
+      context: ./Client
+  api:
+    container_name: posts-website-api
+    build: 
+      context: ./Server
+      target: final
     ports:
       - 8080:8080
-    build: 
-      context: .
-      dockerfile: /Server/Dockerfile
-      target: production
     depends_on: 
-      - posts_website_db
-  posts_website_db:
-    container_name: posts_website_db
+      - db
+  db:
+    container_name: posts-website-db
     image: "postgres:alpine3.19"
     expose:
       - 5432
