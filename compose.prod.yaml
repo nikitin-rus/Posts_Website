@@ -1,0 +1,21 @@
+name: "posts-website"
+
+services:
+  frontend:
+    image: "posts-website-frontend-prod"
+    build:
+      target: prod
+      context: ./Client
+    ports: 
+      - 80:80
+    extends:
+      file: compose.yaml
+      service: frontend
+  api:
+    extends:
+      file: compose.yaml
+      service: api
+  db:
+    extends:
+      file: compose.yaml
+      service: db
