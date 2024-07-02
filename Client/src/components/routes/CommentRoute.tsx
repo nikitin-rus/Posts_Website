@@ -1,5 +1,4 @@
 import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
-import { getComment } from "../../fetchers/getComment";
 import { authSelector } from "../../redux/slices/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import { CommentDetailsDto } from "../../typescript/dtos/CommentDto";
@@ -8,12 +7,11 @@ import { Button } from "../UI/Button";
 import EditIcon from "../../assets/icons/edit_24dp.svg";
 import DeleteIcon from "../../assets/icons/delete_24dp.svg";
 import { store } from "../../redux/store";
-import { updateComment } from "../../fetchers/updateComment";
-import { deleteComment } from "../../fetchers/deleteComment";
 import { CommentCard } from "../cards/CommentCard";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
-    return await getComment(params.postId!, params.commentId!);
+    return await ApiWorker.getComment(params.postId!, params.commentId!);
 }
 
 export async function action({ request, params }: { request: Request, params: Params }) {
@@ -33,7 +31,7 @@ export async function action({ request, params }: { request: Request, params: Pa
                 });
             }
 
-            return await updateComment(
+            return await ApiWorker.updateComment(
                 postId,
                 commentId,
                 { content: content },
@@ -41,7 +39,7 @@ export async function action({ request, params }: { request: Request, params: Pa
             );
         }
         case "DELETE": {
-            await deleteComment(postId, commentId, token!);
+            await ApiWorker.deleteComment(postId, commentId, token!);
             return redirect(`/posts/${postId}`);
         }
     }

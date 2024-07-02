@@ -1,6 +1,6 @@
 import { Params } from "react-router-dom";
-import { createComment } from "../../fetchers/createComment";
 import { store } from "../../redux/store";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function action({
     request,
@@ -27,7 +27,7 @@ export async function action({
         });
     }
 
-    return await createComment(
+    return await ApiWorker.createComment(
         params.id!,
         { content: content },
         store.getState().jwtToken!

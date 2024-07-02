@@ -3,8 +3,8 @@ import { Page } from "../Page";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { PostForm } from "../forms/PostForm";
-import { createPost } from "../../fetchers/createPost";
 import { store } from "../../redux/store";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function action({ request }: { request: Request }) {
     if (request.method !== "POST") {
@@ -26,7 +26,7 @@ export async function action({ request }: { request: Request }) {
         });
     }
 
-    const post = await createPost(
+    const post = await ApiWorker.createPost(
         { content: content, title: title },
         store.getState().jwtToken!
     );

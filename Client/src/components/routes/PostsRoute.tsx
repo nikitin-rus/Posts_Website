@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { getPosts } from "../../fetchers/getPosts";
 import { PostDto } from "../../typescript/dtos/PostDto";
 import { Select, SelectOption } from "../UI/Select";
 import { Page } from "../Page";
 import { Search } from "../UI/Search";
 import { PostCardList } from "../lists/PostCardList";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader() {
-    return await getPosts();
+    return await ApiWorker.getPosts();
 }
 
 export function PostsRoute() {

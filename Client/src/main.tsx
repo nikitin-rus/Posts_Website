@@ -19,9 +19,6 @@ import { EditPostRoute, loader as editPostLoader } from './components/routes/Edi
 import { action as postCommentsAction } from './components/routes/PostCommentsRoute';
 import { EditCommentRoute, loader as editCommentLoader } from './components/routes/EditCommentRoute';
 
-import axios from 'axios';
-axios.defaults.baseURL = "http://localhost:8080";
-
 const router = createBrowserRouter([{
     path: "/",
     element: <RootRoute />,

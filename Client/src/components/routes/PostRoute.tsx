@@ -1,4 +1,3 @@
-import { getPost } from "../../fetchers/getPost";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
@@ -8,14 +7,13 @@ import { Page } from "../Page";
 import { CommentForm } from "../forms/CommentForm";
 import EditIcon from "../../assets/icons/edit_24dp.svg";
 import DeleteIcon from "../../assets/icons/delete_24dp.svg";
-import { deletePost } from "../../fetchers/deletePost";
 import { store } from "../../redux/store";
-import { updatePost } from "../../fetchers/updatePost";
 import { PostCard } from "../cards/PostCard";
 import { CommentCardList } from "../lists/CommentCardList";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
-    return getPost(params.id!);
+    return ApiWorker.getPost(params.id!);
 }
 
 export async function action({ params, request }: { params: Params, request: Request }) {
@@ -35,14 +33,14 @@ export async function action({ params, request }: { params: Params, request: Req
                 });
             }
 
-            return await updatePost(
+            return await ApiWorker.updatePost(
                 id,
                 { title: title, content: content },
                 token!
             );
         }
         case "DELETE": {
-            await deletePost(id, token!);
+            await ApiWorker.deletePost(id, token!);
             return redirect(`/`);
         }
     }

@@ -1,13 +1,13 @@
 import { Navigate, Params, useLoaderData } from "react-router-dom";
 import { CommentDetailsDto } from "../../typescript/dtos/CommentDto";
-import { getComment } from "../../fetchers/getComment";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Page } from "../Page";
 import { CommentForm } from "../forms/CommentForm";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
-    return await getComment(params.postId!, params.commentId!);
+    return await ApiWorker.getComment(params.postId!, params.commentId!);
 }
 
 export function EditCommentRoute() {

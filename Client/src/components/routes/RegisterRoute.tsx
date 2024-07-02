@@ -4,8 +4,8 @@ import { AuthDto } from "../../typescript/dtos/AuthDto";
 import { useEffect } from "react";
 import { login as loginDispatcher } from "../../redux/slices/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
-import { register } from "../../fetchers/register";
 import { RegisterForm } from "../forms/RegisterForm";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function action({ request }: { request: Request }) {
     if (request.method !== "POST") {
@@ -28,7 +28,7 @@ export async function action({ request }: { request: Request }) {
         });
     }
 
-    return await register({ email, userName, password });
+    return await ApiWorker.register({ email, userName, password });
 }
 
 export function RegisterRoute() {

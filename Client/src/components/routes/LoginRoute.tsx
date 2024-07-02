@@ -1,11 +1,11 @@
 import { Page } from "../Page";
 import { LoginForm } from "../forms/LoginForm";
-import { login } from "../../fetchers/login";
 import { useActionData, useNavigate } from "react-router-dom";
 import { AuthDto } from "../../typescript/dtos/AuthDto";
 import { useEffect } from "react";
 import { login as loginDispatcher } from "../../redux/slices/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function action({ request }: { request: Request }) {
     if (request.method !== "POST") {
@@ -27,7 +27,7 @@ export async function action({ request }: { request: Request }) {
         });
     }
 
-    return await login({ email, password });
+    return await ApiWorker.login({ email, password });
 }
 
 export function LoginRoute() {

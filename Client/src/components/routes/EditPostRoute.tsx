@@ -1,13 +1,13 @@
 import { Page } from "../Page";
 import { PostForm } from "../forms/PostForm";
-import { getPost } from "../../fetchers/getPost";
 import { PostDto } from "../../typescript/dtos/PostDto";
 import { Navigate, Params, useLoaderData } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
-    return await getPost(params.id!);
+    return await ApiWorker.getPost(params.id!);
 }
 
 export function EditPostRoute() {

@@ -1,14 +1,14 @@
 import { Params, useLoaderData } from "react-router-dom";
-import { getUser } from "../../fetchers/getUser";
 import { UserDetailsDto } from "../../typescript/dtos/UserDto";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Page } from "../Page";
 import { CommentCardList } from "../lists/CommentCardList";
 import { PostCardList } from "../lists/PostCardList";
+import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
-    return await getUser(params.id!);
+    return await ApiWorker.getUser(params.id!);
 }
 
 export function UserRoute() {
