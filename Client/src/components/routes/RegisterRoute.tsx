@@ -1,6 +1,6 @@
 import { Page } from "../Page";
 import { useActionData, useNavigate } from "react-router-dom";
-import { AuthDto } from "../../typescript/dtos/AuthDto";
+import { AuthDto } from "../../schemas/auth/AuthSchema";
 import { useEffect } from "react";
 import { login as loginDispatcher } from "../../redux/slices/authSlice";
 import { useAppDispatch } from "../../redux/hooks";

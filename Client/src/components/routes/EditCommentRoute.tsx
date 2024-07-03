@@ -1,5 +1,5 @@
 import { Navigate, Params, useLoaderData } from "react-router-dom";
-import { CommentDetailsDto } from "../../typescript/dtos/CommentDto";
+import { CommentDetailsDto } from "../../schemas/comment/CommentDetailsSchema";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Page } from "../Page";

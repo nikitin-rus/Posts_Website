@@ -1,7 +1,7 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
 import { TextArea } from "../UI/TextArea";
 import { Button } from "../UI/Button";
-import { CommentFormDto } from "../../typescript/dtos/CommentDto";
+import { CommentFormDto } from "../../schemas/comment/CommentFormSchema";
 import { getClassName } from "../../helpers/getClassName";
 import { useFetcher, useSubmit } from "react-router-dom";
 

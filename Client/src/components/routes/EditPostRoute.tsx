@@ -1,6 +1,6 @@
 import { Page } from "../Page";
 import { PostForm } from "../forms/PostForm";
-import { PostDto } from "../../typescript/dtos/PostDto";
+import { PostDto } from "../../schemas/post/PostSchema";
 import { Navigate, Params, useLoaderData } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";

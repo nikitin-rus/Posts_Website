@@ -1,12 +1,12 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
 import { Button } from "../UI/Button";
-import { LoginDto } from "../../typescript/dtos/AuthDto";
 import { getClassName } from "../../helpers/getClassName";
 import { Input } from "../UI/Input";
 import { useSubmit } from "react-router-dom";
+import { LoginFormDto } from "../../schemas/auth/LoginFormSchema";
 
 interface Props extends FormikFormProps {
-    initialData?: LoginDto
+    initialData?: LoginFormDto
 }
 
 export function LoginForm({

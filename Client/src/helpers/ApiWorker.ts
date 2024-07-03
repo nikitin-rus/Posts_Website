@@ -1,59 +1,66 @@
 import axios from "axios";
-import { CommentFormDto } from "../typescript/dtos/CommentDto";
-import { PostFormDto } from "../typescript/dtos/PostDto";
-import { LoginDto, RegisterDto } from "../typescript/dtos/AuthDto";
+import { UserSchema, UserDto } from "../schemas/user/UserSchema";
+import { PostDto, PostSchema } from "../schemas/post/PostSchema";
+import { PostDetailsDto, PostDetailsSchema } from "../schemas/post/PostDetailsSchema";
+import { AuthDto, AuthSchema } from "../schemas/auth/AuthSchema";
+import { LoginFormDto } from "../schemas/auth/LoginFormSchema";
+import { RegisterFormDto } from "../schemas/auth/RegisterFormSchema";
+import { CommentDto, CommentSchema } from "../schemas/comment/Comment";
+import { CommentDetailsDto, CommentDetailsSchema } from "../schemas/comment/CommentDetailsSchema";
+import { CommentFormDto } from "../schemas/comment/CommentFormSchema";
+import { PostFormDto } from "../schemas/post/PostFormSchema";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
-// TODO: Валидация корректности id (GUID)
-// TODO: Валидация корректности результата запроса (yup)
-
 export class ApiWorker {
-
-    // UserDto
-    static async getUser(id: string): Promise<any> {
-        return (await axios.get<any>(`/api/users/${id}`)).data;
+    static async getUser(id: string): Promise<UserDto> {
+        const { data } = await axios.get(`/api/users/${id}`);
+        return UserSchema.parse(data);
     }
 
-    // PostDto
-    static async getPosts(): Promise<any> {
-        return (await axios.get<any>(
+    static async getPosts(): Promise<PostDto[]> {
+        const { data } = await axios.get(
             `/api/posts`
-        )).data;
+        );
+
+        return PostSchema.array().parse(data);
     }
 
-    // PostDetailsDto
-    static async getPost(id: string): Promise<any> {
-        return (await axios.get<any>(`/api/posts/${id}`)).data;
+    static async getPost(id: string): Promise<PostDetailsDto> {
+        const { data } = await axios.get(`/api/posts/${id}`);
+        return PostDetailsSchema.parse(data);
     }
 
-    // CommentDetailsDto
     static async getComment(
         postId: string,
         commentId: string
-    ): Promise<any> {
-        return (await axios.get<any>(
+    ): Promise<CommentDetailsDto> {
+        const { data } = await axios.get(
             `/api/posts/${postId}/comments/${commentId}`
-        )).data;
+        );
+
+        return CommentDetailsSchema.parse(data);
     }
 
     static async createPost(
         postForm: PostFormDto,
         jwtToken: string
-    ): Promise<any> {
-        return (await axios.post(`/api/posts`, postForm, {
+    ): Promise<PostDto> {
+        const { data } = await axios.post(`/api/posts`, postForm, {
             headers: {
                 "Authorization": `Bearer ${jwtToken}`
             }
-        })).data;
+        });
+
+        return PostSchema.parse(data);
     }
 
     static async createComment(
         postId: string,
         commentForm: CommentFormDto,
         jwtToken: string
-    ): Promise<any> {
-        return (await axios.post<any>(
+    ): Promise<CommentDto> {
+        const { data } = await axios.post(
             `/api/posts/${postId}/comments`,
             commentForm,
             {
@@ -61,33 +68,39 @@ export class ApiWorker {
                     "Authorization": `Bearer ${jwtToken}`
                 }
             }
-        )).data;
+        );
+
+        return CommentSchema.parse(data);
     }
 
     static async deletePost(
         id: string,
         jwtToken: string
-    ): Promise<any> {
-        return (await axios.delete<any>(`/api/posts/${id}`, {
+    ): Promise<PostDto> {
+        const { data } = await axios.delete(`/api/posts/${id}`, {
             headers: {
                 "Authorization": `Bearer ${jwtToken}`
             }
-        })).data;
+        });
+
+        return PostSchema.parse(data);
     }
 
     static async deleteComment(
         postId: string,
         commentId: string,
         jwtToken: string
-    ): Promise<any> {
-        (await axios.delete<any>(
+    ): Promise<CommentDto> {
+        const { data } = await axios.delete(
             `/api/posts/${postId}/comments/${commentId}`,
             {
                 headers: {
                     "Authorization": `Bearer ${jwtToken}`
                 }
             }
-        )).data;
+        );
+
+        return CommentSchema.parse(data);
     }
 
     static async updateComment(
@@ -95,8 +108,8 @@ export class ApiWorker {
         commentId: string,
         commentForm: CommentFormDto,
         jwtToken: string
-    ): Promise<any> {
-        return (await axios.put<any>(
+    ): Promise<CommentDto> {
+        const { data } = await axios.put(
             `/api/posts/${postId}/comments/${commentId}`,
             commentForm,
             {
@@ -104,15 +117,17 @@ export class ApiWorker {
                     "Authorization": `Bearer ${jwtToken}`
                 }
             }
-        )).data;
+        );
+
+        return CommentSchema.parse(data);
     }
 
     static async updatePost(
         id: string,
         postForm: PostFormDto,
         jwtToken: string
-    ): Promise<any> {
-        return (await axios.put<any>(
+    ): Promise<PostDto> {
+        const { data } = await axios.put(
             `/api/posts/${id}`,
             postForm,
             {
@@ -120,20 +135,26 @@ export class ApiWorker {
                     "Authorization": `Bearer ${jwtToken}`
                 }
             }
-        )).data;
+        );
+
+        return PostSchema.parse(data);
     }
 
-    static async login(login: LoginDto): Promise<any> {
-        return (await axios.post<any>(
+    static async login(login: LoginFormDto): Promise<AuthDto> {
+        const { data } = await axios.post(
             "/auth/login",
             login
-        )).data;
+        );
+
+        return AuthSchema.parse(data);
     }
 
-    static async register(register: RegisterDto): Promise<any> {
-        return (await axios.post<any>(
+    static async register(register: RegisterFormDto): Promise<AuthDto> {
+        const { data } = await axios.post(
             "/auth/register",
             register
-        )).data;
+        );
+
+        return AuthSchema.parse(data);
     }
 }

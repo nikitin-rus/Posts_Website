@@ -1,9 +1,9 @@
 import { createRef } from "react";
 import { Link } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { PostDto } from "../../typescript/dtos/PostDto";
 import { getClassName } from "../../helpers/getClassName";
 import { PostCard } from "../cards/PostCard";
+import { PostDto } from "../../schemas/post/PostSchema";
 
 interface Props {
     className?: string,

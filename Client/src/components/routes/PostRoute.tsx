@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
-import { PostDetailsDto } from "../../typescript/dtos/PostDto";
+import { PostDetailsDto } from "../../schemas/post/PostDetailsSchema";
 import { Button } from "../UI/Button";
 import { Page } from "../Page";
 import { CommentForm } from "../forms/CommentForm";

@@ -1,14 +1,14 @@
 import { Form, Link, Params, redirect, useLoaderData } from "react-router-dom";
-import { authSelector } from "../../redux/slices/authSlice";
+import DeleteIcon from "../../assets/icons/delete_24dp.svg";
+import EditIcon from "../../assets/icons/edit_24dp.svg";
+import { ApiWorker } from "../../helpers/ApiWorker";
 import { useAppSelector } from "../../redux/hooks";
-import { CommentDetailsDto } from "../../typescript/dtos/CommentDto";
+import { authSelector } from "../../redux/slices/authSlice";
+import { store } from "../../redux/store";
+import { CommentDetailsDto } from "../../schemas/comment/CommentDetailsSchema";
 import { Page } from "../Page";
 import { Button } from "../UI/Button";
-import EditIcon from "../../assets/icons/edit_24dp.svg";
-import DeleteIcon from "../../assets/icons/delete_24dp.svg";
-import { store } from "../../redux/store";
 import { CommentCard } from "../cards/CommentCard";
-import { ApiWorker } from "../../helpers/ApiWorker";
 
 export async function loader({ params }: { params: Params }) {
     return await ApiWorker.getComment(params.postId!, params.commentId!);

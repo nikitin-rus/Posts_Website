@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { PostDto } from "../../typescript/dtos/PostDto";
+import { PostDto } from "../../schemas/post/PostSchema";
 import { Select, SelectOption } from "../UI/Select";
 import { Page } from "../Page";
 import { Search } from "../UI/Search";

@@ -1,5 +1,5 @@
 import { Params, useLoaderData } from "react-router-dom";
-import { UserDetailsDto } from "../../typescript/dtos/UserDto";
+import { UserDetailsDto } from "../../schemas/user/UserDetailsSchema";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
 import { Page } from "../Page";
