@@ -1,5 +1,4 @@
 import axios from "axios";
-import { UserSchema, UserDto } from "../schemas/user/UserSchema";
 import { PostDto, PostSchema } from "../schemas/post/PostSchema";
 import { PostDetailsDto, PostDetailsSchema } from "../schemas/post/PostDetailsSchema";
 import { AuthDto, AuthSchema } from "../schemas/auth/AuthSchema";
@@ -9,13 +8,14 @@ import { CommentDto, CommentSchema } from "../schemas/comment/Comment";
 import { CommentDetailsDto, CommentDetailsSchema } from "../schemas/comment/CommentDetailsSchema";
 import { CommentFormDto } from "../schemas/comment/CommentFormSchema";
 import { PostFormDto } from "../schemas/post/PostFormSchema";
+import { UserDetailsDto, UserDetailsSchema } from "../schemas/user/UserDetailsSchema";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
 export class ApiWorker {
-    static async getUser(id: string): Promise<UserDto> {
+    static async getUser(id: string): Promise<UserDetailsDto> {
         const { data } = await axios.get(`/api/users/${id}`);
-        return UserSchema.parse(data);
+        return UserDetailsSchema.parse(data);
     }
 
     static async getPosts(): Promise<PostDto[]> {
@@ -99,7 +99,7 @@ export class ApiWorker {
                 }
             }
         );
-
+        
         return CommentSchema.parse(data);
     }
 

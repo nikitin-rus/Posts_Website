@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { PostDto } from "../../schemas/post/PostSchema";
-import { Select, SelectOption } from "../UI/Select";
-import { Page } from "../Page";
-import { Search } from "../UI/Search";
-import { PostCardList } from "../lists/PostCardList";
-import { ApiWorker } from "../../helpers/ApiWorker";
-
-export async function loader() {
-    return await ApiWorker.getPosts();
-}
+import { PostSchema } from "../../../schemas/post/PostSchema";
+import { PostCardList } from "../../../components/lists/PostCardList";
+import { Page } from "../../../components/Page";
+import { Search } from "../../../components/UI/Search";
+import { SelectOption, Select } from "../../../components/UI/Select";
 
 export function PostsRoute() {
-    const posts = useLoaderData() as PostDto[];
+    const posts = PostSchema.array().parse(useLoaderData());
     const [search, setSearch] = useState<string>("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const selectOptions: SelectOption[] = [
@@ -70,12 +65,12 @@ export function PostsRoute() {
                         options={selectOptions}
                     />
                 </div>
-                
+
                 <PostCardList className="posts-route__list"
                     posts={sortedPosts}
                 />
-                
-                {sortedPosts.length === 0 && 
+
+                {sortedPosts.length === 0 &&
                     <h2>Ничего не найдено</h2>
                 }
             </Page>

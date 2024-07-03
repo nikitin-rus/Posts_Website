@@ -1,18 +1,13 @@
-import { Params, useLoaderData } from "react-router-dom";
-import { UserDetailsDto } from "../../schemas/user/UserDetailsSchema";
+import { useLoaderData } from "react-router-dom";
+import { UserDetailsSchema } from "../../schemas/user/UserDetailsSchema";
 import { useAppSelector } from "../../redux/hooks";
 import { authSelector } from "../../redux/slices/authSlice";
-import { Page } from "../Page";
-import { CommentCardList } from "../lists/CommentCardList";
-import { PostCardList } from "../lists/PostCardList";
-import { ApiWorker } from "../../helpers/ApiWorker";
-
-export async function loader({ params }: { params: Params }) {
-    return await ApiWorker.getUser(params.id!);
-}
+import { Page } from "../../components/Page";
+import { CommentCardList } from "../../components/lists/CommentCardList";
+import { PostCardList } from "../../components/lists/PostCardList";
 
 export function UserRoute() {
-    const user = useLoaderData() as UserDetailsDto;
+    const user = UserDetailsSchema.parse(useLoaderData());
     const auth = useAppSelector(authSelector);
     const isSameUser = user.id === auth.user?.id;
 

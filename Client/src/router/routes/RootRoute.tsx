@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "../Navbar";
+import { Navbar } from "../../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { authSelector, login } from "../../redux/slices/authSlice";
 import { useEffect } from "react";
