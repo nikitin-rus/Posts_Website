@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
-import ExpandMoreIcon from "../../assets/icons/expand_more_24dp.svg";
+import ChevronDown from "../../assets/icons/chevron_down_24dp.svg";
 import { isNode } from "../../typescript/validators/isNode";
 
 export type SelectOption = {
@@ -64,7 +64,7 @@ export function Select({
                 {selectedIndex >= 0 ?
                     options[selectedIndex].value : ""
                 }
-                <ExpandMoreIcon />
+                <ChevronDown />
             </div>
 
             <CSSTransition

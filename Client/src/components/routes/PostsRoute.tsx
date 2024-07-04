@@ -6,6 +6,7 @@ import { Select, SelectOption } from "../UI/Select";
 import { Page } from "../Page";
 import { Search } from "../UI/Search";
 import { PostCardList } from "../lists/PostCardList";
+import { Pagination } from "../Pagination";
 
 export async function loader() {
     return await getPosts();
@@ -53,6 +54,10 @@ export function PostsRoute() {
         setSelectedIndex(selectedIndex);
     }
 
+    function handleNavigate(page: number) {
+        console.log(page);
+    }
+
     return (
         <div className="posts-route">
             <Page>
@@ -70,14 +75,20 @@ export function PostsRoute() {
                         options={selectOptions}
                     />
                 </div>
-                
+
                 <PostCardList className="posts-route__list"
                     posts={sortedPosts}
                 />
-                
-                {sortedPosts.length === 0 && 
+
+                {sortedPosts.length === 0 &&
                     <h2>Ничего не найдено</h2>
                 }
+
+                <Pagination className="posts-route__pagination"
+                    pages={15}
+                    page={1}
+                    onNavigate={handleNavigate}
+                />
             </Page>
         </div >
     );
