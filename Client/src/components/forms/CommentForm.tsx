@@ -53,7 +53,7 @@ export function CommentForm({
             <Form className={finalClassName}
                 {...rest}
             >
-                <Field className="comment-form__input"
+                <Field className="comment-form__text-area"
                     name="content"
                     as={TextArea}
                     placeholder="Что вы думаете о данном посте?"

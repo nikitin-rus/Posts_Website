@@ -2,7 +2,7 @@
 
 .text-area {
     display: flex;
-    min-height: 300px;
+    min-height: 200px;
     padding: 12px;
 
     background-color: vars.$white;
@@ -10,5 +10,5 @@
     box-shadow: vars.$shadow;
     border-radius: 5px;
 
-    resize: none;
+    resize: vertical;
 }
