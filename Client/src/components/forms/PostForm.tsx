@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
 import { Button } from "../UI/Button";
-import { PostFormDto } from "../../typescript/dtos/PostDto";
+import { PostFormDto } from "../../schemas/post/PostFormSchema";
 import { getClassName } from "../../helpers/getClassName";
 import { useSubmit } from "react-router-dom";
 import { Input } from "../UI/Input";

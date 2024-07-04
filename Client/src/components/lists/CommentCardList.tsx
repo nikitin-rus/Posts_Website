@@ -2,8 +2,8 @@ import { createRef } from "react";
 import { Link } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { getClassName } from "../../helpers/getClassName";
-import { CommentDto } from "../../typescript/dtos/CommentDto";
 import { CommentCard } from "../cards/CommentCard";
+import { CommentDto } from "../../schemas/comment/Comment";
 
 interface Props {
     className?: string,

@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
-import { CommentDto } from "../../typescript/dtos/CommentDto";
+import { CommentDto } from "../../schemas/comment/Comment";
 
 interface Props {
     className?: string,

@@ -45,10 +45,10 @@ builder.Services.AddControllers(opts => opts.Filters.Add<EntityNotFoundException
 
 var app = builder.Build();
 
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors();
 
 app.MapControllers();
 

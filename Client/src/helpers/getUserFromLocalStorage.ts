@@ -1,13 +1,5 @@
-import { UserDto } from "../typescript/dtos/UserDto";
-
-// TODO: Упростить валидацию (library yup)
-function isUserDto(obj: any): obj is UserDto {
-    return typeof obj === "object"
-        && obj !== null
-        && obj["id"] !== undefined
-        && obj["userName"] !== undefined
-        && obj["email"] !== undefined;
-}
+import { ZodError } from "zod";
+import { UserSchema } from "../schemas/user/UserSchema";
 
 export function getUserFromLocalStorage() {
     const user = localStorage.getItem('user');
@@ -16,9 +8,12 @@ export function getUserFromLocalStorage() {
 
     try {
         const parsedUser = JSON.parse(user);
-        return isUserDto(parsedUser) ? parsedUser : null;
+        return UserSchema.parse(parsedUser);
     } catch (e) {
-        if (e instanceof SyntaxError) {
+        if (
+            e instanceof SyntaxError
+            || e instanceof ZodError
+        ) {
             return null;
         } else {
             throw e;

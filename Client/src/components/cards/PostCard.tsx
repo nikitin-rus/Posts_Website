@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
-import { PostDto } from "../../typescript/dtos/PostDto";
 import Markdown from "markdown-to-jsx";
+import { PostDto } from "../../schemas/post/PostSchema";
 
 interface Props {
     className?: string,
