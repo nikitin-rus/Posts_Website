@@ -8,6 +8,10 @@ namespace Posts_Website.Repositories
     {
         Post[] GetAll();
 
+        Post[] GetRange(int limit, int offset);
+
+        int GetLength();
+
         Post? GetById(Guid id);
 
         void Insert(Post post);
@@ -23,9 +27,21 @@ namespace Posts_Website.Repositories
     {
         public Post[] GetAll()
         {
-
             return [.. db.Posts.Include(p => p.User)
                                .Include(p => p.Comments)];
+        }
+
+        public Post[] GetRange(int limit, int offset)
+        {
+            return [.. db.Posts.Skip(offset)
+                               .Take(limit)
+                               .Include(p => p.User)
+                               .Include(p => p.Comments)];
+        }
+
+        public int GetLength()
+        {
+            return db.Posts.Count();
         }
 
         public Post? GetById(Guid id)
