@@ -32,9 +32,9 @@ namespace Posts_Website.Controllers
                 );
             }
             
-            Post[] posts = postRepo.GetRange(limit, limit * (page - 1));
+            Post[] posts = postRepo.Get(limit, limit * (page - 1));
 
-            // // ctx.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
+            HttpContext.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
 
             return Ok(posts.Select(p => p.ToPostDto()));
         }

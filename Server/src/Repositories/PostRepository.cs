@@ -6,9 +6,7 @@ namespace Posts_Website.Repositories
 {
     public interface IPostRepository
     {
-        Post[] GetAll();
-
-        Post[] GetRange(int limit, int offset);
+        Post[] Get(int limit, int offset);
 
         int GetLength();
 
@@ -25,13 +23,7 @@ namespace Posts_Website.Repositories
 
     public class PostRepository(ApplicationContext db) : IPostRepository
     {
-        public Post[] GetAll()
-        {
-            return [.. db.Posts.Include(p => p.User)
-                               .Include(p => p.Comments)];
-        }
-
-        public Post[] GetRange(int limit, int offset)
+        public Post[] Get(int limit, int offset)
         {
             var posts = db.Posts.Skip(offset);
 
