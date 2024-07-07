@@ -17,32 +17,24 @@ namespace Posts_Website.Controllers
     ) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetRange([FromQuery] int limit, [FromQuery] int page)
+        public IActionResult GetRange([FromQuery] int limit = 0, [FromQuery] int page = 1)
         {
-            if (limit < 0)
+            if (limit < 0 || page < 0)
             {
-                return BadRequest("Query-параметр limit не может принимать отрицательное значение.");
-            }
-
-            if (page < 0)
-            {
-                return BadRequest("Query-параметр page не может принимать отрицательное значение.");
-            }
-
-            Post[] posts = [];
-            if (limit == 0)
-            {
-                posts = posts = postRepo.GetAll();
-            }
-            else if (limit > 0)
-            {
-                posts = postRepo.GetRange(
-                    limit,
-                    page > 0 ? (page - 1) * limit : 0
+                return BadRequest(
+                    $"Query-параметры {nameof(limit)} и {nameof(page)} не могут принимать отрицательные значения."
                 );
             }
 
-            // ctx.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
+            if (page == 0) {
+                return BadRequest(
+                    $"Query-параметр {nameof(page)} не может быть равен нулю."
+                );
+            }
+            
+            Post[] posts = postRepo.GetRange(limit, limit * (page - 1));
+
+            // // ctx.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
 
             return Ok(posts.Select(p => p.ToPostDto()));
         }

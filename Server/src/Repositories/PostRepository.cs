@@ -33,10 +33,15 @@ namespace Posts_Website.Repositories
 
         public Post[] GetRange(int limit, int offset)
         {
-            return [.. db.Posts.Skip(offset)
-                               .Take(limit)
-                               .Include(p => p.User)
-                               .Include(p => p.Comments)];
+            var posts = db.Posts.Skip(offset);
+
+            if (limit > 0)
+            {
+                posts = posts.Take(limit);
+            }
+
+            return [.. posts.Include(p => p.User)
+                            .Include(p => p.Comments)];
         }
 
         public int GetLength()
