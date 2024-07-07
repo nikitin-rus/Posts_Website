@@ -9,6 +9,7 @@ import { CommentDetailsDto, CommentDetailsSchema } from "../schemas/comment/Comm
 import { CommentFormDto } from "../schemas/comment/CommentFormSchema";
 import { PostFormDto } from "../schemas/post/PostFormSchema";
 import { UserDetailsDto, UserDetailsSchema } from "../schemas/user/UserDetailsSchema";
+import { PostsDto, PostsSchema } from "../schemas/post/PostsSchema";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
@@ -18,12 +19,30 @@ export class ApiWorker {
         return UserDetailsSchema.parse(data);
     }
 
-    static async getPosts(): Promise<PostDto[]> {
-        const { data } = await axios.get(
-            `/api/posts`
+    static async getPosts(
+        limit: number = 0,
+        page: number = 1
+    ): Promise<PostsDto> {
+        const { data, headers } = await axios.get(
+            `/api/posts`,
+            {
+                params: {
+                    limit: limit,
+                    page: page,
+                }
+            }
         );
 
-        return PostSchema.array().parse(data);
+        const totalCount = headers["x-total-count"];
+
+        if (!totalCount) {
+            throw new Error("Отсутствие хэдера X-Total-Count");
+        }
+
+        return PostsSchema.parse({
+            posts: data,
+            totalCount: +totalCount,
+        });
     }
 
     static async getPost(id: string): Promise<PostDetailsDto> {
@@ -99,7 +118,7 @@ export class ApiWorker {
                 }
             }
         );
-        
+
         return CommentSchema.parse(data);
     }
 

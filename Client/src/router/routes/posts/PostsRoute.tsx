@@ -6,9 +6,11 @@ import { Page } from "../../../components/Page";
 import { Search } from "../../../components/UI/Search";
 import { SelectOption, Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
+import { PostsSchema } from "../../../schemas/post/PostsSchema";
 
 export function PostsRoute() {
-    const posts = PostSchema.array().parse(useLoaderData());
+    const { posts, totalCount } = PostsSchema.parse(useLoaderData());
+
     const [search, setSearch] = useState<string>("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const selectOptions: SelectOption[] = [
@@ -48,7 +50,7 @@ export function PostsRoute() {
     function handleSelect(selectedIndex: number) {
         setSelectedIndex(selectedIndex);
     }
-    
+
     function handleNavigate(page: number) {
         console.log(page);
     }
