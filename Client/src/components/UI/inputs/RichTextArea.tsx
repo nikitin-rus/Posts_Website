@@ -1,10 +1,10 @@
-import { TextareaHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
-import { getClassName } from "../../helpers/getClassName";
-import { Button } from "./Button";
-import { TextArea } from "./TextArea";
 import Markdown from "markdown-to-jsx";
-import { FormatType, TextFormatter } from "../../helpers/TextFormatter";
-import { Toolbar } from "../Toolbar";
+import { TextareaHTMLAttributes, useCallback, useRef, useState } from "react";
+import { getClassName } from "../../../helpers/getClassName";
+import { FormatType, TextFormatter } from "../../../helpers/TextFormatter";
+import { Toolbar } from "../../Toolbar";
+import { Button } from "../Button";
+import { TextArea } from "./TextArea";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     value: string,

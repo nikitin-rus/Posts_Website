@@ -1,5 +1,5 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
-import { TextArea } from "../UI/TextArea";
+import { TextArea } from "../UI/inputs/TextArea";
 import { Button } from "../UI/Button";
 import { CommentFormDto } from "../../schemas/comment/CommentFormSchema";
 import { getClassName } from "../../helpers/getClassName";

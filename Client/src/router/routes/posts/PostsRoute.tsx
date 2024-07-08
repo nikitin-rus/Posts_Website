@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
-import { PostSchema } from "../../../schemas/post/PostSchema";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import { PostCardList } from "../../../components/lists/PostCardList";
 import { Page } from "../../../components/Page";
-import { Search } from "../../../components/UI/Search";
 import { SelectOption, Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
 import { PostsSchema } from "../../../schemas/post/PostsSchema";
+import { Input } from "../../../components/UI/inputs/Input";
+import Close from "../../../assets/icons/close_24dp.svg";
 
 export function PostsRoute() {
+    const componentClassName = "posts-route";
     const { posts, totalCount } = PostsSchema.parse(useLoaderData());
+    const [page, setPage] = useState(1);
+    // const [limit, setLimit] = useState(1);
 
-    const [search, setSearch] = useState<string>("");
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const [search, setSearch] = useState("");
+
     const [selectedIndex, setSelectedIndex] = useState(0);
     const selectOptions: SelectOption[] = [
         { name: "new", value: "Сначала новые" },
@@ -41,10 +47,12 @@ export function PostsRoute() {
         }
     });
 
-    const handleSearchClear = () => setSearch("");
-
-    function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
         setSearch(e.target.value);
+    }
+
+    function handleClear() {
+        setSearch("");
     }
 
     function handleSelect(selectedIndex: number) {
@@ -52,20 +60,26 @@ export function PostsRoute() {
     }
 
     function handleNavigate(page: number) {
-        console.log(page);
+        setPage(page);
+        setSearchParams({
+            ...Object.fromEntries(searchParams.entries()),
+            page: page.toString()
+        });
     }
 
     return (
         <div className="posts-route">
             <Page>
-                <div className="posts-route__controls">
-                    <Search
-                        search={search}
-                        labelText="Поиск по содержанию"
-                        onClear={handleSearchClear}
-                        onSearch={handleSearchInput}
-                        placeholder="ECMAScript 2024"
+                <div className={componentClassName + "__input-and-select"}>
+                    <Input className={componentClassName + "__input"}
+                        value={search}
+                        onChange={handleSearch}
+                        label="Поиск по содержанию"
+                        placeholder="Полет через Ла-Манш"
+                        icon={Close}
+                        onIconClick={handleClear}
                     />
+
                     <Select
                         selectedIndex={selectedIndex}
                         onSelect={handleSelect}
@@ -82,8 +96,8 @@ export function PostsRoute() {
                 }
 
                 <Pagination className="posts-route__pagination"
-                    pages={15}
-                    page={1}
+                    pages={totalCount}
+                    page={page}
                     onNavigate={handleNavigate}
                 />
             </Page>

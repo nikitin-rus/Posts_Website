@@ -20,13 +20,16 @@ export function Pagination({
 
     let buttons = [];
     for (let i = 0; i < pages; i++) {
+        const isCurrent = page === i + 1;
+
         buttons.push(
             <Button className={[
                 componentClassName + "__button",
-                page === i + 1 ? (componentClassName + "__button_current") : "",
+                isCurrent ? (componentClassName + "__button_current") : "",
             ].join(" ")}
                 key={i}
                 onClick={() => onNavigate(i + 1)}
+                theme={isCurrent ? "blue" : "default"}
             >
                 {i + 1}
             </Button>

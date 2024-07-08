@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { getClassName } from "../../helpers/getClassName";
+import { getClassName } from "../../../helpers/getClassName";
 
 function setHeight(element: HTMLElement, defaultHeight: number) {
     element.style.minHeight = `${defaultHeight}px`;
