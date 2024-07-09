@@ -95,6 +95,7 @@ export function PostsRoute() {
                     <h2>Ничего не найдено</h2>
                 }
 
+                {/* TODO: Вычислять pages на основе limit и totalCount */}
                 <Pagination className="posts-route__pagination"
                     pages={totalCount}
                     page={page}

@@ -17,7 +17,7 @@ const CommentCard = forwardRef<HTMLDivElement, Props>(({
     const finalClassName = getClassName(
         "comment-card",
         className,
-        { "post-card_preview": isPreview }
+        { "comment-card_preview": isPreview }
     );
 
     return (

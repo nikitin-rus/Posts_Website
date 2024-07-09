@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, Fragment } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
 import Markdown from "markdown-to-jsx";
@@ -36,9 +36,7 @@ const PostCard = forwardRef<HTMLDivElement, Props>(({
             </h3>
 
             <div className="post-card__body">
-                <Markdown options={{
-                    forceBlock: true
-                }}>
+                <Markdown>
                     {post.content}
                 </Markdown>
             </div>
