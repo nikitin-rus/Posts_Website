@@ -97,8 +97,8 @@ export function PostsRoute() {
 
                 {/* TODO: Вычислять pages на основе limit и totalCount */}
                 <Pagination className="posts-route__pagination"
-                    pages={totalCount}
-                    page={page}
+                    pagesCount={totalCount}
+                    currentPage={page}
                     onNavigate={handleNavigate}
                 />
             </Page>

@@ -4,23 +4,67 @@ import ChevronDown from "../assets/icons/chevron_down_24dp.svg";
 
 interface Props {
     className?: string,
-    pages: number,
-    page: number,
+    pagesCount: number,
+    currentPage: number,
     onNavigate: (page: number) => void;
+}
+
+function getPages(currentPage: number, pagesCount: number): number[] {
+    console.log(currentPage);
+    console.log(pagesCount);
+    
+    if (pagesCount <= 5) {
+        const result = [];
+
+        for (let i = 0; i < pagesCount; i++) {
+            result.push(i + 1);
+        }
+
+        return result;
+    }
+
+    if (currentPage <= 3) {
+        return [1, 2, 3, 4, pagesCount];
+    }
+
+    if (currentPage >= pagesCount - 2) {
+        return [
+            1,
+            pagesCount - 3,
+            pagesCount - 2,
+            pagesCount - 1,
+            pagesCount,
+        ];
+    }
+
+    return [
+        1,
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        pagesCount,
+    ];
 }
 
 export function Pagination({
     className,
-    pages,
-    page,
+    pagesCount,
+    currentPage,
     onNavigate
 }: Props) {
     const componentClassName = "pagination";
     const finalClassName = getClassName(componentClassName, className);
 
-    let buttons = [];
-    for (let i = 0; i < pages; i++) {
-        const isCurrent = page === i + 1;
+    // const isPlain = pagesCount <= 5;
+    // const isLeftEllipsisShown = !isPlain && currentPage > 3;
+    // const isRightEllipsisShown = !isPlain && pagesCount - currentPage > 2;
+
+    const pages = getPages(currentPage, pagesCount);
+
+    const buttons = [];
+
+    for (let i = 0; i < pages.length; i++) {
+        const isCurrent = currentPage === pages[i];
 
         buttons.push(
             <Button className={[
@@ -28,10 +72,10 @@ export function Pagination({
                 isCurrent ? (componentClassName + "__button_current") : "",
             ].join(" ")}
                 key={i}
-                onClick={() => onNavigate(i + 1)}
+                onClick={() => onNavigate(pages[i])}
                 theme={isCurrent ? "blue" : "default"}
             >
-                {i + 1}
+                {pages[i]}
             </Button>
         );
     }
@@ -42,8 +86,8 @@ export function Pagination({
                 componentClassName + "__button",
                 componentClassName + "__button_navigate",
             ].join(" ")}
-                onClick={() => onNavigate(page - 1)}
-                disabled={page <= 1}
+                onClick={() => onNavigate(currentPage - 1)}
+                disabled={currentPage <= 1}
                 isSquare={true}
             >
                 <ChevronDown className={[
@@ -60,8 +104,8 @@ export function Pagination({
                 componentClassName + "__button",
                 componentClassName + "__button_navigate",
             ].join(" ")}
-                onClick={() => onNavigate(page + 1)}
-                disabled={page >= pages}
+                onClick={() => onNavigate(currentPage + 1)}
+                disabled={currentPage >= pagesCount}
                 isSquare={true}
             >
                 <ChevronDown className={[
