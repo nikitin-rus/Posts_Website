@@ -1,8 +1,7 @@
 .pagination {
     display: flex;
-    justify-content: center;
     column-gap: 16px;
-    
+
     &__buttons-wrapper {
         display: flex;
         column-gap: 16px;
@@ -14,8 +13,7 @@
 
     &__buttons {
         display: flex;
-        justify-content: center;
-        gap: 16px;
+        column-gap: 16px;
     }
 
     &__chevron-down {

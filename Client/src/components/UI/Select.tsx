@@ -3,9 +3,9 @@ import { CSSTransition } from "react-transition-group";
 import ChevronDown from "../../assets/icons/chevron_down_24dp.svg";
 import { isNode } from "../../typescript/validators/isNode";
 
-export type SelectOption = {
+export interface SelectOption {
     name: string,
-    value: string
+    value: string,
 };
 
 interface Props {

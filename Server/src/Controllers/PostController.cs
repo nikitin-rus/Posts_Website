@@ -17,7 +17,11 @@ namespace Posts_Website.Controllers
     ) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetRange([FromQuery] int limit = 0, [FromQuery] int page = 1)
+        public IActionResult GetRange(
+            [FromQuery] int limit = 0,
+            [FromQuery] int page = 1,
+            [FromQuery] string sort = "new"
+        )
         {
             if (limit < 0 || page < 0)
             {
@@ -26,13 +30,14 @@ namespace Posts_Website.Controllers
                 );
             }
 
-            if (page == 0) {
+            if (page == 0)
+            {
                 return BadRequest(
                     $"Query-параметр {nameof(page)} не может быть равен нулю."
                 );
             }
-            
-            Post[] posts = postRepo.Get(limit, limit * (page - 1));
+
+            Post[] posts = postRepo.Get(limit, limit * (page - 1), sort);
 
             HttpContext.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
 

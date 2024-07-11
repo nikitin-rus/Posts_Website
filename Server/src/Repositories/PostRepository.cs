@@ -6,7 +6,7 @@ namespace Posts_Website.Repositories
 {
     public interface IPostRepository
     {
-        Post[] Get(int limit, int offset);
+        Post[] Get(int limit, int offset, string sortType = "new");
 
         int GetLength();
 
@@ -23,9 +23,13 @@ namespace Posts_Website.Repositories
 
     public class PostRepository(ApplicationContext db) : IPostRepository
     {
-        public Post[] Get(int limit, int offset)
+        public Post[] Get(int limit, int offset, string sortType = "new")
         {
-            var posts = db.Posts.Skip(offset);
+            var posts = (
+                sortType == "old" ?
+                db.Posts.OrderBy(p => p.PublishedAt) :
+                db.Posts.OrderByDescending(p => p.PublishedAt)
+            ).Skip(offset);
 
             if (limit > 0)
             {

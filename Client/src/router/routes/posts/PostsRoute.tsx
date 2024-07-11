@@ -8,11 +8,12 @@ import { PostsSchema } from "../../../schemas/post/PostsSchema";
 import { Input } from "../../../components/UI/inputs/Input";
 import Close from "../../../assets/icons/close_24dp.svg";
 
+
 export function PostsRoute() {
     const componentClassName = "posts-route";
     const { posts, totalCount } = PostsSchema.parse(useLoaderData());
     const [page, setPage] = useState(1);
-    // const [limit, setLimit] = useState(1);
+    const [limit, setLimit] = useState(3);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -42,7 +43,7 @@ export function PostsRoute() {
                 return date1.getTime() - date2.getTime();
             }
             default: {
-                throw new Error(`Невозможно проассоциировать значение name опции селекта с типом сортировки`);
+                return date2.getTime() - date1.getTime();
             }
         }
     });
@@ -57,6 +58,10 @@ export function PostsRoute() {
 
     function handleSelect(selectedIndex: number) {
         setSelectedIndex(selectedIndex);
+        setSearchParams({
+            ...Object.fromEntries(searchParams.entries()),
+            sort: selectOptions[selectedIndex].name
+        });
     }
 
     function handleNavigate(page: number) {
@@ -87,17 +92,18 @@ export function PostsRoute() {
                     />
                 </div>
 
-                <PostCardList className="posts-route__list"
-                    posts={sortedPosts}
-                />
+                {sortedPosts.length > 0 ? (
+                    <PostCardList className={componentClassName + "__list"}
+                        posts={sortedPosts}
+                    />
+                ) : (
+                    <h2 className={componentClassName + "__message"}>
+                        Ничего не найдено
+                    </h2>
+                )}
 
-                {sortedPosts.length === 0 &&
-                    <h2>Ничего не найдено</h2>
-                }
-
-                {/* TODO: Вычислять pages на основе limit и totalCount */}
-                <Pagination className="posts-route__pagination"
-                    pagesCount={totalCount}
+                <Pagination className={componentClassName + "__pagination"}
+                    pagesCount={Math.ceil(totalCount / limit)}
                     currentPage={page}
                     onNavigate={handleNavigate}
                 />

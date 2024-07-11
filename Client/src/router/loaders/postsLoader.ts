@@ -8,13 +8,15 @@ export async function postsLoader({
 }: {
     request: Request
 }) {
-    let limit = 1;
+    let limit = 3;
     let page = 1;
+    let sort = "new";
     
     const url = new URL(request.url);
     const searchParams = {
         page: url.searchParams.get("page"),
         limit: url.searchParams.get("limit"),
+        sort: url.searchParams.get("sort"),
     };
 
     if (searchParams.page && isNonNegativeInteger(searchParams.page)) {
@@ -25,5 +27,9 @@ export async function postsLoader({
         limit = +searchParams.limit;
     }
 
-    return await ApiWorker.getPosts(limit, page);
+    if (searchParams.sort) {
+        sort = searchParams.sort;
+    }
+
+    return await ApiWorker.getPosts(limit, page, sort);
 }
