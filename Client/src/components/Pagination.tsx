@@ -9,10 +9,12 @@ interface Props {
     onNavigate: (page: number) => void;
 }
 
-function getPages(currentPage: number, pagesCount: number): number[] {
-    console.log(currentPage);
-    console.log(pagesCount);
-    
+interface PagesInfo {
+    isPlain: boolean,
+    pages: number[],
+}
+
+function getPages(currentPage: number, pagesCount: number): PagesInfo {
     if (pagesCount <= 5) {
         const result = [];
 
@@ -20,30 +22,42 @@ function getPages(currentPage: number, pagesCount: number): number[] {
             result.push(i + 1);
         }
 
-        return result;
+        return {
+            isPlain: true,
+            pages: result,
+        }
     }
 
     if (currentPage <= 3) {
-        return [1, 2, 3, 4, pagesCount];
+        return {
+            isPlain: false,
+            pages: [1, 2, 3, 4, pagesCount],
+        }
     }
 
     if (currentPage >= pagesCount - 2) {
-        return [
-            1,
-            pagesCount - 3,
-            pagesCount - 2,
-            pagesCount - 1,
-            pagesCount,
-        ];
+        return {
+            isPlain: false,
+            pages: [
+                1,
+                pagesCount - 3,
+                pagesCount - 2,
+                pagesCount - 1,
+                pagesCount
+            ],
+        }
     }
 
-    return [
-        1,
-        currentPage - 1,
-        currentPage,
-        currentPage + 1,
-        pagesCount,
-    ];
+    return {
+        isPlain: false,
+        pages: [
+            1,
+            currentPage - 1,
+            currentPage,
+            currentPage + 1,
+            pagesCount
+        ],
+    }
 }
 
 export function Pagination({
@@ -55,11 +69,7 @@ export function Pagination({
     const componentClassName = "pagination";
     const finalClassName = getClassName(componentClassName, className);
 
-    // const isPlain = pagesCount <= 5;
-    // const isLeftEllipsisShown = !isPlain && currentPage > 3;
-    // const isRightEllipsisShown = !isPlain && pagesCount - currentPage > 2;
-
-    const pages = getPages(currentPage, pagesCount);
+    const { isPlain, pages } = getPages(currentPage, pagesCount);
 
     const buttons = [];
 
@@ -82,10 +92,7 @@ export function Pagination({
 
     return (
         <div className={finalClassName}>
-            <Button className={[
-                componentClassName + "__button",
-                componentClassName + "__button_navigate",
-            ].join(" ")}
+            <Button className={componentClassName + "__navigate"}
                 onClick={() => onNavigate(currentPage - 1)}
                 disabled={currentPage <= 1}
                 isSquare={true}
@@ -96,14 +103,35 @@ export function Pagination({
                 ].join(" ")} />
             </Button>
 
-            <ul className={componentClassName + "__buttons"}>
-                {buttons}
-            </ul>
+            {isPlain ? (
+                <div className={componentClassName + "__buttons"}>
+                    {buttons}
+                </div>
+            ) : (
+                <div className={componentClassName + "__buttons-wrapper"}>
+                    {buttons[0]}
 
-            <Button className={[
-                componentClassName + "__button",
-                componentClassName + "__button_navigate",
-            ].join(" ")}
+                    {currentPage > 3 &&
+                        <div className={componentClassName + "__ellipsis"}>
+                            ...
+                        </div>
+                    }
+
+                    <div className={componentClassName + "__buttons"}>
+                        {buttons.slice(1, buttons.length - 1)}
+                    </div>
+
+                    {pagesCount - currentPage > 2 &&
+                        <div className={componentClassName + "__ellipsis"}>
+                            ...
+                        </div>
+                    }
+
+                    {buttons[buttons.length - 1]}
+                </div>
+            )}
+
+            <Button className={componentClassName + "__navigate"}
                 onClick={() => onNavigate(currentPage + 1)}
                 disabled={currentPage >= pagesCount}
                 isSquare={true}
