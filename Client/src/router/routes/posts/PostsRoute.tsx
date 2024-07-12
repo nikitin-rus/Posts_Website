@@ -1,66 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { PostCardList } from "../../../components/lists/PostCardList";
 import { Page } from "../../../components/Page";
 import { SelectOption, Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
 import { PostsSchema } from "../../../schemas/post/PostsSchema";
-import { Input } from "../../../components/UI/inputs/Input";
-import Close from "../../../assets/icons/close_24dp.svg";
-
+import { Search } from "../../../components/UI/inputs/Search";
+import { isNonNegativeInteger } from "../../../helpers/isNonNegativeInteger";
 
 export function PostsRoute() {
     const componentClassName = "posts-route";
+
     const { posts, totalCount } = PostsSchema.parse(useLoaderData());
-    const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(3);
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const { searchPage, searchLimit, searchSort } = {
+        searchPage: searchParams.get("page") ?? "1",
+        searchLimit: searchParams.get("limit") ?? "3",
+        searchSort: searchParams.get("sort"),
+    };
 
-    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(isNonNegativeInteger(searchPage) ? +searchPage : 1);
+    const [limit, setLimit] = useState(isNonNegativeInteger(searchLimit) ? +searchLimit : 3);
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
     const selectOptions: SelectOption[] = [
         { name: "new", value: "Сначала новые" },
         { name: "old", value: "Сначала старые" }
     ];
 
-    const filteredPosts = posts.filter(p => {
-        const content = p.content.toLowerCase();
-        return content.includes(search.toLowerCase());
-    });
+    const searchSortIndex = selectOptions.findIndex(o => o.name == searchSort);
+    const [selectedIndex, setSelectedIndex] = useState(searchSortIndex > -1 ? searchSortIndex : 0);
 
-    const sortedPosts = filteredPosts.sort((a, b) => {
-        const date1 = new Date(a.publishedAt);
-        const date2 = new Date(b.publishedAt);
-        const optionName = selectOptions[selectedIndex].name;
-
-        switch (optionName) {
-            case "new": {
-                return date2.getTime() - date1.getTime();
-            }
-            case "old": {
-                return date1.getTime() - date2.getTime();
-            }
-            default: {
-                return date2.getTime() - date1.getTime();
-            }
-        }
-    });
-
-    function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-        setSearch(e.target.value);
-    }
-
-    function handleClear() {
-        setSearch("");
+    function handleSearch(search: string) {
+        setPage(1);
+        setSearchParams({
+            ...Object.fromEntries(searchParams.entries()),
+            page: "1",
+            search: search,
+        });
     }
 
     function handleSelect(selectedIndex: number) {
         setSelectedIndex(selectedIndex);
+        setPage(1);
         setSearchParams({
             ...Object.fromEntries(searchParams.entries()),
-            sort: selectOptions[selectedIndex].name
+            page: "1",
+            sort: selectOptions[selectedIndex].name,
         });
     }
 
@@ -73,16 +59,13 @@ export function PostsRoute() {
     }
 
     return (
-        <div className="posts-route">
+        <div className={componentClassName}>
             <Page>
                 <div className={componentClassName + "__input-and-select"}>
-                    <Input className={componentClassName + "__input"}
-                        value={search}
-                        onChange={handleSearch}
+                    <Search className={componentClassName + "__search"}
                         label="Поиск по содержанию"
                         placeholder="Полет через Ла-Манш"
-                        icon={Close}
-                        onIconClick={handleClear}
+                        onSearch={handleSearch}
                     />
 
                     <Select className={componentClassName + "__select"}
@@ -92,9 +75,9 @@ export function PostsRoute() {
                     />
                 </div>
 
-                {sortedPosts.length > 0 ? (
+                {posts.length > 0 ? (
                     <PostCardList className={componentClassName + "__list"}
-                        posts={sortedPosts}
+                        posts={posts}
                     />
                 ) : (
                     <h2 className={componentClassName + "__message"}>
@@ -102,11 +85,13 @@ export function PostsRoute() {
                     </h2>
                 )}
 
-                <Pagination className={componentClassName + "__pagination"}
-                    pagesCount={Math.ceil(totalCount / limit)}
-                    currentPage={page}
-                    onNavigate={handleNavigate}
-                />
+                {totalCount > 0 && (
+                    <Pagination className={componentClassName + "__pagination"}
+                        pagesCount={Math.ceil(totalCount / limit)}
+                        currentPage={page}
+                        onNavigate={handleNavigate}
+                    />
+                )}
             </Page>
         </div >
     );

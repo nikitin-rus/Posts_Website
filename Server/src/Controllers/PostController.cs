@@ -20,7 +20,8 @@ namespace Posts_Website.Controllers
         public IActionResult GetRange(
             [FromQuery] int limit = 0,
             [FromQuery] int page = 1,
-            [FromQuery] string sort = "new"
+            [FromQuery] string sort = "new",
+            [FromQuery] string search = ""
         )
         {
             if (limit < 0 || page < 0)
@@ -37,9 +38,17 @@ namespace Posts_Website.Controllers
                 );
             }
 
-            Post[] posts = postRepo.Get(limit, limit * (page - 1), sort);
+            Post[] posts = postRepo.Get(
+                search,
+                sort,
+                limit, 
+                limit * (page - 1) 
+            );
 
-            HttpContext.Response.Headers.Append("X-Total-Count", postRepo.GetLength().ToString());
+            HttpContext.Response.Headers.Append(
+                "X-Total-Count", 
+                postRepo.GetLength(search).ToString()
+            );
 
             return Ok(posts.Select(p => p.ToPostDto()));
         }

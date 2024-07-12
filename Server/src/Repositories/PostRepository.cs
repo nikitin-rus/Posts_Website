@@ -6,9 +6,14 @@ namespace Posts_Website.Repositories
 {
     public interface IPostRepository
     {
-        Post[] Get(int limit, int offset, string sortType = "new");
+        Post[] Get(
+            string search,
+            string sort,
+            int limit,
+            int offset
+        );
 
-        int GetLength();
+        int GetLength(string search);
 
         Post? GetById(Guid id);
 
@@ -23,34 +28,39 @@ namespace Posts_Website.Repositories
 
     public class PostRepository(ApplicationContext db) : IPostRepository
     {
-        public Post[] Get(int limit, int offset, string sortType = "new")
+        public Post[] Get(
+            string search,
+            string sort,
+            int limit,
+            int offset
+        )
         {
-            var posts = (
-                sortType == "old" ?
-                db.Posts.OrderBy(p => p.PublishedAt) :
-                db.Posts.OrderByDescending(p => p.PublishedAt)
-            ).Skip(offset);
+            IQueryable<Post> sorted = sort == "old" ?
+                sorted = db.Posts.OrderBy(p => p.PublishedAt) :
+                sorted = db.Posts.OrderByDescending(p => p.PublishedAt);
 
-            if (limit > 0)
-            {
-                posts = posts.Take(limit);
-            }
+            IEnumerable<Post> searched = sorted.Include(p => p.User)
+                .Include(p => p.Comments)
+                .ToArray()
+                .Where(p => p.Content.Contains(search, StringComparison.OrdinalIgnoreCase))
+                .Skip(offset);
 
-            return [.. posts.Include(p => p.User)
-                            .Include(p => p.Comments)];
+            return [.. searched.Take(limit > 0 ? limit : searched.Count())];
         }
 
-        public int GetLength()
+        public int GetLength(string search = "")
         {
-            return db.Posts.Count();
+            return db.Posts.ToArray()
+                .Where(p => p.Content.Contains(search, StringComparison.OrdinalIgnoreCase))
+                .Count();
         }
 
         public Post? GetById(Guid id)
         {
             return db.Posts.Include(p => p.User)
-                           .Include(p => p.Comments)
-                                .ThenInclude(c => c.User)
-                           .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.User)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void Insert(Post post)

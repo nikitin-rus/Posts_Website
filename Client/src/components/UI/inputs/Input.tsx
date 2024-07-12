@@ -1,23 +1,28 @@
-import { FC, forwardRef, InputHTMLAttributes, memo, createElement, FunctionComponent, SVGProps } from "react";
+import { forwardRef, InputHTMLAttributes, memo, createElement, FunctionComponent, SVGProps } from "react";
 import { getClassName } from "../../../helpers/getClassName";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label?: string,
-    icon?: FunctionComponent<SVGProps<SVGSVGElement>>
-    onIconClick?: () => void,
+    iconLeft?: FunctionComponent<SVGProps<SVGSVGElement>>
+    iconRight?: FunctionComponent<SVGProps<SVGSVGElement>>
+    onIconLeftClick?: () => void,
+    onIconRightClick?: () => void,
 }
 
 const Input = memo(forwardRef<HTMLInputElement, Props>(
     function ({
         className,
         label,
-        icon: Icon,
-        onIconClick,
+        iconLeft: IconLeft,
+        iconRight: IconRight,
+        onIconLeftClick,
+        onIconRightClick,
         ...rest
     }, ref) {
         const componentClassName = "input";
         const finalClassName = getClassName(componentClassName, className, {
-            [componentClassName + "_icon"]: Icon !== undefined
+            [componentClassName + "_icon-left"]: IconLeft !== undefined,
+            [componentClassName + "_icon-right"]: IconRight !== undefined
         });
 
         return (
@@ -27,13 +32,27 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
                 </label>}
 
                 <div className={componentClassName + "__input-form"}>
+                    {IconLeft && <IconLeft className={
+                        [
+                            componentClassName + "__icon",
+                            componentClassName + "__icon_left",
+                        ].join(" ")
+                    }
+                        onClick={onIconLeftClick}
+                    />}
+
                     <input className={componentClassName + "__input"}
                         ref={ref}
                         {...rest}
                     />
 
-                    {Icon && <Icon className={componentClassName + "__icon"}
-                        onClick={onIconClick}
+                    {IconRight && <IconRight className={
+                        [
+                            componentClassName + "__icon",
+                            componentClassName + "__icon_right"
+                        ].join(" ")
+                    }
+                        onClick={onIconRightClick}
                     />}
                 </div>
             </div>

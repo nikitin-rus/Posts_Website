@@ -23,6 +23,7 @@ export class ApiWorker {
         limit: number = 0,
         page: number = 1,
         sort: string = "new",
+        search: string = "",
     ): Promise<PostsDto> {
         const { data, headers } = await axios.get(
             `/api/posts`,
@@ -30,7 +31,8 @@ export class ApiWorker {
                 params: {
                     limit: limit,
                     page: page,
-                    sort: sort
+                    sort: sort,
+                    search: search,
                 }
             }
         );

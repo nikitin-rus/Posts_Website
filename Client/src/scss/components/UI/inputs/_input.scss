@@ -1,6 +1,8 @@
 @use '../../../base/vars';
 
 .input {
+    $component-selector: &;
+
     display: flex;
     flex-direction: column;
     row-gap: 8px;
@@ -27,23 +29,36 @@
     }
 
     &__icon {
-        width: 18px;
-        height: 18px;
-    
         position: absolute;
         top: 0;
         bottom: 0;
-        right: 12px;
         margin: auto 0;
 
         cursor: pointer;
+
+        &_left {
+            left: 12px;
+        }
+
+        &_right {
+            width: 18px;
+            height: 18px;
+
+            right: 12px;
+        }
     }
 
-    $component-selector: &;
-
     &_icon {
-        #{$component-selector}__input {
-            padding-right: 42px;
+        &-left {
+            #{$component-selector}__input {
+                padding-left: 48px;
+            }
+        }
+
+        &-right {
+            #{$component-selector}__input {
+                padding-right: 42px;
+            }
         }
     }
 }

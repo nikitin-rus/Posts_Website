@@ -1,4 +1,4 @@
-import { forwardRef, Fragment } from "react";
+import { forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
 import Markdown from "markdown-to-jsx";
@@ -10,38 +10,40 @@ interface Props {
     post: PostDto
 }
 
-const PostCard = forwardRef<HTMLDivElement, Props>(({
-    className,
-    isPreview = false,
-    post
-}, ref) => {
-    const finalClassName = getClassName(
-        "post-card",
+const PostCard = memo(forwardRef<HTMLDivElement, Props>(
+    function ({
         className,
-        { "post-card_preview": isPreview }
-    );
+        isPreview = false,
+        post
+    }, ref) {
+        const finalClassName = getClassName(
+            "post-card",
+            className,
+            { "post-card_preview": isPreview }
+        );
 
-    return (
-        <div className={finalClassName}
-            ref={ref}
-        >
-            <CardHead className="post-card__head"
-                user={post.user}
-                creationDate={new Date(post.publishedAt)}
-                isUserLinked={!isPreview}
-            />
+        return (
+            <div className={finalClassName}
+                ref={ref}
+            >
+                <CardHead className="post-card__head"
+                    user={post.user}
+                    creationDate={new Date(post.publishedAt)}
+                    isUserLinked={!isPreview}
+                />
 
-            <h3 className="post-card__title">
-                {post.title}
-            </h3>
+                <h3 className="post-card__title">
+                    {post.title}
+                </h3>
 
-            <div className="post-card__body">
-                <Markdown>
-                    {post.content}
-                </Markdown>
+                <div className="post-card__body">
+                    <Markdown>
+                        {post.content}
+                    </Markdown>
+                </div>
             </div>
-        </div>
-    );
-});
+        );
+    }
+));
 
 export { PostCard };
