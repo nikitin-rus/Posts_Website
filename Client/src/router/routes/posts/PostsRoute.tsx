@@ -85,7 +85,7 @@ export function PostsRoute() {
                         onIconClick={handleClear}
                     />
 
-                    <Select
+                    <Select className={componentClassName + "__select"}
                         selectedIndex={selectedIndex}
                         onSelect={handleSelect}
                         options={selectOptions}

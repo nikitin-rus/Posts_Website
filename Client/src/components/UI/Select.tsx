@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import ChevronDown from "../../assets/icons/chevron_down_24dp.svg";
 import { isNode } from "../../typescript/validators/isNode";
+import { getClassName } from "../../helpers/getClassName";
 
 export interface SelectOption {
     name: string,
@@ -9,22 +10,35 @@ export interface SelectOption {
 };
 
 interface Props {
+    className?: string,
     options: SelectOption[],
     selectedIndex: number,
     onSelect: (selectedIndex: number) => void,
 }
 
 export function Select({
+    className,
     selectedIndex,
     options,
     onSelect,
 }: Props) {
     const [isOpened, setIsOpened] = useState(false);
 
-    const selectRef = useRef<null | HTMLDivElement>(null);
+    const componentClassName = "select";
+    const finalClassName = getClassName(
+        componentClassName,
+        className,
+        {
+            [componentClassName + "_opened"]: isOpened
+        }
+    );
+
+    const barRef = useRef<null | HTMLDivElement>(null);
     const optionsRef = useRef<null | HTMLDivElement>(null);
 
-    const handleSelectClick = () => setIsOpened(!isOpened);
+    function handleBarClick() {
+        setIsOpened(!isOpened);
+    }
 
     function handleSelect(selectedIndex: number) {
         setIsOpened(false);
@@ -35,7 +49,7 @@ export function Select({
         if (
             e.target &&
             isNode(e.target) &&
-            !selectRef.current?.contains(e.target) &&
+            !barRef.current?.contains(e.target) &&
             !optionsRef.current?.contains(e.target)
         ) {
             setIsOpened(false);
@@ -51,39 +65,31 @@ export function Select({
     }, []);
 
     return (
-        <div
-            className={isOpened ?
-                "select select_opened" : "select"
-            }
-        >
-            <div
-                ref={selectRef}
-                className="select__bar"
-                onClick={handleSelectClick}
+        <div className={finalClassName}>
+            <div className={componentClassName + "__bar"}
+                ref={barRef}
+                onClick={handleBarClick}
             >
                 {selectedIndex >= 0 ?
                     options[selectedIndex].value : ""
                 }
-                <ChevronDown />
+                <ChevronDown className={componentClassName + "__icon"}/>
             </div>
 
-            <CSSTransition
+            <CSSTransition classNames={componentClassName + "__options"}
+                nodeRef={optionsRef}
                 in={isOpened}
                 timeout={200}
                 mountOnEnter={true}
                 unmountOnExit={true}
-                nodeRef={optionsRef}
-                classNames="select__options"
             >
-                <div
+                <div className={componentClassName + "__options"}
                     ref={optionsRef}
-                    className="select__options"
                 >
                     {options.map((option, index) => {
                         return (
-                            <div
+                            <div className={componentClassName + "__option"}
                                 key={option.name}
-                                className="select__option"
                                 onClick={() => handleSelect(index)}
                             >
                                 {option.value}
