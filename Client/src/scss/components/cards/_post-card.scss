@@ -19,13 +19,8 @@
         white-space: nowrap;
     }
 
-    &__body {
-        overflow-wrap: break-word;
-        line-height: 150%;
-    }
-
     &_preview {
-        #{$component-selector}__body {
+        #{$component-selector}__markdown {
             max-height: 150px;
             overflow: hidden;
         }

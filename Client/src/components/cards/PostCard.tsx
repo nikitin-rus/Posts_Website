@@ -1,8 +1,8 @@
 import { forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
-import Markdown from "markdown-to-jsx";
 import { PostDto } from "../../schemas/post/PostSchema";
+import { MyMarkdown } from "../MyMarkdown";
 
 interface Props {
     className?: string,
@@ -16,31 +16,32 @@ const PostCard = memo(forwardRef<HTMLDivElement, Props>(
         isPreview = false,
         post
     }, ref) {
+        const componentClassName = "post-card";
         const finalClassName = getClassName(
-            "post-card",
+            componentClassName,
             className,
-            { "post-card_preview": isPreview }
+            {
+                [componentClassName + "_preview"]: isPreview
+            }
         );
 
         return (
             <div className={finalClassName}
                 ref={ref}
             >
-                <CardHead className="post-card__head"
+                <CardHead className={componentClassName + "__head"}
                     user={post.user}
                     creationDate={new Date(post.publishedAt)}
                     isUserLinked={!isPreview}
                 />
 
-                <h3 className="post-card__title">
+                <h3 className={componentClassName + "__title"}>
                     {post.title}
                 </h3>
 
-                <div className="post-card__body">
-                    <Markdown>
-                        {post.content}
-                    </Markdown>
-                </div>
+                <MyMarkdown className={componentClassName + "__markdown"}>
+                    {post.content}
+                </MyMarkdown>
             </div>
         );
     }

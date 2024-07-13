@@ -1,0 +1,14 @@
+@use '../base/vars';
+
+.my-markdown {
+    & * {
+        all: revert;
+        overflow-wrap: break-word;
+        line-height: 150%;
+        margin-top: 0;
+    }
+
+    & *:last-child {
+        margin-bottom: 0;
+    }
+}

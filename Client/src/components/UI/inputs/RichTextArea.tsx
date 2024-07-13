@@ -5,6 +5,7 @@ import { FormatType, TextFormatter } from "../../../helpers/TextFormatter";
 import { Toolbar } from "../../Toolbar";
 import { Button } from "../Button";
 import { TextArea } from "./TextArea";
+import { MyMarkdown } from "../../MyMarkdown";
 
 interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     value: string,
@@ -53,11 +54,9 @@ export function RichTextArea({
 
             {isPreviewShown ? (
                 <div className={componentClassName + "__preview"}>
-                    <Markdown options={{
-                        forceBlock: true
-                    }}>
+                    <MyMarkdown className={componentClassName + "__markdown"}>
                         {value.length === 0 ? "Пустое превью!" : value}
-                    </Markdown>
+                    </MyMarkdown>
                 </div>
             ) : (
                 <TextArea className={componentClassName + "__text-area"}

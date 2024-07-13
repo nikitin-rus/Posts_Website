@@ -14,23 +14,27 @@ const CommentCard = memo(forwardRef<HTMLDivElement, Props>(({
     isPreview = false,
     comment
 }, ref) => {
+    const componentClassName = "comment-card";
+
     const finalClassName = getClassName(
-        "comment-card",
+        componentClassName,
         className,
-        { "comment-card_preview": isPreview }
+        {
+            [componentClassName + "_preview"]: isPreview
+        }
     );
 
     return (
         <div className={finalClassName}
             ref={ref}
         >
-            <CardHead className="comment-card__head"
+            <CardHead className={componentClassName + "__head"}
                 user={comment.user}
                 creationDate={new Date(comment.writtenAt)}
                 isUserLinked={!isPreview}
             />
 
-            <div className="comment-card__body">
+            <div className={componentClassName + "__body"}>
                 {comment.content}
             </div>
         </div>
