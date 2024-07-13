@@ -1,6 +1,5 @@
 import { createRef } from "react";
 import { Link } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { getClassName } from "../../helpers/getClassName";
 import { CommentCard } from "../cards/CommentCard";
 import { CommentDto } from "../../schemas/comment/Comment";
@@ -10,8 +9,12 @@ interface Props {
     comments: CommentDto[]
 }
 
-export function CommentCardList({ className, comments }: Props) {
-    const finalClassName = getClassName("comment-card-list", className);
+export function CommentCardList({
+    className,
+    comments
+}: Props) {
+    const componentClassName = "comment-card-list";
+    const finalClassName = getClassName(componentClassName, className);
 
     const listItems = comments.map(c => {
         return {
@@ -21,24 +24,19 @@ export function CommentCardList({ className, comments }: Props) {
     });
 
     return (
-        <TransitionGroup className={finalClassName}>
+        <ul className={finalClassName}>
             {listItems.map(({ comment, nodeRef }) =>
-                <CSSTransition classNames="comment-card-list__link"
+                <Link className={componentClassName + "__link"}
                     key={comment.id}
-                    nodeRef={nodeRef}
-                    timeout={300}
+                    ref={nodeRef}
+                    to={`/posts/${comment.postId}/comments/${comment.id}`}
                 >
-                    <Link className="comment-card-list__link"
-                        ref={nodeRef}
-                        to={`/posts/${comment.postId}/comments/${comment.id}`}
-                    >
-                        <CommentCard className="comment-card-list__comment"
-                            comment={comment}
-                            isPreview={true}
-                        />
-                    </Link>
-                </CSSTransition>
+                    <CommentCard className={componentClassName + "__comment"}
+                        comment={comment}
+                        isPreview={true}
+                    />
+                </Link>
             )}
-        </TransitionGroup>
+        </ul>
     );
 }

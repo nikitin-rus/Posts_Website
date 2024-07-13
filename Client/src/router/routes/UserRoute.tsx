@@ -7,27 +7,29 @@ import { CommentCardList } from "../../components/lists/CommentCardList";
 import { PostCardList } from "../../components/lists/PostCardList";
 
 export function UserRoute() {
+    const componentClassName = "user-route";
+
     const user = UserDetailsSchema.parse(useLoaderData());
     const auth = useAppSelector(authSelector);
     const isSameUser = user.id === auth.user?.id;
 
     return (
-        <div className="user-route">
+        <div className={componentClassName}>
             <Page>
-                <section className="user-route__section">
-                    <h1 className="user-route__heading">
+                <section className={componentClassName + "__section"}>
+                    <h1 className={componentClassName + "__heading"}>
                         {isSameUser ?
                             "Мои посты" :
                             `Посты ${user.userName}`
                         }
                     </h1>
 
-                    <PostCardList className="user-route__list"
-                        posts={user.posts}
-                    />
-
-                    {user.posts.length === 0 && (
-                        <p className="user-route__message">
+                    {user.posts.length > 0 ? (
+                        <PostCardList className={componentClassName + "__list"}
+                            posts={user.posts}
+                        />
+                    ) : (
+                        <p className={componentClassName + "__message"}>
                             {isSameUser ?
                                 "У вас еще нет постов" :
                                 `${user.userName} еще не имеет постов`
@@ -36,19 +38,19 @@ export function UserRoute() {
                     )}
                 </section>
 
-                <section className="user-route__section">
-                    <h1 className="user-route__heading">
+                <section className={componentClassName + "__section"}>
+                    <h1 className={componentClassName + "__heading"}>
                         {isSameUser ?
                             "Мои комментарии" :
                             `Комментарии ${user.userName}`
                         }
                     </h1>
 
-                    <CommentCardList className="user-route__list"
-                        comments={user.comments}
-                    />
-
-                    {user.comments.length === 0 && (
+                    {user.comments.length > 0 ? (
+                        <CommentCardList className="user-route__list"
+                            comments={user.comments}
+                        />
+                    ) : (
                         <p className="user-route__message">
                             {isSameUser ?
                                 "Вы еще не написали ни одного комментария" :

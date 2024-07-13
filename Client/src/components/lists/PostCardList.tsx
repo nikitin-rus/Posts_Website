@@ -9,8 +9,12 @@ interface Props {
     posts: PostDto[]
 }
 
-export function PostCardList({ className, posts }: Props) {
-    const finalClassName = getClassName("post-card-list", className);
+export function PostCardList({
+    className,
+    posts
+}: Props) {
+    const componentClassName = "post-card-list";
+    const finalClassName = getClassName(componentClassName, className);
 
     const listItems = posts.map(p => {
         return {
@@ -22,12 +26,12 @@ export function PostCardList({ className, posts }: Props) {
     return (
         <ul className={finalClassName}>
             {listItems.map(({ post, nodeRef }) =>
-                <Link className={finalClassName + "__link"}
+                <Link className={componentClassName + "__link"}
                     key={post.id}
                     ref={nodeRef}
                     to={`/posts/${post.id}`}
                 >
-                    <PostCard className={finalClassName + "__post"}
+                    <PostCard className={componentClassName + "__post"}
                         post={post}
                         isPreview={true}
                     />

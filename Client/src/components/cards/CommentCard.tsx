@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
 import { CommentDto } from "../../schemas/comment/Comment";
@@ -9,7 +9,7 @@ interface Props {
     comment: CommentDto
 }
 
-const CommentCard = forwardRef<HTMLDivElement, Props>(({
+const CommentCard = memo(forwardRef<HTMLDivElement, Props>(({
     className,
     isPreview = false,
     comment
@@ -35,6 +35,6 @@ const CommentCard = forwardRef<HTMLDivElement, Props>(({
             </div>
         </div>
     );
-});
+}));
 
 export { CommentCard };
