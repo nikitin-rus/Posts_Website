@@ -6,14 +6,7 @@ namespace Posts_Website.Repositories
 {
     public interface IPostRepository
     {
-        Post[] Get(
-            string search,
-            string sort,
-            int limit,
-            int offset
-        );
-
-        int GetLength(string search);
+        Post[] GetAll();
 
         Post? GetById(Guid id);
 
@@ -28,31 +21,10 @@ namespace Posts_Website.Repositories
 
     public class PostRepository(ApplicationContext db) : IPostRepository
     {
-        public Post[] Get(
-            string search,
-            string sort,
-            int limit,
-            int offset
-        )
+        public Post[] GetAll()
         {
-            IQueryable<Post> sorted = sort == "old" ?
-                sorted = db.Posts.OrderBy(p => p.PublishedAt) :
-                sorted = db.Posts.OrderByDescending(p => p.PublishedAt);
-
-            IEnumerable<Post> searched = sorted.Include(p => p.User)
-                .Include(p => p.Comments)
-                .ToArray()
-                .Where(p => p.Content.Contains(search, StringComparison.OrdinalIgnoreCase))
-                .Skip(offset);
-
-            return [.. searched.Take(limit > 0 ? limit : searched.Count())];
-        }
-
-        public int GetLength(string search = "")
-        {
-            return db.Posts.ToArray()
-                .Where(p => p.Content.Contains(search, StringComparison.OrdinalIgnoreCase))
-                .Count();
+            return [.. db.Posts.Include(p => p.User)
+                .Include(p => p.Comments)];
         }
 
         public Post? GetById(Guid id)

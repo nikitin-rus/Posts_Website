@@ -38,19 +38,25 @@ namespace Posts_Website.Controllers
                 );
             }
 
-            Post[] posts = postRepo.Get(
-                search,
-                sort,
-                limit, 
-                limit * (page - 1) 
+            Post[] posts = postRepo.GetAll();
+
+            var searched = posts.Where(p =>
+                p.Content.Contains(search, StringComparison.OrdinalIgnoreCase)
             );
+
+            var sorted = sort == "old" ?
+                searched.OrderBy(p => p.PublishedAt) :
+                searched.OrderByDescending(p => p.PublishedAt);
+
+            var result = sorted.Skip(limit * (page - 1))
+                .Take(limit > 0 ? limit : searched.Count());
 
             HttpContext.Response.Headers.Append(
-                "X-Total-Count", 
-                postRepo.GetLength(search).ToString()
+                "X-Total-Count",
+                searched.Count().ToString()
             );
 
-            return Ok(posts.Select(p => p.ToPostDto()));
+            return Ok(result.Select(p => p.ToPostDto()));
         }
 
         [HttpGet("{id:guid}")]
