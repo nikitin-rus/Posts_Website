@@ -6,7 +6,7 @@ interface Props {
     className?: string,
     pagesCount: number,
     currentPage: number,
-    onNavigate: (page: number) => void;
+    onNavigate: (page: number) => void,
 }
 
 interface PagesInfo {
@@ -64,7 +64,7 @@ export function Pagination({
     className,
     pagesCount,
     currentPage,
-    onNavigate
+    onNavigate,
 }: Props) {
     const componentClassName = "pagination";
     const finalClassName = getClassName(componentClassName, className);

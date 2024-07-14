@@ -14,6 +14,7 @@ interface Props {
     options: SelectOption[],
     selectedIndex: number,
     onSelect: (selectedIndex: number) => void,
+    isUp?: boolean,
 }
 
 export function Select({
@@ -21,15 +22,20 @@ export function Select({
     selectedIndex,
     options,
     onSelect,
+    isUp = false,
 }: Props) {
     const [isOpened, setIsOpened] = useState(false);
+    const hasOptions = options.length > 0;
+    const isSelectedIndexValid = selectedIndex >= 0 && selectedIndex < options.length;
+    const maxValueLength = Math.max(...options.map(o => o.value.length));
 
     const componentClassName = "select";
     const finalClassName = getClassName(
         componentClassName,
         className,
         {
-            [componentClassName + "_opened"]: isOpened
+            [componentClassName + "_opened"]: isOpened,
+            [componentClassName + "_up"]: isUp,
         }
     );
 
@@ -65,15 +71,23 @@ export function Select({
     }, []);
 
     return (
-        <div className={finalClassName}>
+        <div className={finalClassName}
+            style={{ minWidth: 50 + maxValueLength * 10 }}
+        >
             <div className={componentClassName + "__bar"}
                 ref={barRef}
                 onClick={handleBarClick}
             >
-                {selectedIndex >= 0 ?
-                    options[selectedIndex].value : ""
-                }
-                <ChevronDown className={componentClassName + "__icon"}/>
+                <p className={componentClassName + "__text"}>
+                    {hasOptions ?
+                        isSelectedIndexValid ?
+                            options[selectedIndex].value
+                            : options[0].value
+                        : ""
+                    }
+                </p>
+
+                <ChevronDown className={componentClassName + "__icon"} />
             </div>
 
             <CSSTransition classNames={componentClassName + "__options"}
@@ -85,6 +99,7 @@ export function Select({
             >
                 <div className={componentClassName + "__options"}
                     ref={optionsRef}
+                    style={{ top: isUp ? (-40 * options.length - 8) : 48 }}
                 >
                     {options.map((option, index) => {
                         return (
@@ -92,7 +107,9 @@ export function Select({
                                 key={option.name}
                                 onClick={() => handleSelect(index)}
                             >
-                                {option.value}
+                                <p className={componentClassName + "__text"}>
+                                    {option.value}
+                                </p>
                             </div>
                         );
                     })}

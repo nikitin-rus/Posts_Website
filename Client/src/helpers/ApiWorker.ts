@@ -20,19 +20,19 @@ export class ApiWorker {
     }
 
     static async getPosts(
-        limit: number = 0,
-        page: number = 1,
-        sort: string = "new",
-        search: string = "",
+        page: string | null,
+        limit: string | null,
+        sort: string | null,
+        search: string | null
     ): Promise<PostsDto> {
         const { data, headers } = await axios.get(
             `/api/posts`,
             {
                 params: {
-                    limit: limit,
-                    page: page,
-                    sort: sort,
-                    search: search,
+                    page,
+                    limit,
+                    sort,
+                    search
                 }
             }
         );

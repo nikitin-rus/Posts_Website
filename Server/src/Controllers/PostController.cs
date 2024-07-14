@@ -18,24 +18,18 @@ namespace Posts_Website.Controllers
     {
         [HttpGet]
         public IActionResult GetRange(
-            [FromQuery] int limit = 0,
+            [FromQuery] int limit = 10,
             [FromQuery] int page = 1,
             [FromQuery] string sort = "new",
             [FromQuery] string search = ""
         )
         {
-            if (limit < 0 || page < 0)
-            {
-                return BadRequest(
-                    $"Query-параметры {nameof(limit)} и {nameof(page)} не могут принимать отрицательные значения."
-                );
-            }
+            int targetLimit = limit;
+            int targetPage = page;
 
-            if (page == 0)
+            if (limit <= 0 || limit > 10)
             {
-                return BadRequest(
-                    $"Query-параметр {nameof(page)} не может быть равен нулю."
-                );
+                targetLimit = 10;
             }
 
             Post[] posts = postRepo.GetAll();
@@ -44,12 +38,19 @@ namespace Posts_Website.Controllers
                 p.Content.Contains(search, StringComparison.OrdinalIgnoreCase)
             );
 
+            int pagesCount = (searched.Count() + targetLimit - 1) / targetLimit;
+
+            if (page <= 0 || page > pagesCount)
+            {
+                targetPage = 1;
+            }
+
             var sorted = sort == "old" ?
                 searched.OrderBy(p => p.PublishedAt) :
                 searched.OrderByDescending(p => p.PublishedAt);
 
-            var result = sorted.Skip(limit * (page - 1))
-                .Take(limit > 0 ? limit : searched.Count());
+            var result = sorted.Skip(targetLimit * (targetPage - 1))
+                .Take(targetLimit);
 
             HttpContext.Response.Headers.Append(
                 "X-Total-Count",

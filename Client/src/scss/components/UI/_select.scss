@@ -3,17 +3,22 @@
 .select {
     $component-selector: &;
 
-    min-width: 200px;
-
     position: relative;
     white-space: nowrap;
     user-select: none;
     cursor: pointer;
 
+    &_opened {
+        #{$component-selector}__icon {
+            transform: rotate(-180deg);
+        }
+    }
+
     &__bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        column-gap: 8px;
 
         min-height: 40px;
         max-height: 40px;
@@ -30,12 +35,6 @@
         transition: transform 0.1s;
     }
 
-    &_opened {
-        #{$component-selector}__icon {
-            transform: rotate(-180deg);
-        }
-    }
-
     &__options {
         display: flex;
         flex-direction: column;
@@ -43,7 +42,6 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: 48px;
 
         background-color: vars.$white;
         box-shadow: vars.$shadow;
@@ -82,5 +80,10 @@
         &:hover {
             background-color: vars.$white-hover;
         }
+    }
+
+    &__text {
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

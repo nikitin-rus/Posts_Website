@@ -6,6 +6,12 @@
         gap: 24px;
     }
 
+    &__pagination-and-limit {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+    }
+
     &__input-and-select,
     &__message,
     &__list {
