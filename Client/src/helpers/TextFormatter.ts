@@ -1,4 +1,3 @@
-import { EnvironmentPlugin } from "webpack";
 import { SelectionInfoError } from "../errors/SelectionInfoError";
 
 export type InlineFormatType = "title" | "bold" | "italic" | "strikethrough" | "link" | "code" | "quote";

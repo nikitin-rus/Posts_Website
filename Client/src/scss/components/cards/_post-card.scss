@@ -1,7 +1,8 @@
 @use '../../base/vars';
-@use '../../base/mixins';
 
 .post-card {
+    $component-selector: &;
+
     display: flex;
     flex-direction: column;
     row-gap: 20px;
@@ -12,16 +13,20 @@
     border: 1px solid vars.$black;
     border-radius: 5px;
 
-    &__body {
-        white-space: pre-wrap;
-        line-height: 150%;
+    &__title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    $selector: &;
-
     &_preview {
-        #{$selector}__body {
-            @include mixins.line-clamp;
+        #{$component-selector}__markdown {
+            max-height: 150px;
+            overflow: hidden;
+        }
+
+        &:hover {
+            background-color: vars.$white-hover;
         }
     }
 }

@@ -1,8 +1,8 @@
-import { forwardRef } from "react";
+import { forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
-import { PostDto } from "../../typescript/dtos/PostDto";
-import Markdown from "markdown-to-jsx";
+import { PostDto } from "../../schemas/post/PostSchema";
+import { MyMarkdown } from "../MyMarkdown";
 
 interface Props {
     className?: string,
@@ -10,40 +10,41 @@ interface Props {
     post: PostDto
 }
 
-const PostCard = forwardRef<HTMLDivElement, Props>(({
-    className,
-    isPreview = false,
-    post
-}, ref) => {
-    const finalClassName = getClassName(
-        "post-card",
+const PostCard = memo(forwardRef<HTMLDivElement, Props>(
+    function ({
         className,
-        { "post-card_preview": isPreview }
-    );
+        isPreview = false,
+        post
+    }, ref) {
+        const componentClassName = "post-card";
+        const finalClassName = getClassName(
+            componentClassName,
+            className,
+            {
+                [componentClassName + "_preview"]: isPreview
+            }
+        );
 
-    return (
-        <div className={finalClassName}
-            ref={ref}
-        >
-            <CardHead className="post-card__head"
-                user={post.user}
-                creationDate={new Date(post.publishedAt)}
-                isUserLinked={!isPreview}
-            />
+        return (
+            <div className={finalClassName}
+                ref={ref}
+            >
+                <CardHead className={componentClassName + "__head"}
+                    user={post.user}
+                    creationDate={new Date(post.publishedAt)}
+                    isUserLinked={!isPreview}
+                />
 
-            <h3 className="post-card__title">
-                {post.title}
-            </h3>
+                <h3 className={componentClassName + "__title"}>
+                    {post.title}
+                </h3>
 
-            <div className="post-card__body">
-                <Markdown options={{
-                    forceBlock: true
-                }}>
+                <MyMarkdown className={componentClassName + "__markdown"}>
                     {post.content}
-                </Markdown>
+                </MyMarkdown>
             </div>
-        </div>
-    );
-});
+        );
+    }
+));
 
 export { PostCard };

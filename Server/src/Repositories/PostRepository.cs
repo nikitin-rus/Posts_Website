@@ -23,17 +23,16 @@ namespace Posts_Website.Repositories
     {
         public Post[] GetAll()
         {
-
             return [.. db.Posts.Include(p => p.User)
-                               .Include(p => p.Comments)];
+                .Include(p => p.Comments)];
         }
 
         public Post? GetById(Guid id)
         {
             return db.Posts.Include(p => p.User)
-                           .Include(p => p.Comments)
-                                .ThenInclude(c => c.User)
-                           .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.Comments)
+                    .ThenInclude(c => c.User)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void Insert(Post post)

@@ -1,12 +1,12 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
 import { Button } from "../UI/Button";
-import { RegisterDto } from "../../typescript/dtos/AuthDto";
+import { RegisterFormDto } from "../../schemas/auth/RegisterFormSchema";
 import { getClassName } from "../../helpers/getClassName";
-import { Input } from "../UI/Input";
+import { Input } from "../UI/inputs/Input";
 import { useSubmit } from "react-router-dom";
 
 interface Props extends FormikFormProps {
-    initialData?: RegisterDto
+    initialData?: RegisterFormDto
 }
 
 export function RegisterForm({

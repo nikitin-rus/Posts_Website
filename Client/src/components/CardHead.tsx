@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { getClassName } from "../helpers/getClassName";
 import { getFormattedDate } from "../helpers/getFormattedDate";
-import { UserDto } from "../typescript/dtos/UserDto";
+import { UserDto } from "../schemas/user/UserSchema";
 
 interface Props {
     user: UserDto,

@@ -6,21 +6,27 @@ import "./scss/main.scss";
 import { Provider } from 'react-redux';
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { store } from './redux/store';
-import { RootRoute } from './components/routes/RootRoute';
-import { ErrorRoute } from './components/routes/ErrorRoute';
-import { PostsRoute, loader as postsLoader } from './components/routes/PostsRoute';
-import { PostRoute, loader as postLoader, action as postAction } from './components/routes/PostRoute';
-import { CommentRoute, loader as commentLoader, action as commentAction } from './components/routes/CommentRoute';
-import { UserRoute, loader as userLoader } from './components/routes/UserRoute';
-import { LoginRoute, action as loginAction } from './components/routes/LoginRoute';
-import { RegisterRoute, action as registerAction } from './components/routes/RegisterRoute';
-import { NewPostRoute, action as newPostAction } from './components/routes/NewPostRoute';
-import { EditPostRoute, loader as editPostLoader } from './components/routes/EditPostRoute';
-import { action as postCommentsAction } from './components/routes/PostCommentsRoute';
-import { EditCommentRoute, loader as editCommentLoader } from './components/routes/EditCommentRoute';
-
-import axios from 'axios';
-axios.defaults.baseURL = "http://localhost:8080";
+import { RootRoute } from './router/routes/RootRoute';
+import { ErrorRoute } from './router/routes/ErrorRoute';
+import { commentAction } from './router/actions/commentAction';
+import { loginAction } from './router/actions/loginAction';
+import { postAction } from './router/actions/postAction';
+import { registerAction } from './router/actions/registerAction';
+import { postLoader } from './router/loaders/postLoader';
+import { postsLoader } from './router/loaders/postsLoader';
+import { userLoader } from './router/loaders/userLoader';
+import { LoginRoute } from './router/routes/auth/LoginRoute';
+import { RegisterRoute } from './router/routes/auth/RegisterRoute';
+import { CommentRoute } from './router/routes/comments/CommentRoute';
+import { EditCommentRoute } from './router/routes/comments/EditCommentRoute';
+import { EditPostRoute } from './router/routes/posts/EditPostRoute';
+import { NewPostRoute } from './router/routes/posts/NewPostRoute';
+import { PostRoute } from './router/routes/posts/PostRoute';
+import { PostsRoute } from './router/routes/posts/PostsRoute';
+import { UserRoute } from './router/routes/UserRoute';
+import { commentLoader } from './router/loaders/commentLoader';
+import { newPostAction } from './router/actions/newPostAction';
+import { newCommentAction } from './router/actions/newCommentAction';
 
 const router = createBrowserRouter([{
     path: "/",
@@ -77,17 +83,17 @@ const router = createBrowserRouter([{
         {
             path: "/posts/:id/edit",
             element: <EditPostRoute />,
-            loader: editPostLoader,
+            loader: postLoader,
             errorElement: <ErrorRoute />
         },
         {
             path: "/posts/:id/comments",
-            action: postCommentsAction
+            action: newCommentAction
         },
         {
             path: "/posts/:postId/comments/:commentId/edit",
             element: <EditCommentRoute />,
-            loader: editCommentLoader,
+            loader: commentLoader,
             errorElement: <ErrorRoute />
         }
     ],
@@ -95,9 +101,7 @@ const router = createBrowserRouter([{
 }]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={router} />
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <RouterProvider router={router} />
+    </Provider>
 );
