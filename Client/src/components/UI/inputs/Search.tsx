@@ -40,9 +40,19 @@ const Search = memo(
                 <Input className={componentClassName + "__input"}
                     value={search}
                     onChange={handleChange}
-                    iconLeft={SearchIcon}
+                    iconLeft={
+                        <SearchIcon className={[
+                            componentClassName + "__icon",
+                            componentClassName + "__icon_search",
+                        ].join(" ")} />
+                    }
                     isIconLeftDisabled={outerSearch === search}
-                    iconRight={CloseIcon}
+                    iconRight={
+                        <CloseIcon className={[
+                            componentClassName + "__icon",
+                            componentClassName + "__icon_close",
+                        ].join(" ")} />
+                    }
                     onIconLeftClick={handleSearch}
                     onIconRightClick={handleClear}
                     {...rest}
