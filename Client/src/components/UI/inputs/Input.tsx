@@ -3,8 +3,10 @@ import { getClassName } from "../../../helpers/getClassName";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label?: string,
-    iconLeft?: FunctionComponent<SVGProps<SVGSVGElement>>
-    iconRight?: FunctionComponent<SVGProps<SVGSVGElement>>
+    iconLeft?: FunctionComponent<SVGProps<SVGSVGElement>>,
+    iconRight?: FunctionComponent<SVGProps<SVGSVGElement>>,
+    isIconLeftDisabled?: boolean,
+    isIconRightDisabled?: boolean,
     onIconLeftClick?: () => void,
     onIconRightClick?: () => void,
 }
@@ -15,6 +17,8 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
         label,
         iconLeft: IconLeft,
         iconRight: IconRight,
+        isIconLeftDisabled = false,
+        isIconRightDisabled = false,
         onIconLeftClick,
         onIconRightClick,
         ...rest
@@ -36,6 +40,7 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
                         [
                             componentClassName + "__icon",
                             componentClassName + "__icon_left",
+                            isIconLeftDisabled ? (componentClassName + "__icon_disabled") : "",
                         ].join(" ")
                     }
                         onClick={onIconLeftClick}
@@ -49,7 +54,8 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
                     {IconRight && <IconRight className={
                         [
                             componentClassName + "__icon",
-                            componentClassName + "__icon_right"
+                            componentClassName + "__icon_right",
+                            isIconRightDisabled ? (componentClassName + "__icon_disabled") : "",
                         ].join(" ")
                     }
                         onClick={onIconRightClick}

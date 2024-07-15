@@ -1,85 +1,61 @@
+import { useEffect, useState } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { PostCardList } from "../../../components/lists/PostCardList";
 import { Page } from "../../../components/Page";
-import { SelectOption, Select } from "../../../components/UI/Select";
+import { Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
 import { PostsSchema } from "../../../schemas/post/PostsSchema";
 import { Search } from "../../../components/UI/inputs/Search";
-import { ParamsWorker } from "../../../helpers/ParamsWorker";
 
 export function PostsRoute() {
     const componentClassName = "posts-route";
 
-    const sortOptions: SelectOption[] = [
+    const sortOptions = [
         { name: "new", value: "Сначала новые" },
         { name: "old", value: "Сначала старые" }
     ];
-
-    const limitOptions: SelectOption[] = [
+    const limitOptions = [
         { name: "3", value: "3" },
         { name: "5", value: "5" },
         { name: "10", value: "10" },
     ];
 
-    const defaultPage = 1;
-    const defaultLimit = 10;
+    const [selectedSortIndex, setSelectedSortIndex] = useState(0);
+    const [selectedLimitIndex, setSelectedLimitIndex] = useState(0);
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
+
+    const limit = +limitOptions[selectedLimitIndex].name;
+    const sort = sortOptions[selectedSortIndex].name;
 
     const { posts, totalCount } = PostsSchema.parse(useLoaderData());
 
+    const pagesCount = Math.ceil(totalCount / limit);
+
     const [searchParams, setSearchParams] = useSearchParams();
-    const {
-        page,
-        limit,
-        sort,
-    } = {
-        page: ParamsWorker.getNonNegativeInteger(searchParams, "page", defaultPage),
-        limit: ParamsWorker.getNonNegativeInteger(searchParams, "limit", defaultLimit),
-        sort: searchParams.get("sort") ?? "new",
-    };
 
-    const perPage = (limit === 0 || limit > 10) ? defaultLimit : limit;
-    const pagesCount = Math.ceil(totalCount / perPage);
-    const currentPage = (page === 0 || page > pagesCount) ? defaultPage : page;
-
-    let selectedSortIndex = sortOptions.findIndex(o => o.name === sort);
-    if (selectedSortIndex < 0) {
-        selectedSortIndex = 0;
-    }
-
-    let selectedLimitIndex = limitOptions.findIndex(o => +o.name === limit);
-    if (selectedLimitIndex < 0) {
-        selectedLimitIndex = limitOptions.length - 1;
-    }
+    useEffect(() => {
+        setSearchParams(new URLSearchParams(
+            `?search=${search}&sort=${sort}&page=${page}&limit=${limit}`
+        ));
+    }, [search, sort, page, limit]);
 
     function handleSearch(search: string) {
-        setSearchParams({
-            ...Object.fromEntries(searchParams.entries()),
-            page: "1",
-            search: search,
-        });
+        setSearch(search);
     }
 
-    function handleSelect(selectedSortIndex: number) {
-        setSearchParams({
-            ...Object.fromEntries(searchParams.entries()),
-            page: "1",
-            sort: sortOptions[selectedSortIndex].name,
-        });
+    function handleSortSelect(selectedSortIndex: number) {
+        setSelectedSortIndex(selectedSortIndex);
+        setPage(1);
     }
 
-    function handleLimit(selectedLimitIndex: number) {
-        setSearchParams({
-            ...Object.fromEntries(searchParams.entries()),
-            page: "1",
-            limit: limitOptions[selectedLimitIndex].name
-        });
+    function handleLimitSelect(selectedLimitIndex: number) {
+        setSelectedLimitIndex(selectedLimitIndex);
+        setPage(1);
     }
 
     function handleNavigate(page: number) {
-        setSearchParams({
-            ...Object.fromEntries(searchParams.entries()),
-            page: page.toString()
-        });
+        setPage(page);
     }
 
     return (
@@ -89,12 +65,16 @@ export function PostsRoute() {
                     <Search className={componentClassName + "__search"}
                         label="Поиск по содержанию"
                         placeholder="Полет через Ла-Манш"
+                        search={search}
                         onSearch={handleSearch}
                     />
 
-                    <Select className={componentClassName + "__select"}
+                    <Select className={[
+                        componentClassName + "__select",
+                        componentClassName + "__select_sort"
+                    ].join(" ")}
                         selectedIndex={selectedSortIndex}
-                        onSelect={handleSelect}
+                        onSelect={handleSortSelect}
                         options={sortOptions}
                     />
                 </div>
@@ -113,14 +93,17 @@ export function PostsRoute() {
                     <div className={componentClassName + "__pagination-and-limit"}>
                         <Pagination className={componentClassName + "__pagination"}
                             pagesCount={pagesCount}
-                            currentPage={currentPage}
+                            currentPage={page}
                             onNavigate={handleNavigate}
                         />
 
-                        <Select className={componentClassName + "__limit"}
-                            options={limitOptions}
+                        <Select className={[
+                            componentClassName + "__select",
+                            componentClassName + "__select_limit"
+                        ].join(" ")}
                             selectedIndex={selectedLimitIndex}
-                            onSelect={handleLimit}
+                            onSelect={handleLimitSelect}
+                            options={limitOptions}
                             isUp={true}
                         />
                     </div>

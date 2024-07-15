@@ -19,28 +19,19 @@ export class ApiWorker {
         return UserDetailsSchema.parse(data);
     }
 
-    static async getPosts(
-        page: string | null,
-        limit: string | null,
-        sort: string | null,
-        search: string | null
+    static async getPosts(searchParams: URLSearchParams
     ): Promise<PostsDto> {
         const { data, headers } = await axios.get(
             `/api/posts`,
             {
-                params: {
-                    page,
-                    limit,
-                    sort,
-                    search
-                }
+                params: Object.fromEntries(searchParams.entries())
             }
         );
 
         const totalCount = headers["x-total-count"];
 
         if (!totalCount) {
-            throw new Error("Отсутствие хэдера X-Total-Count");
+            throw new Error("Отсутствует заголовок X-Total-Count");
         }
 
         return PostsSchema.parse({

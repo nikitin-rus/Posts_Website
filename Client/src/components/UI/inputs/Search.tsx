@@ -7,13 +7,15 @@ import SearchIcon from "../../../assets/icons/search_24dp.svg";
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     className?: string,
     label?: string,
-    onSearch: (search: string) => void;
+    onSearch: (search: string) => void,
+    search: string,
 }
 
 const Search = memo(
     function ({
         className,
         onSearch,
+        search: outerSearch,
         ...rest
     }: Props) {
         const componentClassName = "search";
@@ -39,6 +41,7 @@ const Search = memo(
                     value={search}
                     onChange={handleChange}
                     iconLeft={SearchIcon}
+                    isIconLeftDisabled={outerSearch === search}
                     iconRight={CloseIcon}
                     onIconLeftClick={handleSearch}
                     onIconRightClick={handleClear}

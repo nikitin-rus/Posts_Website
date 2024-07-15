@@ -46,6 +46,11 @@
 
             right: 12px;
         }
+
+        &_disabled {
+            pointer-events: none;
+            opacity: 0.75;
+        }
     }
 
     &_icon {
