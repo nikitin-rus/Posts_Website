@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { UserDto } from "../../typescript/dtos/UserDto";
+import { UserDto } from "../../schemas/user/UserSchema";
 import { getUserFromLocalStorage } from "../../helpers/getUserFromLocalStorage";
 
 interface AuthState {

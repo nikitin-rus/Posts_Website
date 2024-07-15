@@ -1,0 +1,25 @@
+@use '../../../base/vars';
+
+.rich-text-area {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+
+    padding: 16px;
+    
+    background: vars.$white;
+    box-shadow: vars.$shadow;
+    border: 1px solid vars.$black;
+    border-radius: 5px;
+
+    &__preview {
+        display: flex;
+        flex-direction: column;
+
+        min-height: 120px;
+        padding: 12px;
+
+        background: vars.$white-hover;
+        border-radius: 5px;
+    }
+}

@@ -6,4 +6,8 @@
     gap: 12px;
     padding-bottom: 16px;
     border-bottom: 1px solid vars.$black;   
+
+    &__tool {
+        box-shadow: none;
+    }
 }

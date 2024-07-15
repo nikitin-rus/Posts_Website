@@ -1,7 +1,7 @@
 import { Field, Form, Formik, FormikFormProps } from "formik";
-import { TextArea } from "../UI/TextArea";
+import { TextArea } from "../UI/inputs/TextArea";
 import { Button } from "../UI/Button";
-import { CommentFormDto } from "../../typescript/dtos/CommentDto";
+import { CommentFormDto } from "../../schemas/comment/CommentFormSchema";
 import { getClassName } from "../../helpers/getClassName";
 import { useFetcher, useSubmit } from "react-router-dom";
 
@@ -53,7 +53,7 @@ export function CommentForm({
             <Form className={finalClassName}
                 {...rest}
             >
-                <Field className="comment-form__input"
+                <Field className="comment-form__text-area"
                     name="content"
                     as={TextArea}
                     placeholder="Что вы думаете о данном посте?"

@@ -1,31 +1,19 @@
 .post-route {
+    &__section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+        margin-bottom: 40px;
+    }
+
     &__controls {
         display: flex;
         flex-wrap: wrap;
         gap: 24px;
-        margin-bottom: 40px;
     }
 
     &__btn-text {
         margin-right: 8px;
-    }
-
-    &__card {
-        margin-bottom: 40px;
-    }
-
-    &__heading {
-        margin-bottom: 24px;
-    }
-
-    &__comment-form {
-        margin-bottom: 40px;
-    }
-
-    &__comments-list {
-        display: flex;
-        flex-direction: column;
-        row-gap: 24px;
     }
 
     &__message {

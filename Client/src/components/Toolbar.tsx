@@ -8,7 +8,7 @@ import CodeIcon from "../assets/icons/code_24dp.svg";
 import UnorderedListIcon from "../assets/icons/unordered_list_24dp.svg";
 import NumberedListIcon from "../assets/icons/numbered_list_24dp.svg";
 import { getClassName } from "../helpers/getClassName";
-import { FormatType, InlineFormatType, ListFormatType } from "../helpers/TextFormatter";
+import { FormatType } from "../helpers/TextFormatter";
 import { Button } from "./UI/Button";
 import { memo } from "react";
 

@@ -3,6 +3,10 @@
     flex-direction: column;
     row-gap: 24px;
 
+    &__text-area {
+        min-height: 150px;
+    }
+
     &__btn {
         align-self: flex-start;
     }

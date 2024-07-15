@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    column-gap: 16px;
+
+    &__buttons-wrapper {
+        display: flex;
+        column-gap: 16px;
+    }
+
+    &__ellipsis {
+        align-self: flex-end;
+    }
+
+    &__buttons {
+        display: flex;
+        column-gap: 16px;
+    }
+
+    &__chevron-down {
+        &_left {
+            rotate: 90deg;
+        }
+
+        &_right {
+            rotate: -90deg;
+        }
+    }
+}

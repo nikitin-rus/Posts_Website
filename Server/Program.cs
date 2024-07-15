@@ -15,7 +15,8 @@ builder.Services.AddCors(opts =>
     {
         policy.WithMethods(["GET", "POST", "PUT", "DELETE"])
             .AllowAnyOrigin()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .WithExposedHeaders(["X-Total-Count"]);
     });
 });
 
@@ -45,10 +46,10 @@ builder.Services.AddControllers(opts => opts.Filters.Add<EntityNotFoundException
 
 var app = builder.Build();
 
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors();
 
 app.MapControllers();
 

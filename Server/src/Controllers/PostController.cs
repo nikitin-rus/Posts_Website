@@ -17,11 +17,47 @@ namespace Posts_Website.Controllers
     ) : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetRange(
+            [FromQuery] int limit = 10,
+            [FromQuery] int page = 1,
+            [FromQuery] string sort = "new",
+            [FromQuery] string search = ""
+        )
         {
+            int targetLimit = limit;
+            int targetPage = page;
+
+            if (limit <= 0 || limit > 10)
+            {
+                targetLimit = 10;
+            }
+
             Post[] posts = postRepo.GetAll();
 
-            return Ok(posts.Select(p => p.ToPostDto()));
+            var searched = posts.Where(p =>
+                p.Content.Contains(search, StringComparison.OrdinalIgnoreCase)
+            );
+
+            int pagesCount = (searched.Count() + targetLimit - 1) / targetLimit;
+
+            if (page <= 0 || page > pagesCount)
+            {
+                targetPage = 1;
+            }
+
+            var sorted = sort == "old" ?
+                searched.OrderBy(p => p.PublishedAt) :
+                searched.OrderByDescending(p => p.PublishedAt);
+
+            var result = sorted.Skip(targetLimit * (targetPage - 1))
+                .Take(targetLimit);
+
+            HttpContext.Response.Headers.Append(
+                "X-Total-Count",
+                searched.Count().ToString()
+            );
+
+            return Ok(result.Select(p => p.ToPostDto()));
         }
 
         [HttpGet("{id:guid}")]

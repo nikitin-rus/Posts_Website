@@ -1,0 +1,69 @@
+@use '../../../base/vars';
+
+.input {
+    $component-selector: &;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    &__label {
+        user-select: none;
+    }
+
+    &__input-form {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    &__input {
+        min-height: 40px;
+        max-height: 40px;
+        padding: 0 12px;
+
+        background-color: vars.$white;
+        box-shadow: vars.$shadow;
+        border: 1px solid vars.$black;
+        border-radius: 5px;
+    }
+
+    &__icon {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+
+        cursor: pointer;
+
+        &_left {
+            left: 12px;
+        }
+
+        &_right {
+            width: 18px;
+            height: 18px;
+
+            right: 12px;
+        }
+
+        &_disabled {
+            pointer-events: none;
+            opacity: 0.75;
+        }
+    }
+
+    &_icon {
+        &-left {
+            #{$component-selector}__input {
+                padding-left: 48px;
+            }
+        }
+
+        &-right {
+            #{$component-selector}__input {
+                padding-right: 42px;
+            }
+        }
+    }
+}
