@@ -23,17 +23,18 @@ export function PostRoute() {
                     {post.user.userName === auth.user?.userName && (
                         <div className={componentClassName + "__controls"}>
                             <Link to="edit">
-                                <Button>
-                                    <p className={componentClassName + "__btn-text"}>Изменить</p>
-                                    <EditIcon />
-                                </Button>
+                                <Button className={componentClassName + "__button"}
+                                    value="Редактировать"
+                                    iconRight={<EditIcon />}
+                                />
                             </Link>
 
                             <Form method="DELETE">
-                                <Button type="submit">
-                                    <p className={componentClassName + "__btn-text"}>Удалить</p>
-                                    <DeleteIcon />
-                                </Button>
+                                <Button className={componentClassName + "__button"}
+                                    value="Удалить"
+                                    iconRight={<DeleteIcon />}
+                                    type="submit"
+                                />
                             </Form>
                         </div>
                     )}

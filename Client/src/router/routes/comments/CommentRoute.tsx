@@ -9,15 +9,17 @@ import { authSelector } from "../../../redux/slices/authSlice";
 import { CommentDetailsSchema } from "../../../schemas/comment/CommentDetailsSchema";
 
 export function CommentRoute() {
+    const componentClassName = "comment-route";
+
     const auth = useAppSelector(authSelector);
     const comment = CommentDetailsSchema.parse(useLoaderData());
 
     return (
-        <div className="comment-route">
+        <div className={componentClassName}>
             <Page>
-                <h1 className="comment-route__heading">
+                <h1 className={componentClassName + "__heading"}>
                     Комментарий к {
-                        <Link className="comment-route__link"
+                        <Link className={componentClassName + "__link"}
                             to={`/posts/${comment.post.id}`}
                         >
                             посту {comment.post.user.userName}
@@ -26,24 +28,25 @@ export function CommentRoute() {
                 </h1>
 
                 {comment.user.userName === auth.user?.userName && (
-                    <div className="comment-route__controls">
+                    <div className={componentClassName + "__controls"}>
                         <Link to="edit">
-                            <Button>
-                                <p className="comment-route__btn-text">Изменить</p>
-                                <EditIcon />
-                            </Button>
+                            <Button className={componentClassName + "__button"}
+                                value="Редактировать"
+                                iconRight={<EditIcon />}
+                            />
                         </Link>
 
                         <Form method="DELETE">
-                            <Button type="submit">
-                                <p className="comment-route__btn-text">Удалить</p>
-                                <DeleteIcon />
-                            </Button>
+                            <Button className={componentClassName + "__button"}
+                                value="Удалить"
+                                iconRight={<DeleteIcon />}
+                                type="submit"
+                            />
                         </Form>
                     </div>
                 )}
 
-                <CommentCard className="comment-route__card"
+                <CommentCard className={componentClassName + "__card"}
                     comment={comment}
                 />
             </Page>

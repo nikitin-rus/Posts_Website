@@ -15,7 +15,8 @@ export function PostForm({
     initialData,
     ...rest
 }: Props) {
-    const finalClassName = getClassName("post-form", className);
+    const componentClassName = "post-form";
+    const finalClassName = getClassName(componentClassName, className);
 
     const submit = useSubmit();
 
@@ -47,14 +48,14 @@ export function PostForm({
                 <Form className={finalClassName}
                     {...rest}
                 >
-                    <Field className="post-form__input"
+                    <Field className={componentClassName + "__input"}
                         name="title"
                         as={Input}
                         placeholder="Заголовок поста"
                         required
                     />
 
-                    <Field className="post-form__input"
+                    <Field className={componentClassName + "__input"}
                         name="content"
                         as={RichTextArea}
                         onFormat={(value: string) => setFieldValue("content", value)}
@@ -62,12 +63,11 @@ export function PostForm({
                         required
                     />
 
-                    <Button className="post-form__btn"
+                    <Button className={componentClassName + "__button"}
                         type="submit"
                         disabled={isSubmitting}
-                    >
-                        Сохранить
-                    </Button>
+                        value="Сохранить"
+                    />
                 </Form>
             )}
         </Formik>

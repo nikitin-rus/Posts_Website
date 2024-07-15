@@ -1,3 +1,4 @@
+import { memo } from "react";
 import TitleIcon from "../assets/icons/title_24dp.svg";
 import BoldIcon from "../assets/icons/bold_24dp.svg";
 import ItalicIcon from "../assets/icons/italic_24dp.svg";
@@ -10,11 +11,10 @@ import NumberedListIcon from "../assets/icons/numbered_list_24dp.svg";
 import { getClassName } from "../helpers/getClassName";
 import { FormatType } from "../helpers/TextFormatter";
 import { Button } from "./UI/Button";
-import { memo } from "react";
 
 type FormatToolInfo = {
     formatType: FormatType,
-    icon: React.ReactElement;
+    icon: JSX.Element;
 };
 
 interface Props {
@@ -68,16 +68,17 @@ const Toolbar = memo(function Toolbar({ className, onFormat, isDisabled }: Props
 
     return (
         <div className={finalClassName}>
-            {formatTools.map((formatTool, index) => {
+            {formatTools.map(({
+                formatType,
+                icon
+            }, index) => {
                 return (
                     <Button className={componentClassName + "__tool"}
-                    key={index}
-                    isSquare={true}
-                    disabled={isDisabled}
-                    onClick={() => onFormat(formatTool.formatType)}
-                >
-                    {formatTool.icon}
-                </Button>
+                        key={index}
+                        disabled={isDisabled}
+                        iconRight={icon}
+                        onClick={() => onFormat(formatType)}
+                    />
                 );
             })}
         </div >

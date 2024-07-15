@@ -14,7 +14,9 @@ export function CommentForm({
     initialData,
     ...rest
 }: Props) {
-    const finalClassName = getClassName("comment-form", className);
+    const componentClassName = "comment-form";
+    const finalClassName = getClassName(componentClassName, className);
+
     const submit = useSubmit();
     const fetcher = useFetcher();
 
@@ -53,18 +55,17 @@ export function CommentForm({
             <Form className={finalClassName}
                 {...rest}
             >
-                <Field className="comment-form__text-area"
+                <Field className={componentClassName + "__text-area"}
                     name="content"
                     as={TextArea}
                     placeholder="Что вы думаете о данном посте?"
                     required
                 />
 
-                <Button className="comment-form__btn"
+                <Button className={componentClassName + "__button"}
+                    value="Сохранить"
                     type="submit"
-                >
-                    Сохранить
-                </Button>
+                />
             </Form>
         </Formik>
     );
