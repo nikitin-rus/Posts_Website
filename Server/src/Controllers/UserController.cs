@@ -11,20 +11,38 @@ namespace Posts_Website.Controllers
     [ApiController]
     public class UserController(IUserRepository repo) : ControllerBase
     {
-		[HttpGet]
-		public IActionResult GetAll()
-		{
-			return Ok(repo.GetAll()
-						  .Select(u => u.ToUserDto()));
-		}
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            return Ok(repo.GetAll()
+                          .Select(u => u.ToUserDto()));
+        }
 
-		[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
             User? user = repo.GetById(id) ??
-				throw new EntityNotFoundException();
+                throw new EntityNotFoundException();
 
-            return Ok(user.ToUserDetailsDto());
+            return Ok(user.ToUserDto());
+        }
+
+        [HttpGet("{id}/posts")]
+        public IActionResult GetPosts([FromRoute] Guid id)
+        {
+            User? user = repo.GetById(id) ??
+                throw new EntityNotFoundException();
+
+            return Ok(user.Posts.Select(p => p.ToPostDto()));
+        }
+
+        [HttpGet("{id}/comments")]
+        public IActionResult GetComments([FromRoute] Guid id)
+        {
+            User? user = repo.GetById(id) ??
+                throw new EntityNotFoundException();
+
+            return Ok(user.Comments.Select(c => c.ToCommentDto()));
         }
     }
 }

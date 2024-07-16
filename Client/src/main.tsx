@@ -23,10 +23,14 @@ import { EditPostRoute } from './router/routes/posts/EditPostRoute';
 import { NewPostRoute } from './router/routes/posts/NewPostRoute';
 import { PostRoute } from './router/routes/posts/PostRoute';
 import { PostsRoute } from './router/routes/posts/PostsRoute';
-import { UserRoute } from './router/routes/UserRoute';
+import { UserRoute } from './router/routes/user/UserRoute';
 import { commentLoader } from './router/loaders/commentLoader';
 import { newPostAction } from './router/actions/newPostAction';
 import { newCommentAction } from './router/actions/newCommentAction';
+import { UserPostsRoute } from './router/routes/user/UserPostsRoute';
+import { userPostsLoader } from './router/loaders/userPostsLoader';
+import { UserCommentsRoute } from './router/routes/user/UserCommentsRoute';
+import { userCommentsLoader } from './router/loaders/userCommentsLoader';
 
 const router = createBrowserRouter([{
     path: "/",
@@ -60,7 +64,19 @@ const router = createBrowserRouter([{
             path: "/users/:id",
             element: <UserRoute />,
             loader: userLoader,
-            errorElement: <ErrorRoute />
+            errorElement: <ErrorRoute />,
+            children: [
+                {
+                    path: "/users/:id/posts",
+                    element: <UserPostsRoute />,
+                    loader: userPostsLoader,
+                },
+                {
+                    path: "/users/:id/comments",
+                    element: <UserCommentsRoute />,
+                    loader: userCommentsLoader,
+                }
+            ]
         },
         {
             path: "/login",

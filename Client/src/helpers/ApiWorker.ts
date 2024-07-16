@@ -8,15 +8,26 @@ import { CommentDto, CommentSchema } from "../schemas/comment/Comment";
 import { CommentDetailsDto, CommentDetailsSchema } from "../schemas/comment/CommentDetailsSchema";
 import { CommentFormDto } from "../schemas/comment/CommentFormSchema";
 import { PostFormDto } from "../schemas/post/PostFormSchema";
-import { UserDetailsDto, UserDetailsSchema } from "../schemas/user/UserDetailsSchema";
 import { PostsDto, PostsSchema } from "../schemas/post/PostsSchema";
+import { UserDto, UserSchema } from "../schemas/user/UserSchema";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
 export class ApiWorker {
-    static async getUser(id: string): Promise<UserDetailsDto> {
+    
+    static async getUser(id: string): Promise<UserDto> {
         const { data } = await axios.get(`/api/users/${id}`);
-        return UserDetailsSchema.parse(data);
+        return UserSchema.parse(data);
+    }
+
+    static async getUserPosts(id: string): Promise<PostDto[]> {
+        const { data } = await axios.get(`/api/users/${id}/posts`);
+        return PostSchema.array().parse(data);
+    }
+
+    static async getUserComments(id: string): Promise<CommentDto[]> {
+        const { data } = await axios.get(`/api/users/${id}/comments`);
+        return CommentSchema.array().parse(data);
     }
 
     static async getPosts(searchParams: URLSearchParams
