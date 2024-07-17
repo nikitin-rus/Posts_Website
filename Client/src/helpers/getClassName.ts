@@ -1,23 +1,28 @@
-interface ClassNames {
+interface ConditionalClassNames {
     [className: string]: boolean
 }
 
-export function getClassName(
-    innerClassName: string,
-    outerClassName?: string,
-    extraClassNames: ClassNames = {}
-) {
-    const classNames = [innerClassName];
+type ClassName = string | ConditionalClassNames | undefined | null;
 
-    if (outerClassName) {
-        classNames.push(outerClassName);
+export function getClassName(...classNames: ClassName[]): string {
+    let result: string[] = [];
+
+    for (const className of classNames) {
+        if (!className) {
+            continue;
+        }
+
+        if (typeof className === "string") {
+            result.push(className);
+            continue;
+        }
+
+        for (const [name, isPresent] of Object.entries(className)) {
+            if (isPresent) {
+                result.push(name);
+            }
+        }
     }
 
-    for (const [className, isPresent] of Object.entries(extraClassNames)) {
-        if (isPresent) {
-            classNames.push(className);
-        }
-    };
-
-    return classNames.join(" ");
+    return result.join(" ");
 }
