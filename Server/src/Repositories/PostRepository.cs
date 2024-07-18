@@ -1,14 +1,32 @@
 using Microsoft.EntityFrameworkCore;
 using Posts_Website.Data;
 using Posts_Website.Entities;
+using Posts_Website.Helpers;
 
 namespace Posts_Website.Repositories
 {
     public interface IPostRepository
     {
-        Post[] GetAll();
+        Post[] Get(
+            string search,
+            string sort,
+            int offset,
+            int limit
+        );
+
+        Post[] Get(
+            Guid userId,
+            string search,
+            string sort,
+            int offset,
+            int limit
+        );
 
         Post? GetById(Guid id);
+
+        int GetCount(string search);
+
+        int GetCount(Guid userId, string search);
 
         void Insert(Post post);
 
@@ -21,10 +39,37 @@ namespace Posts_Website.Repositories
 
     public class PostRepository(ApplicationContext db) : IPostRepository
     {
-        public Post[] GetAll()
+        public Post[] Get(
+            string search,
+            string sort,
+            int offset,
+            int limit
+        )
         {
-            return [.. db.Posts.Include(p => p.User)
-                .Include(p => p.Comments)];
+            return RepositoryHelper.GetPosts(
+                db.Posts.AsQueryable(),
+                search,
+                sort,
+                offset,
+                limit
+            );
+        }
+
+        public Post[] Get(
+            Guid userId,
+            string search,
+            string sort,
+            int offset,
+            int limit
+        )
+        {
+            return RepositoryHelper.GetPosts(
+                db.Posts.Where(p => p.UserId == userId),
+                search,
+                sort,
+                offset,
+                limit
+            );
         }
 
         public Post? GetById(Guid id)
@@ -33,6 +78,24 @@ namespace Posts_Website.Repositories
                 .Include(p => p.Comments)
                     .ThenInclude(c => c.User)
                 .FirstOrDefault(p => p.Id == id);
+        }
+
+        public int GetCount(string search)
+        {
+            return db.Posts.Where(p => EF.Functions.Like(
+                p.Content.ToLower(),
+                $"%{search}%".ToLower()
+            )).Count();
+        }
+
+        public int GetCount(Guid userId, string search)
+        {
+            return db.Posts
+                .Where(p => p.UserId == userId)
+                .Where(p => EF.Functions.Like(
+                    p.Content.ToLower(), 
+                    $"%{search}%".ToLower()
+                )).Count();
         }
 
         public void Insert(Post post)

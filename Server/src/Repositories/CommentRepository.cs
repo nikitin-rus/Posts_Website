@@ -1,16 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Posts_Website.Data;
 using Posts_Website.Entities;
+using Posts_Website.Helpers;
 
 namespace Posts_Website.Repositories
 {
     public interface ICommentRepository
     {
-        Comment[] GetAllByUserId(Guid userId);
-
-        Comment[] GetAllByPostId(Guid postId);
+        Comment[] Get(
+            Guid userId,
+            string search,
+            string sort,
+            int offset,
+            int limit
+        );
 
         Comment? GetById(Guid id);
+
+        int GetCount(Guid userId, string search);
 
         void Insert(Comment comment);
 
@@ -23,16 +30,31 @@ namespace Posts_Website.Repositories
 
     public class CommentRepository(ApplicationContext db) : ICommentRepository
     {
-        public Comment[] GetAllByUserId(Guid userId)
+        public Comment[] Get(
+            Guid userId,
+            string search,
+            string sort,
+            int offset,
+            int limit
+        )
         {
-            return [.. db.Comments.Where(c => c.UserId == userId)
-                                  .Include(c => c.User)];
+            return RepositoryHelper.GetComments(
+                db.Comments.Where(c => c.UserId == userId),
+                search,
+                sort,
+                offset,
+                limit
+            );
         }
 
-        public Comment[] GetAllByPostId(Guid postId)
+        public int GetCount(Guid userId, string search)
         {
-            return [.. db.Comments.Where(c => c.PostId == postId)
-                                  .Include(c => c.User)];
+            return db.Comments
+                .Where(c => c.UserId == userId)
+                .Where(c => EF.Functions.Like(
+                    c.Content.ToLower(), 
+                    $"%{search}%".ToLower()
+                )).Count();
         }
 
         public Comment? GetById(Guid id)

@@ -17,13 +17,6 @@ namespace server.src.Controllers
 		IClaimsPrincipalService principalService
 	) : ControllerBase
 	{
-		[HttpGet]
-		public IActionResult GetAll([FromRoute] Guid postId)
-		{
-			return Ok(commentRepo.GetAllByPostId(postId)
-								 .Select(c => c.ToCommentDto()));
-		}
-
 		[HttpGet("{id:guid}")]
 		public IActionResult GetById([FromRoute] Guid id)
 		{
