@@ -1,11 +1,11 @@
 import { useLoaderData } from "react-router-dom";
-import { CommentSchema } from "../../../schemas/comment/Comment";
 import { CommentCardList } from "../../../components/lists/CommentCardList";
+import { CommentsSchema } from "../../../schemas/comment/CommentsSchema";
 
 export function UserCommentsRoute() {
     const componentClassName = "user-comments-route";
 
-    const comments = CommentSchema.array().parse(useLoaderData());
+    const { comments, totalCount } = CommentsSchema.parse(useLoaderData());
 
     return (
         <div className={componentClassName}>

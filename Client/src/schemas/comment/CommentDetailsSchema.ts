@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CommentSchema } from "./Comment";
+import { CommentSchema } from "./CommentSchema";
 import { PostSchema } from "../post/PostSchema";
 
 export const CommentDetailsSchema = CommentSchema.extend({

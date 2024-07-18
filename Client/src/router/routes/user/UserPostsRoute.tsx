@@ -1,11 +1,11 @@
 import { useLoaderData } from "react-router-dom";
 import { PostCardList } from "../../../components/lists/PostCardList";
-import { PostSchema } from "../../../schemas/post/PostSchema";
+import { PostsSchema } from "../../../schemas/post/PostsSchema";
 
 export function UserPostsRoute() {
     const componentClassName = "user-posts-route";
 
-    const posts = PostSchema.array().parse(useLoaderData());
+    const { posts, totalCount } = PostsSchema.parse(useLoaderData());
 
     return (
         <div className={componentClassName}>

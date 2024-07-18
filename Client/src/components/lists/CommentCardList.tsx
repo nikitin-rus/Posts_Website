@@ -2,7 +2,7 @@ import { createRef } from "react";
 import { Link } from "react-router-dom";
 import { getClassName } from "../../helpers/getClassName";
 import { CommentCard } from "../cards/CommentCard";
-import { CommentDto } from "../../schemas/comment/Comment";
+import { CommentDto } from "../../schemas/comment/CommentSchema";
 
 interface Props {
     className?: string,

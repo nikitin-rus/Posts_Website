@@ -3,10 +3,14 @@ import { ApiWorker } from "../../helpers/ApiWorker";
 import { UserRouteParamsSchema } from "../../schemas/params/UserRouteParamsSchema";
 
 export async function userCommentsLoader({
-    params
+    request,
+    params,
 }: {
-    params: Params
+    request: Request,
+    params: Params,
 }) {
     const { id } = UserRouteParamsSchema.parse(params);
-    return await ApiWorker.getUserComments(id);
+    const searchParams = new URL(request.url).searchParams;
+    
+    return await ApiWorker.getUserComments(id, searchParams);
 }

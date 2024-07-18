@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { UserSchema } from "./UserSchema";
 import { PostSchema } from "../post/PostSchema";
-import { CommentSchema } from "../comment/Comment";
+import { CommentSchema } from "../comment/CommentSchema";
 
 export const UserDetailsSchema = UserSchema.extend({
     posts: PostSchema.array(),
