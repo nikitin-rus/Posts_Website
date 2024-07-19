@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
-import { PostCardList } from "../../../components/lists/PostCardList";
 import { Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
-import { PostsSchema } from "../../../schemas/post/PostsSchema";
 import { Search } from "../../../components/UI/inputs/Search";
 import { getPagesCount } from "../../../helpers/getPagesCount";
+import { CommentsSchema } from "../../../schemas/comment/CommentsSchema";
+import { CommentCardList } from "../../../components/lists/CommentCardList";
 
-export function PostsRoute() {
-    const componentClassName = "posts-route";
-    const { posts, totalCount } = PostsSchema.parse(useLoaderData());
+export function CommentsRoute() {
+    const componentClassName = "comments-route";
+    const { comments, totalCount } = CommentsSchema.parse(useLoaderData());
     const selectSortOptions = [
         { name: "new", value: "Сначала новые" },
         { name: "old", value: "Сначала старые" }
@@ -91,9 +91,9 @@ export function PostsRoute() {
                     />
                 </div>
 
-                {posts.length > 0 ? (
-                    <PostCardList className={componentClassName + "__list"}
-                        posts={posts}
+                {comments.length > 0 ? (
+                    <CommentCardList className={componentClassName + "__list"}
+                        comments={comments}
                     />
                 ) : (
                     <p className={componentClassName + "__message"}>

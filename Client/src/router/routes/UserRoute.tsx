@@ -1,17 +1,15 @@
 import { Outlet, useLoaderData } from "react-router-dom";
-import { Page } from "../../../components/Page";
-import { Tabs } from "../../../components/Tabs";
-import { UserSchema } from "../../../schemas/user/UserSchema";
-import { UserCard } from "../../../components/cards/UserCard";
+import { UserSchema } from "../../schemas/user/UserSchema";
+import { UserCard } from "../../components/cards/UserCard";
+import { Tabs } from "../../components/Tabs";
 
 export function UserRoute() {
     const componentClassName = "user-route";
-
     const user = UserSchema.parse(useLoaderData());
 
     return (
         <div className={componentClassName}>
-            <Page>
+            <div className={componentClassName + "__content"}>
                 <UserCard className={componentClassName + "__user-card"}
                     user={user}
                 >
@@ -24,7 +22,7 @@ export function UserRoute() {
                 </UserCard>
 
                 <Outlet />
-            </Page>
+            </div>
         </div>
     );
 }

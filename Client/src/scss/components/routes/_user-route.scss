@@ -1,5 +1,7 @@
 .user-route {
-    &__user-card {
-        margin-bottom: 40px;
+    &__content {
+        display: flex;
+        flex-direction: column;
+        row-gap: 40px;
     }
 }

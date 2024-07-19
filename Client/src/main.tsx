@@ -23,18 +23,18 @@ import { EditPostRoute } from './router/routes/posts/EditPostRoute';
 import { NewPostRoute } from './router/routes/posts/NewPostRoute';
 import { PostRoute } from './router/routes/posts/PostRoute';
 import { PostsRoute } from './router/routes/posts/PostsRoute';
-import { UserRoute } from './router/routes/user/UserRoute';
 import { commentLoader } from './router/loaders/commentLoader';
 import { newPostAction } from './router/actions/newPostAction';
 import { newCommentAction } from './router/actions/newCommentAction';
-import { UserPostsRoute } from './router/routes/user/UserPostsRoute';
 import { userPostsLoader } from './router/loaders/userPostsLoader';
-import { UserCommentsRoute } from './router/routes/user/UserCommentsRoute';
 import { userCommentsLoader } from './router/loaders/userCommentsLoader';
+import { UserRoute } from './router/routes/UserRoute';
+import { CommentsRoute } from './router/routes/comments/CommetsRoute';
 
 const router = createBrowserRouter([{
     path: "/",
     element: <RootRoute />,
+    errorElement: <ErrorRoute />,
     children: [
         {
             index: true,
@@ -51,7 +51,7 @@ const router = createBrowserRouter([{
             element: <PostRoute />,
             loader: postLoader,
             action: postAction,
-            errorElement: <ErrorRoute />
+            errorElement: <ErrorRoute />,
         },
         {
             path: "/posts/:postId/comments/:commentId",
@@ -68,12 +68,12 @@ const router = createBrowserRouter([{
             children: [
                 {
                     path: "/users/:id/posts",
-                    element: <UserPostsRoute />,
+                    element: <PostsRoute />,
                     loader: userPostsLoader,
                 },
                 {
                     path: "/users/:id/comments",
-                    element: <UserCommentsRoute />,
+                    element: <CommentsRoute />,
                     loader: userCommentsLoader,
                 }
             ]
@@ -113,7 +113,6 @@ const router = createBrowserRouter([{
             errorElement: <ErrorRoute />
         }
     ],
-    errorElement: <ErrorRoute />
 }]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
