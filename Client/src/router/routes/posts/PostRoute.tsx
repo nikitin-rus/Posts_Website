@@ -1,39 +1,38 @@
-import { useLoaderData, Link, Form } from "react-router-dom";
+import { useLoaderData, Link, Form, Outlet } from "react-router-dom";
 import { PostCard } from "../../../components/cards/PostCard";
 import { CommentForm } from "../../../components/forms/CommentForm";
-import { CommentCardList } from "../../../components/lists/CommentCardList";
-import { Page } from "../../../components/Page";
 import { Button } from "../../../components/UI/Button";
 import { useAppSelector } from "../../../redux/hooks";
 import { authSelector } from "../../../redux/slices/authSlice";
-import { PostDetailsSchema } from "../../../schemas/post/PostDetailsSchema";
 import EditIcon from "../../../assets/icons/edit_24dp.svg";
 import DeleteIcon from "../../../assets/icons/delete_24dp.svg";
+import { PostSchema } from "../../../schemas/post/PostSchema";
 
 export function PostRoute() {
     const componentClassName = "post-route";
 
     const auth = useAppSelector(authSelector);
-    const post = PostDetailsSchema.parse(useLoaderData());
+    const post = PostSchema.parse(useLoaderData());
 
     return (
         <div className={componentClassName}>
-            <Page>
+            <div className={componentClassName + "__content"}>
                 <section className={componentClassName + "__section"}>
                     {post.user.userName === auth.user?.userName && (
                         <div className={componentClassName + "__controls"}>
                             <Link to="edit">
-                                <Button>
-                                    <p className={componentClassName + "__btn-text"}>Изменить</p>
-                                    <EditIcon />
-                                </Button>
+                                <Button className={componentClassName + "__button"}
+                                    value="Редактировать"
+                                    iconRight={<EditIcon />}
+                                />
                             </Link>
 
                             <Form method="DELETE">
-                                <Button type="submit">
-                                    <p className={componentClassName + "__btn-text"}>Удалить</p>
-                                    <DeleteIcon />
-                                </Button>
+                                <Button className={componentClassName + "__button"}
+                                    value="Удалить"
+                                    iconRight={<DeleteIcon />}
+                                    type="submit"
+                                />
                             </Form>
                         </div>
                     )}
@@ -58,17 +57,9 @@ export function PostRoute() {
                         />
                     )}
 
-                    {post.comments.length > 0 ? (
-                        <CommentCardList className={componentClassName + "__list"}
-                            comments={post.comments}
-                        />
-                    ) : (
-                        <p className={componentClassName + "__message"}>
-                            Комментариев пока нет!
-                        </p>
-                    )}
+                    <Outlet />
                 </section>
-            </Page>
+            </div>
         </div>
     );
 }

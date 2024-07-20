@@ -10,6 +10,10 @@ namespace Posts_Website.Repositories
 
         Post? GetById(Guid id);
 
+        int GetCount(string search);
+
+        int GetCount(Guid userId, string search);
+
         void Insert(Post post);
 
         void Update(Post post);
@@ -23,8 +27,7 @@ namespace Posts_Website.Repositories
     {
         public Post[] GetAll()
         {
-            return [.. db.Posts.Include(p => p.User)
-                .Include(p => p.Comments)];
+            return [.. db.Posts.Include(p => p.User)];
         }
 
         public Post? GetById(Guid id)
@@ -33,6 +36,24 @@ namespace Posts_Website.Repositories
                 .Include(p => p.Comments)
                     .ThenInclude(c => c.User)
                 .FirstOrDefault(p => p.Id == id);
+        }
+
+        public int GetCount(string search)
+        {
+            return db.Posts.Where(p => EF.Functions.Like(
+                p.Content.ToLower(),
+                $"%{search}%".ToLower()
+            )).Count();
+        }
+
+        public int GetCount(Guid userId, string search)
+        {
+            return db.Posts
+                .Where(p => p.UserId == userId)
+                .Where(p => EF.Functions.Like(
+                    p.Content.ToLower(),
+                    $"%{search}%".ToLower()
+                )).Count();
         }
 
         public void Insert(Post post)

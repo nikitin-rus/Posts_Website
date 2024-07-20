@@ -1,0 +1,18 @@
+.comments-route {
+    &__content {
+        display: flex;
+        flex-direction: column;
+        row-gap: 40px;   
+    }
+    
+    &__controls {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        gap: 24px;
+    }
+
+    &__message {
+        font-style: italic;
+    }
+}

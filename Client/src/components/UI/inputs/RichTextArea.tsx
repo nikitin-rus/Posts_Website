@@ -67,11 +67,10 @@ export function RichTextArea({
             )}
 
             <Button className={componentClassName + "__button"}
+                value={`Показать ${isPreviewShown ? "черновик" : "превью"}`}
                 onClick={handleModeChange}
                 disabled={value.length === 0}
-            >
-                Показать {isPreviewShown ? "черновик" : "превью"}
-            </Button>
+            />
         </div >
     );
 }

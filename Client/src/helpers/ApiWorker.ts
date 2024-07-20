@@ -1,26 +1,72 @@
 import axios from "axios";
 import { PostDto, PostSchema } from "../schemas/post/PostSchema";
-import { PostDetailsDto, PostDetailsSchema } from "../schemas/post/PostDetailsSchema";
 import { AuthDto, AuthSchema } from "../schemas/auth/AuthSchema";
 import { LoginFormDto } from "../schemas/auth/LoginFormSchema";
 import { RegisterFormDto } from "../schemas/auth/RegisterFormSchema";
-import { CommentDto, CommentSchema } from "../schemas/comment/Comment";
+import { CommentDto, CommentSchema } from "../schemas/comment/CommentSchema";
+import { CommentsDto, CommentsSchema } from "../schemas/comment/CommentsSchema";
 import { CommentDetailsDto, CommentDetailsSchema } from "../schemas/comment/CommentDetailsSchema";
 import { CommentFormDto } from "../schemas/comment/CommentFormSchema";
 import { PostFormDto } from "../schemas/post/PostFormSchema";
-import { UserDetailsDto, UserDetailsSchema } from "../schemas/user/UserDetailsSchema";
 import { PostsDto, PostsSchema } from "../schemas/post/PostsSchema";
+import { UserDto, UserSchema } from "../schemas/user/UserSchema";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
 export class ApiWorker {
-    static async getUser(id: string): Promise<UserDetailsDto> {
+
+    static async getUser(id: string): Promise<UserDto> {
         const { data } = await axios.get(`/api/users/${id}`);
-        return UserDetailsSchema.parse(data);
+        return UserSchema.parse(data);
     }
 
-    static async getPosts(searchParams: URLSearchParams
+    static async getUserPosts(
+        id: string,
+        searchParams: URLSearchParams
     ): Promise<PostsDto> {
+        const { data, headers } = await axios.get(
+            `/api/users/${id}/posts`,
+            {
+                params: Object.fromEntries(searchParams.entries())
+            }
+        );
+
+        const totalCount = headers["x-total-count"];
+
+        if (!totalCount) {
+            throw new Error("Отсутствует заголовок X-Total-Count");
+        }
+
+        return PostsSchema.parse({
+            posts: data,
+            totalCount: +totalCount,
+        });
+    }
+
+    static async getUserComments(
+        userId: string,
+        searchParams: URLSearchParams
+    ): Promise<CommentsDto> {
+        const { data, headers } = await axios.get(
+            `/api/users/${userId}/comments`,
+            {
+                params: Object.fromEntries(searchParams.entries())
+            }
+        );
+
+        const totalCount = headers["x-total-count"];
+
+        if (!totalCount) {
+            throw new Error("Отсутствует заголовок X-Total-Count");
+        }
+
+        return CommentsSchema.parse({
+            comments: data,
+            totalCount: +totalCount,
+        });
+    }
+
+    static async getPosts(searchParams: URLSearchParams): Promise<PostsDto> {
         const { data, headers } = await axios.get(
             `/api/posts`,
             {
@@ -40,9 +86,31 @@ export class ApiWorker {
         });
     }
 
-    static async getPost(id: string): Promise<PostDetailsDto> {
+    static async getPost(id: string): Promise<PostDto> {
         const { data } = await axios.get(`/api/posts/${id}`);
-        return PostDetailsSchema.parse(data);
+        return PostSchema.parse(data);
+    }
+
+    static async getPostComments(postId: string,
+        searchParams: URLSearchParams
+    ): Promise<CommentsDto> {
+        const { data, headers } = await axios.get(
+            `/api/posts/${postId}/comments`,
+            {
+                params: Object.fromEntries(searchParams.entries())
+            }
+        );
+
+        const totalCount = headers["x-total-count"];
+
+        if (!totalCount) {
+            throw new Error("Отсутствует заголовок X-Total-Count");
+        }
+
+        return CommentsSchema.parse({
+            comments: data,
+            totalCount: +totalCount,
+        });
     }
 
     static async getComment(

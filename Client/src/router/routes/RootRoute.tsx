@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authSelector, login } from "../../redux/slices/authSlice";
 import { useEffect } from "react";
 import { getUserFromLocalStorage } from "../../helpers/getUserFromLocalStorage";
+import { Page } from "../../components/Page";
 
 export function RootRoute() {
     const auth = useSelector(authSelector);
@@ -31,7 +32,9 @@ export function RootRoute() {
     return (
         <div className="root-route">
             <Navbar />
-            <Outlet />
+            <Page>
+                <Outlet />
+            </Page>
         </div>
     );
 }

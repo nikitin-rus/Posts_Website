@@ -3,8 +3,8 @@ import { getClassName } from "../../../helpers/getClassName";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label?: string,
-    iconLeft?: FunctionComponent<SVGProps<SVGSVGElement>>,
-    iconRight?: FunctionComponent<SVGProps<SVGSVGElement>>,
+    iconLeft?: JSX.Element,
+    iconRight?: JSX.Element,
     isIconLeftDisabled?: boolean,
     isIconRightDisabled?: boolean,
     onIconLeftClick?: () => void,
@@ -15,8 +15,8 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
     function ({
         className,
         label,
-        iconLeft: IconLeft,
-        iconRight: IconRight,
+        iconLeft,
+        iconRight,
         isIconLeftDisabled = false,
         isIconRightDisabled = false,
         onIconLeftClick,
@@ -25,8 +25,8 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
     }, ref) {
         const componentClassName = "input";
         const finalClassName = getClassName(componentClassName, className, {
-            [componentClassName + "_icon-left"]: IconLeft !== undefined,
-            [componentClassName + "_icon-right"]: IconRight !== undefined
+            [componentClassName + "_icon-left"]: iconLeft !== undefined,
+            [componentClassName + "_icon-right"]: iconRight !== undefined
         });
 
         return (
@@ -36,30 +36,34 @@ const Input = memo(forwardRef<HTMLInputElement, Props>(
                 </label>}
 
                 <div className={componentClassName + "__input-form"}>
-                    {IconLeft && <IconLeft className={
-                        [
-                            componentClassName + "__icon",
-                            componentClassName + "__icon_left",
-                            isIconLeftDisabled ? (componentClassName + "__icon_disabled") : "",
-                        ].join(" ")
-                    }
-                        onClick={onIconLeftClick}
-                    />}
+                    {iconLeft && (
+                        <div className={[
+                            componentClassName + "__icon-wrapper",
+                            componentClassName + "__icon-wrapper_left",
+                            isIconLeftDisabled ? (componentClassName + "__icon-wrapper_disabled") : "",
+                        ].join(" ")}
+                            onClick={onIconLeftClick}
+                        >
+                            {iconLeft}
+                        </div>
+                    )}
 
                     <input className={componentClassName + "__input"}
                         ref={ref}
                         {...rest}
                     />
 
-                    {IconRight && <IconRight className={
-                        [
-                            componentClassName + "__icon",
-                            componentClassName + "__icon_right",
-                            isIconRightDisabled ? (componentClassName + "__icon_disabled") : "",
-                        ].join(" ")
-                    }
-                        onClick={onIconRightClick}
-                    />}
+                    {iconRight && (
+                        <div className={[
+                            componentClassName + "__icon-wrapper",
+                            componentClassName + "__icon-wrapper_right",
+                            isIconRightDisabled ? (componentClassName + "__icon-wrapper_disabled") : "",
+                        ].join(" ")}
+                            onClick={onIconRightClick}
+                        >
+                            {iconRight}
+                        </div>
+                    )}
                 </div>
             </div>
         );

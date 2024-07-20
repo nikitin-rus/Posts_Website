@@ -1,0 +1,18 @@
+.post-route {
+    &__section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    &__controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+    }
+
+    &__message {
+        font-style: italic;
+    }
+}

@@ -1,0 +1,19 @@
+@use '../../base/vars';
+
+.user-card {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    padding: 24px;
+
+    background: vars.$white;
+    box-shadow: vars.$shadow;
+    border: 1px solid vars.$black;
+    border-radius: 5px;
+
+    &__heading {
+        align-self: flex-start;
+        color: vars.$light-blue;
+    }
+}

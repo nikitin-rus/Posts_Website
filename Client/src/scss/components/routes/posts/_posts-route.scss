@@ -1,19 +1,15 @@
-.post-route {
-    &__section {
+.posts-route {
+    &__content {
         display: flex;
         flex-direction: column;
-        row-gap: 24px;
-        margin-bottom: 40px;
+        row-gap: 40px;   
     }
-
+    
     &__controls {
         display: flex;
+        align-items: flex-end;
         flex-wrap: wrap;
         gap: 24px;
-    }
-
-    &__btn-text {
-        margin-right: 8px;
     }
 
     &__message {

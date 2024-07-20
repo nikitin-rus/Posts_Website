@@ -14,7 +14,8 @@ export function RegisterForm({
     initialData,
     ...rest
 }: Props) {
-    const finalClassName = getClassName("register-form", className);
+    const componentClassName = "register-form";
+    const finalClassName = getClassName(componentClassName, className);
 
     const submit = useSubmit();
 
@@ -42,7 +43,7 @@ export function RegisterForm({
             <Form className={finalClassName}
                 {...rest}
             >
-                <Field className="register-form__input"
+                <Field className={componentClassName + "__input"}
                     name="userName"
                     type="text"
                     as={Input}
@@ -51,7 +52,7 @@ export function RegisterForm({
                     required
                 />
 
-                <Field className="register-form__input"
+                <Field className={componentClassName + "__input"}
                     name="email"
                     type="email"
                     as={Input}
@@ -60,7 +61,7 @@ export function RegisterForm({
                     required
                 />
 
-                <Field className="register-form__input"
+                <Field className={componentClassName + "__input"}
                     name="password"
                     type="password"
                     as={Input}
@@ -68,12 +69,11 @@ export function RegisterForm({
                     required
                 />
 
-                <Button className="login-form__btn"
+                <Button className={componentClassName + "__button"}
+                    value="Подтвердить"
                     type="submit"
                     theme="blue"
-                >
-                    Подтвердить
-                </Button>
+                />
             </Form>
         </Formik>
     );

@@ -3,18 +3,20 @@ import { getClassName } from "../../helpers/getClassName";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     theme?: "default" | "blue",
-    isSquare?: boolean
+    iconRight?: JSX.Element,
 }
 
 const Button = memo(forwardRef<HTMLButtonElement, Props>(
     function ({
         className,
-        children,
+        value,
         theme = "default",
-        isSquare = false,
+        iconRight,
         ...rest
     }, ref) {
         const componentClassName = "button";
+
+        const isSquare = iconRight !== undefined && !value;
 
         const finalClassName = getClassName(componentClassName, className, {
             [componentClassName + "_blue"]: theme === "blue",
@@ -27,7 +29,13 @@ const Button = memo(forwardRef<HTMLButtonElement, Props>(
                 type={"button"}
                 {...rest}
             >
-                {children}
+                {value && (
+                    <p className={componentClassName + "__text"}>
+                        {value}
+                    </p>
+                )}
+
+                {iconRight}
             </button>
         );
     }

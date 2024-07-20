@@ -1,9 +1,5 @@
-@use 'posts-route';
+@use 'auth/auth-routes-init';
+@use 'comments/comments-routes-init';
+@use 'posts/posts-routes-init';
 @use 'error-route';
-@use 'post-route';
 @use 'user-route';
-@use 'comment-route';
-@use 'login-route';
-@use 'register-route';
-@use 'new-post-route';
-@use 'edit-post-route';

@@ -16,7 +16,8 @@ export function LoginForm({
 }: Props) {
     const submit = useSubmit();
 
-    const finalClassName = getClassName("login-form", className);
+    const componentClassName = "login-form";
+    const finalClassName = getClassName(componentClassName, className);
 
     return (
         <Formik
@@ -42,7 +43,7 @@ export function LoginForm({
                 action="/"
                 {...rest}
             >
-                <Field className="login-form__input"
+                <Field className={componentClassName + "__input"}
                     name="email"
                     type="email"
                     as={Input}
@@ -51,7 +52,7 @@ export function LoginForm({
                     required
                 />
 
-                <Field className="login-form__input"
+                <Field className={componentClassName + "__input"}
                     name="password"
                     type="password"
                     as={Input}
@@ -59,12 +60,11 @@ export function LoginForm({
                     required
                 />
 
-                <Button className="login-form__btn"
+                <Button className={componentClassName + "__button"}
+                    value="Подтвердить"
                     type="submit"
                     theme="blue"
-                >
-                    Подтвердить
-                </Button>
+                />
             </Form>
         </Formik>
     );

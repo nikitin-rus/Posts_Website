@@ -1,71 +1,83 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { PostCardList } from "../../../components/lists/PostCardList";
-import { Page } from "../../../components/Page";
 import { Select } from "../../../components/UI/Select";
 import { Pagination } from "../../../components/Pagination";
 import { PostsSchema } from "../../../schemas/post/PostsSchema";
 import { Search } from "../../../components/UI/inputs/Search";
+import { getPagesCount } from "../../../helpers/getPagesCount";
 
 export function PostsRoute() {
     const componentClassName = "posts-route";
-
-    const sortOptions = [
+    const { posts, totalCount } = PostsSchema.parse(useLoaderData());
+    const selectSortOptions = [
         { name: "new", value: "Сначала новые" },
         { name: "old", value: "Сначала старые" }
     ];
-    const limitOptions = [
+    const selectLimitOptions = [
         { name: "3", value: "3" },
         { name: "5", value: "5" },
         { name: "10", value: "10" },
     ];
-
-    const [selectedSortIndex, setSelectedSortIndex] = useState(0);
-    const [selectedLimitIndex, setSelectedLimitIndex] = useState(0);
-    const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");
-
-    const limit = +limitOptions[selectedLimitIndex].name;
-    const sort = sortOptions[selectedSortIndex].name;
-
-    const { posts, totalCount } = PostsSchema.parse(useLoaderData());
-
-    const pagesCount = Math.ceil(totalCount / limit);
-
+    const [searchInfo, setSearchInfo] = useState({
+        search: "",
+        page: 1,
+        selectedSortIndex: 0,
+        selectedLimitIndex: 0,
+    });
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        setSearchParams(new URLSearchParams(
-            `?search=${search}&sort=${sort}&page=${page}&limit=${limit}`
-        ));
-    }, [search, sort, page, limit]);
+        setSearchParams({
+            search: searchInfo.search,
+            page: searchInfo.page.toString(),
+            sort: selectSortOptions[searchInfo.selectedSortIndex].name,
+            limit: selectLimitOptions[searchInfo.selectedLimitIndex].name,
+        });
+    }, [searchInfo]);
 
     function handleSearch(search: string) {
-        setSearch(search);
+        setSearchInfo({
+            ...searchInfo,
+            search,
+            page: 1,
+        });
     }
 
     function handleSortSelect(selectedSortIndex: number) {
-        setSelectedSortIndex(selectedSortIndex);
-        setPage(1);
+        setSearchInfo({
+            ...searchInfo,
+            selectedSortIndex,
+            page: 1,
+        });
     }
 
     function handleLimitSelect(selectedLimitIndex: number) {
-        setSelectedLimitIndex(selectedLimitIndex);
-        setPage(1);
+        setSearchInfo({
+            ...searchInfo,
+            selectedLimitIndex,
+            page: 1,
+        });
     }
 
     function handleNavigate(page: number) {
-        setPage(page);
+        setSearchInfo({
+            ...searchInfo,
+            page: page,
+        });
     }
 
     return (
         <div className={componentClassName}>
-            <Page>
-                <div className={componentClassName + "__input-and-select"}>
+            <div className={componentClassName + "__content"}>
+                <div className={[
+                    componentClassName + "__controls",
+                    componentClassName + "__controls_top",
+                ].join(" ")}>
                     <Search className={componentClassName + "__search"}
                         label="Поиск по содержанию"
                         placeholder="Полет через Ла-Манш"
-                        search={search}
+                        search={searchInfo.search}
                         onSearch={handleSearch}
                     />
 
@@ -73,9 +85,9 @@ export function PostsRoute() {
                         componentClassName + "__select",
                         componentClassName + "__select_sort"
                     ].join(" ")}
-                        selectedIndex={selectedSortIndex}
+                        selectedIndex={searchInfo.selectedSortIndex}
                         onSelect={handleSortSelect}
-                        options={sortOptions}
+                        options={selectSortOptions}
                     />
                 </div>
 
@@ -84,16 +96,22 @@ export function PostsRoute() {
                         posts={posts}
                     />
                 ) : (
-                    <h2 className={componentClassName + "__message"}>
-                        Ничего не найдено
-                    </h2>
+                    <p className={componentClassName + "__message"}>
+                        К сожалению, здесь пока пусто.
+                    </p>
                 )}
 
                 {totalCount > 0 && (
-                    <div className={componentClassName + "__pagination-and-limit"}>
+                    <div className={[
+                        componentClassName + "__controls",
+                        componentClassName + "__controls_bottom",
+                    ].join(" ")}>
                         <Pagination className={componentClassName + "__pagination"}
-                            pagesCount={pagesCount}
-                            currentPage={page}
+                            pagesCount={getPagesCount(
+                                totalCount,
+                                +selectLimitOptions[searchInfo.selectedLimitIndex].name)
+                            }
+                            currentPage={searchInfo.page}
                             onNavigate={handleNavigate}
                         />
 
@@ -101,14 +119,14 @@ export function PostsRoute() {
                             componentClassName + "__select",
                             componentClassName + "__select_limit"
                         ].join(" ")}
-                            selectedIndex={selectedLimitIndex}
+                            selectedIndex={searchInfo.selectedLimitIndex}
                             onSelect={handleLimitSelect}
-                            options={limitOptions}
+                            options={selectLimitOptions}
                             isUp={true}
                         />
                     </div>
                 )}
-            </Page>
+            </div>
         </div >
     );
 }

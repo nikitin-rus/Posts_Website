@@ -84,24 +84,24 @@ export function Pagination({
                 key={i}
                 onClick={() => onNavigate(pages[i])}
                 theme={isCurrent ? "blue" : "default"}
-            >
-                {pages[i]}
-            </Button>
+                value={pages[i]}
+            />
         );
     }
 
     return (
         <div className={finalClassName}>
-            <Button className={componentClassName + "__navigate"}
+            <Button className={[
+                componentClassName + "__navigate",
+                componentClassName + "__navigate_left",
+            ].join(" ")}
                 onClick={() => onNavigate(currentPage - 1)}
                 disabled={currentPage <= 1}
-                isSquare={true}
-            >
-                <ChevronDown className={[
+                iconRight={<ChevronDown className={[
                     componentClassName + "__chevron-down",
                     componentClassName + "__chevron-down_left"
-                ].join(" ")} />
-            </Button>
+                ].join(" ")} />}
+            />
 
             {isPlain ? (
                 <div className={componentClassName + "__buttons"}>
@@ -131,16 +131,17 @@ export function Pagination({
                 </div>
             )}
 
-            <Button className={componentClassName + "__navigate"}
+            <Button className={[
+                componentClassName + "__navigate",
+                componentClassName + "__navigate_right",
+            ].join(" ")}
                 onClick={() => onNavigate(currentPage + 1)}
                 disabled={currentPage >= pagesCount}
-                isSquare={true}
-            >
-                <ChevronDown className={[
+                iconRight={<ChevronDown className={[
                     componentClassName + "__chevron-down",
-                    componentClassName + "__chevron-down_right",
-                ].join(" ")} />
-            </Button>
+                    componentClassName + "__chevron-down_right"
+                ].join(" ")} />}
+            />
         </div>
     );
 }
