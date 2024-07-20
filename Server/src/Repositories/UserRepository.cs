@@ -33,10 +33,10 @@ namespace Posts_Website.Repositories
 
         public User? GetByEmail(string email)
         {
-			return db.Users.Include(u => u.Posts)
-						   .Include(u => u.Comments)
-						   .FirstOrDefault(u => u.Email == email);
-		}
+            return db.Users.Include(u => u.Posts)
+                           .Include(u => u.Comments)
+                           .FirstOrDefault(u => u.Email == email);
+        }
 
         public void Insert(User user)
         {

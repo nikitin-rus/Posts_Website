@@ -1,8 +1,8 @@
 import { Params } from "react-router-dom";
-import { ApiWorker } from "../../helpers/ApiWorker";
-import { CommentRouteParamsSchema } from "../../schemas/params/CommentRouteParamsSchema";
+import { CommentRouteParamsSchema } from "../../../schemas/params/CommentRouteParamsSchema";
+import { ApiWorker } from "../../../helpers/ApiWorker";
 
-export async function commentLoader({
+export async function postCommentLoader({
     params
 }: {
     params: Params

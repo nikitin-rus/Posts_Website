@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Posts_Website.Dtos;
 using Posts_Website.Entities;
 using Posts_Website.Exceptions;
+using Posts_Website.Helpers;
 using Posts_Website.Mappers;
 using Posts_Website.Repositories;
 using Posts_Website.Services;
@@ -24,40 +25,20 @@ namespace Posts_Website.Controllers
             [FromQuery] string search = ""
         )
         {
-            int targetLimit = limit;
-            int targetPage = page;
-
-            if (limit <= 0 || limit > 10)
-            {
-                targetLimit = 10;
-            }
-
-            Post[] posts = postRepo.GetAll();
-
-            var searched = posts.Where(p =>
-                p.Content.Contains(search, StringComparison.OrdinalIgnoreCase)
+            SearchPostsResults results = ControllerHelper.SearchPosts(
+                postRepo.GetAll(),
+                search,
+                sort,
+                page,
+                limit
             );
-
-            int pagesCount = (searched.Count() + targetLimit - 1) / targetLimit;
-
-            if (page <= 0 || page > pagesCount)
-            {
-                targetPage = 1;
-            }
-
-            var sorted = sort == "old" ?
-                searched.OrderBy(p => p.PublishedAt) :
-                searched.OrderByDescending(p => p.PublishedAt);
-
-            var result = sorted.Skip(targetLimit * (targetPage - 1))
-                .Take(targetLimit);
 
             HttpContext.Response.Headers.Append(
                 "X-Total-Count",
-                searched.Count().ToString()
+                results.TotalCount.ToString()
             );
 
-            return Ok(result.Select(p => p.ToPostDto()));
+            return Ok(results.Posts.Select(p => p.ToPostDto()));
         }
 
         [HttpGet("{id:guid}")]
@@ -66,7 +47,7 @@ namespace Posts_Website.Controllers
             Post? post = postRepo.GetById(id) ??
                 throw new EntityNotFoundException();
 
-            return Ok(post.ToPostDetailsDto());
+            return Ok(post.ToPostDto());
         }
 
         [HttpPost]

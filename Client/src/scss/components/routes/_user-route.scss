@@ -1,8 +1,7 @@
 .user-route {
-    &__section {
+    &__content {
         display: flex;
         flex-direction: column;
-        row-gap: 24px;
-        margin-bottom: 40px;
+        row-gap: 40px;
     }
 }

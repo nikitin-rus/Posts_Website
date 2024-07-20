@@ -1,4 +1,4 @@
-@use '../../base/vars';
+@use '../../../base/vars';
 
 .comment-route {
     &__heading {
@@ -6,7 +6,7 @@
     }
 
     &__link {
-        color: vars.$blue;
+        color: vars.$light-blue;
         text-decoration: underline;
     }
 

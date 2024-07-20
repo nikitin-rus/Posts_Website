@@ -1,7 +1,7 @@
 import { forwardRef, memo } from "react";
 import { getClassName } from "../../helpers/getClassName";
 import { CardHead } from "../CardHead";
-import { CommentDto } from "../../schemas/comment/Comment";
+import { CommentDto } from "../../schemas/comment/CommentSchema";
 
 interface Props {
     className?: string,
