@@ -1,6 +1,6 @@
 import { Params, redirect, } from "react-router-dom";
-import { ApiWorker } from "../../helpers/ApiWorker";
-import { UserRouteParamsSchema } from "../../schemas/params/UserRouteParamsSchema";
+import { ApiWorker } from "../../../helpers/ApiWorker";
+import { UserRouteParamsSchema } from "../../../schemas/params/UserRouteParamsSchema";
 
 export async function userLoader({
     request,

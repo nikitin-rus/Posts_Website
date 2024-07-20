@@ -1,7 +1,6 @@
-import { useLoaderData, Link, Form } from "react-router-dom";
+import { useLoaderData, Link, Form, Outlet } from "react-router-dom";
 import { PostCard } from "../../../components/cards/PostCard";
 import { CommentForm } from "../../../components/forms/CommentForm";
-import { CommentCardList } from "../../../components/lists/CommentCardList";
 import { Button } from "../../../components/UI/Button";
 import { useAppSelector } from "../../../redux/hooks";
 import { authSelector } from "../../../redux/slices/authSlice";
@@ -17,56 +16,50 @@ export function PostRoute() {
 
     return (
         <div className={componentClassName}>
-            <section className={componentClassName + "__section"}>
-                {post.user.userName === auth.user?.userName && (
-                    <div className={componentClassName + "__controls"}>
-                        <Link to="edit">
-                            <Button className={componentClassName + "__button"}
-                                value="Редактировать"
-                                iconRight={<EditIcon />}
-                            />
-                        </Link>
+            <div className={componentClassName + "__content"}>
+                <section className={componentClassName + "__section"}>
+                    {post.user.userName === auth.user?.userName && (
+                        <div className={componentClassName + "__controls"}>
+                            <Link to="edit">
+                                <Button className={componentClassName + "__button"}
+                                    value="Редактировать"
+                                    iconRight={<EditIcon />}
+                                />
+                            </Link>
 
-                        <Form method="DELETE">
-                            <Button className={componentClassName + "__button"}
-                                value="Удалить"
-                                iconRight={<DeleteIcon />}
-                                type="submit"
-                            />
-                        </Form>
-                    </div>
-                )}
+                            <Form method="DELETE">
+                                <Button className={componentClassName + "__button"}
+                                    value="Удалить"
+                                    iconRight={<DeleteIcon />}
+                                    type="submit"
+                                />
+                            </Form>
+                        </div>
+                    )}
 
-                <PostCard className={componentClassName + "__card"}
-                    post={post}
-                />
-            </section>
-
-            {/* <section className={componentClassName + "__section"}>
-                <h1 className={componentClassName + "__heading"}>
-                    Комментарии
-                </h1>
-
-                {auth.user && (
-                    <CommentForm className={componentClassName + "__comment-form"}
-                        method="POST"
-                        action={`/posts/${post.id}/comments`}
-                        initialData={{
-                            content: "",
-                        }}
+                    <PostCard className={componentClassName + "__card"}
+                        post={post}
                     />
-                )}
+                </section>
 
-                {post.comments.length > 0 ? (
-                    <CommentCardList className={componentClassName + "__list"}
-                        comments={post.comments}
-                    />
-                ) : (
-                    <p className={componentClassName + "__message"}>
-                        Комментариев пока нет!
-                    </p>
-                )}
-            </section> */}
+                <section className={componentClassName + "__section"}>
+                    <h1 className={componentClassName + "__heading"}>
+                        Комментарии
+                    </h1>
+
+                    {auth.user && (
+                        <CommentForm className={componentClassName + "__comment-form"}
+                            method="POST"
+                            action={`/posts/${post.id}/comments`}
+                            initialData={{
+                                content: "",
+                            }}
+                        />
+                    )}
+
+                    <Outlet />
+                </section>
+            </div>
         </div>
     );
 }
