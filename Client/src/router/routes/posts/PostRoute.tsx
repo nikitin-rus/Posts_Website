@@ -5,15 +5,15 @@ import { CommentCardList } from "../../../components/lists/CommentCardList";
 import { Button } from "../../../components/UI/Button";
 import { useAppSelector } from "../../../redux/hooks";
 import { authSelector } from "../../../redux/slices/authSlice";
-import { PostDetailsSchema } from "../../../schemas/post/PostDetailsSchema";
 import EditIcon from "../../../assets/icons/edit_24dp.svg";
 import DeleteIcon from "../../../assets/icons/delete_24dp.svg";
+import { PostSchema } from "../../../schemas/post/PostSchema";
 
 export function PostRoute() {
     const componentClassName = "post-route";
 
     const auth = useAppSelector(authSelector);
-    const post = PostDetailsSchema.parse(useLoaderData());
+    const post = PostSchema.parse(useLoaderData());
 
     return (
         <div className={componentClassName}>
@@ -42,7 +42,7 @@ export function PostRoute() {
                 />
             </section>
 
-            <section className={componentClassName + "__section"}>
+            {/* <section className={componentClassName + "__section"}>
                 <h1 className={componentClassName + "__heading"}>
                     Комментарии
                 </h1>
@@ -66,7 +66,7 @@ export function PostRoute() {
                         Комментариев пока нет!
                     </p>
                 )}
-            </section>
+            </section> */}
         </div>
     );
 }

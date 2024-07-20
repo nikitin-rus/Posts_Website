@@ -87,9 +87,9 @@ export class ApiWorker {
         });
     }
 
-    static async getPost(id: string): Promise<PostDetailsDto> {
+    static async getPost(id: string): Promise<PostDto> {
         const { data } = await axios.get(`/api/posts/${id}`);
-        return PostDetailsSchema.parse(data);
+        return PostSchema.parse(data);
     }
 
     static async getComment(

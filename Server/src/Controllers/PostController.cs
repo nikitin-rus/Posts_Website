@@ -25,30 +25,20 @@ namespace Posts_Website.Controllers
             [FromQuery] string search = ""
         )
         {
-            int count = postRepo.GetCount(search);
-
-            limit = QueryHelper.NormalizeLimit(limit, 1, 10);
-
-            page = QueryHelper.NormalizePage(page, 1, 
-                QueryHelper.GetPages(count, limit)
-            );
-
-            Post[] posts = postRepo.Get(
+            SearchPostsResults results = ControllerHelper.SearchPosts(
+                postRepo.GetAll(),
                 search,
                 sort,
-                QueryHelper.GetOffset(
-                    page, 
-                    limit
-                ),
+                page,
                 limit
             );
 
             HttpContext.Response.Headers.Append(
                 "X-Total-Count",
-                count.ToString()
+                results.TotalCount.ToString()
             );
 
-            return Ok(posts.Select(p => p.ToPostDto()));
+            return Ok(results.Posts.Select(p => p.ToPostDto()));
         }
 
         [HttpGet("{id:guid}")]
@@ -57,7 +47,7 @@ namespace Posts_Website.Controllers
             Post? post = postRepo.GetById(id) ??
                 throw new EntityNotFoundException();
 
-            return Ok(post.ToPostDetailsDto());
+            return Ok(post.ToPostDto());
         }
 
         [HttpPost]

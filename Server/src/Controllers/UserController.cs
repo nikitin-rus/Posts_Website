@@ -11,7 +11,6 @@ namespace Posts_Website.Controllers
     [ApiController]
     public class UserController(
         IUserRepository userRepo,
-        IPostRepository postRepo,
         ICommentRepository commentRepo
     ) : ControllerBase
     {
@@ -36,31 +35,20 @@ namespace Posts_Website.Controllers
             User? user = userRepo.GetById(id) ??
                 throw new EntityNotFoundException();
 
-            int count = postRepo.GetCount(id, search);
-
-            limit = QueryHelper.NormalizeLimit(limit, 1, 10);
-
-            page = QueryHelper.NormalizePage(page, 1,
-                QueryHelper.GetPages(count, limit)
-            );
-
-            Post[] posts = postRepo.Get(
-                id,
+            SearchPostsResults results = ControllerHelper.SearchPosts(
+                user.Posts,
                 search,
                 sort,
-                QueryHelper.GetOffset(
-                    page,
-                    limit
-                ),
+                page,
                 limit
             );
 
             HttpContext.Response.Headers.Append(
                 "X-Total-Count",
-                count.ToString()
+                results.TotalCount.ToString()
             );
 
-            return Ok(posts.Select(p => p.ToPostDto()));
+            return Ok(results.Posts.Select(p => p.ToPostDto()));
         }
 
         [HttpGet("{id}/comments")]
@@ -75,31 +63,22 @@ namespace Posts_Website.Controllers
             User? user = userRepo.GetById(id) ??
                 throw new EntityNotFoundException();
 
-            int count = commentRepo.GetCount(id, search);
+            Comment[] comments = commentRepo.GetAll();
 
-            limit = QueryHelper.NormalizeLimit(limit, 1, 10);
-
-            page = QueryHelper.NormalizePage(page, 1, 
-                QueryHelper.GetPages(count, limit)
-            );
-
-            Comment[] comments = commentRepo.Get(
-                id,
+            SearchCommentsResults results = ControllerHelper.SearchComments(
+                user.Comments,
                 search,
                 sort,
-                QueryHelper.GetOffset(
-                    page,
-                    limit
-                ),
+                page,
                 limit
             );
 
             HttpContext.Response.Headers.Append(
                 "X-Total-Count",
-                count.ToString()
+                results.TotalCount.ToString()
             );
 
-            return Ok(comments.Select(c => c.ToCommentDto()));
+            return Ok(results.Comments.Select(c => c.ToCommentDto()));
         }
     }
 }
